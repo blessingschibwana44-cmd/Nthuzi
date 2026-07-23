@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>MTHUNZI CREATIONS – Original Art from Blantyre, Malawi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  :root {
+    /* Core neutrals — warm paper canvas, cool ink for contrast */
+    --white: #ffffff;
+    --off-white: #f8f6f1;
+    --light-gray: #f0ede5;
+    --mid-gray: #e2dcce;
+    --charcoal: #2a2a27;
+    --dark-charcoal: #1b1b18;
+    --near-black: #171714;
+    --border-light: #e7e1d2;
+    --text-primary: #1a1a17;
+    --text-secondary: #55534b;
+    --text-muted: #8c8a7e;
+
+    /* Signature palette — Lake Malawi at dusk: teal water, gold sky, clay shore */
+    --lake: #0d7d82;
+    --lake-deep: #095b60;
+    --gold: #dfa62e;
+    --clay: #bd4f30;
+    --accent: #0d7d82;
+    --accent-light: #16a3a8;
+    --accent-glow: rgba(13, 125, 130, 0.14);
+    --success: #2f8f5f;
+    --warning: #c9762c;
+
+    /* Signature gradient — used sparingly as the page's one recurring motif */
+    --horizon: linear-gradient(90deg, var(--lake) 0%, var(--gold) 58%, var(--clay) 100%);
+    --horizon-soft: linear-gradient(90deg, rgba(13,125,130,0.16) 0%, rgba(223,166,46,0.16) 58%, rgba(189,79,48,0.16) 100%);
+
+    /* Elevation + shape */
+    --shadow-sm: 0 2px 10px rgba(23,23,20,0.05);
+    --shadow-md: 0 14px 32px -12px rgba(23,23,20,0.14);
+    --shadow-lg: 0 30px 60px -20px rgba(23,23,20,0.22);
+    --r-sm: 12px;
+    --r-md: 20px;
+    --r-lg: 28px;
+    --r-pill: 999px;
+
+    /* Type roles */
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--off-white);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+  button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--lake); outline-offset: 2px; }
+  ::selection { background: var(--gold); color: var(--near-black); }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(248, 246, 241, 0.82);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+    position: relative;
+  }
+  nav::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: var(--horizon);
+    opacity: 0.9;
+  }
+  .logo { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: 0.2px; color: var(--near-black); cursor: pointer; }
+  .site-logo { width:42px; height:42px; border-radius:50%; object-fit:cover; display:inline-block; vertical-align:middle; margin-right:12px; box-shadow: var(--shadow-sm); }
+  .site-logo.hidden { display:none !important; }
+  .logo-badge { width:42px; height:42px; border-radius:50%; display:none; align-items:center; justify-content:center; font-weight:700; background: var(--horizon); color: var(--white); font-family: var(--font-display); font-size:18px; margin-right:12px; box-shadow: var(--shadow-sm); }
+  .hamburger { display:none; background: var(--white); border:1px solid var(--border-light); padding:9px 12px; border-radius: var(--r-sm); cursor:pointer; color:var(--text-primary); box-shadow: var(--shadow-sm); }
+  .mobile-menu { position: fixed; inset: 76px 0 0 0; background: rgba(248,246,241,0.98); backdrop-filter: blur(10px); z-index: 1500; display: none; padding: 24px 5%; }
+  .mobile-menu.open { display:block; }
+  .mobile-menu .nav-links { display:flex; flex-direction:column; gap:6px; }
+  .mobile-menu .nav-links a { padding: 14px 4px; border-bottom: 1px solid var(--border-light); }
+  .logo span { color: var(--lake); font-weight: 400; font-style: italic; }
+  .nav-links { display: flex; gap: 38px; align-items: center; }
+  .nav-links a { position: relative; font-family: var(--font-body); font-size: 13px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; cursor: pointer; font-weight: 600; padding: 4px 0; transition: color 0.2s; }
+  .nav-links a::after { content:''; position:absolute; left:0; bottom:-4px; width:0; height:2px; background: var(--horizon); transition: width 0.25s ease; border-radius: 2px; }
+  .nav-links a:hover { color: var(--near-black); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-actions { display: flex; gap: 10px; align-items: center; }
+  .btn-nav { font-family: var(--font-body); font-size: 12px; font-weight: 600; padding: 9px 20px; cursor: pointer; border-radius: var(--r-pill); transition: all 0.2s ease; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--mid-gray); color: var(--text-primary); }
+  .btn-outline:hover { background: var(--near-black); border-color: var(--near-black); color: var(--white); }
+  .btn-fill { background: var(--near-black); color: var(--white); border: none; }
+  .btn-fill:hover { background: var(--lake-deep); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .cart-btn { background: var(--white); border: 1.5px solid var(--mid-gray); padding: 9px 20px; font-family: var(--font-body); font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text-primary); position: relative; border-radius: var(--r-pill); display: flex; align-items: center; gap: 7px; transition: all 0.2s ease; }
+  .cart-btn:hover { border-color: var(--lake); color: var(--lake); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .cart-badge { position: absolute; top: -7px; right: -7px; background: var(--clay); color: var(--white); border-radius: 50%; width: 19px; height: 19px; font-size: 9px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); box-shadow: 0 0 0 2px var(--off-white); }
+
+  /* HERO */
+  .hero {
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: -4%;
+    background-image: url('https://images.unsplash.com/photo-1520856990214-7a9e59dd5ff7?w=1920&q=80&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    animation: heroZoom 24s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(15,18,17,0.86) 0%, rgba(15,18,17,0.52) 48%, rgba(13,125,130,0.32) 100%);
+    z-index: 1;
+  }
+  @keyframes heroZoom {
+    0% { transform: scale(1) translate3d(0,0,0); }
+    100% { transform: scale(1.14) translate3d(-1%, -1%, 0); }
+  }
+  .hero::before {
+    content: '';
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 3px;
+    background: var(--horizon);
+    background-size: 200% 100%;
+    z-index: 2;
+    animation: horizonShimmer 6s linear infinite;
+  }
+  @keyframes horizonShimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+  .hero-content { position: relative; z-index: 2; width:100%; max-width:1200px; color: var(--white); text-align:left; margin:0 auto; display:flex; flex-direction:column; align-items:flex-start; gap:18px; }
+  .hero-inner { width:100%; max-width:640px; display:flex; flex-direction:column; align-items:flex-start; gap:20px; }
+  .hero-badge, .hero-inner > * {
+    opacity: 0;
+    animation: heroFadeUp 0.85s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .hero-badge { animation-delay: 0.1s; }
+  .hero-inner > *:nth-child(1) { animation-delay: 0.25s; }
+  .hero-inner > *:nth-child(2) { animation-delay: 0.4s; }
+  .hero-inner > *:nth-child(3) { animation-delay: 0.55s; }
+  .hero-inner > *:nth-child(4) { animation-delay: 0.7s; }
+  .hero-inner > *:nth-child(5) { animation-delay: 0.85s; }
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg { animation: none; }
+    .hero::before { animation: none; }
+    .hero-badge, .hero-inner > * { animation: none; opacity: 1; }
+  }
+  .hero-content h1 { font-family: var(--font-display); font-size: clamp(36px, 5.8vw, 68px); line-height: 1.05; font-weight: 600; margin:0; color: var(--white); letter-spacing: -0.5px; }
+  .hero-content h1 span { display:block; width:100%; }
+  .hero-content h1 .emphasize { font-style: italic; font-weight: 500; background: linear-gradient(90deg, var(--accent-light), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; display:block; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(6px); padding: 7px 16px 7px 8px; border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; margin-bottom: 8px; }
+  .hero-badge::before { content:''; width:8px; height:8px; border-radius:50%; background: var(--horizon); display:inline-block; }
+  .hero-content p { font-size: 18px; line-height: 1.65; color: rgba(255,255,255,0.88); margin:0; max-width: 640px; padding:0; font-weight: 300; }
+  .hero-search { display: flex; max-width: 520px; margin: 0; border-radius: var(--r-pill); overflow: hidden; background: var(--white); box-shadow: var(--shadow-lg); }
+  .hero-search input { flex: 1; padding: 16px 24px; font-family: var(--font-body); font-size: 15px; border: none; outline: none; background: transparent; }
+  .hero-search button { background: var(--near-black); color: var(--white); border: none; padding: 16px 30px; font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .hero-search button:hover { background: var(--lake-deep); }
+  .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-tags .tag { background: rgba(255,255,255,0.12); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.28); color: var(--white); }
+  .hero-tags .tag:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); color: var(--white); }
+  .tag { font-family: var(--font-body); font-size: 13px; font-weight: 500; padding: 9px 19px; border: 1.5px solid var(--mid-gray); background: var(--white); color: var(--text-secondary); cursor: pointer; border-radius: var(--r-pill); transition: all 0.2s ease; }
+  .tag:hover { border-color: var(--lake); color: var(--lake); background: var(--accent-glow); }
+
+  /* TRUST BANNER */
+  .trust-banner { display: flex; justify-content: center; gap: 48px; padding: 22px 5%; background: var(--white); border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+  .trust-item i { font-size: 18px; color: var(--lake); }
+
+  .section { padding: 88px 5%; }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 52px; padding-bottom: 20px; position: relative; }
+  .section-header::after { content:''; position:absolute; left:0; right:0; bottom:0; height:2px; background: var(--horizon-soft); border-radius: 2px; }
+  .section-title { font-family: var(--font-display); font-size: 36px; font-weight: 600; color: var(--near-black); letter-spacing: -0.3px; }
+  .section-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--lake); font-weight: 700; }
+
+  /* CATEGORIES */
+  .cat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+  .cat-card { aspect-ratio: 3/4; position: relative; overflow: hidden; cursor: pointer; border-radius: var(--r-lg); background: var(--white); box-shadow: var(--shadow-sm); transition: all 0.35s cubic-bezier(.2,.8,.2,1); }
+  .cat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .cat-bg { width: 100%; height: 100%; background-size: cover; background-position: center; transition: transform 0.5s cubic-bezier(.2,.8,.2,1); }
+  .cat-card:hover .cat-bg { transform: scale(1.06); }
+  .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,15,12,0.78) 0%, rgba(15,15,12,0.05) 55%, transparent 70%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; }
+  .cat-name { font-family: var(--font-display); font-size: 21px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+  .cat-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--gold); text-transform: uppercase; font-weight: 700; }
+
+  /* PRODUCTS */
+  .products-bg { background: var(--white); }
+  .prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .prod-card { background: var(--white); position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(.2,.8,.2,1); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); }
+  .prod-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; }
+  .prod-img { width: 100%; aspect-ratio: 4/3; background-size: cover; background-position: center; transition: transform 0.5s ease; }
+  .prod-card:hover .prod-img { transform: scale(1.04); }
+  .prod-info { padding: 20px; }
+  .prod-cat { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--lake); margin-bottom: 9px; font-weight: 700; }
+  .prod-name { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 7px; line-height: 1.35; color: var(--near-black); }
+  .prod-dimensions { font-size: 11px; color: var(--text-muted); margin-bottom: 9px; display: flex; align-items: center; gap: 5px; }
+  .stock-status { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; margin-bottom: 14px; }
+  .stock-status.in-stock { color: var(--success); }
+  .stock-status.in-stock::before { content: "●"; font-size: 8px; }
+  .stock-status.low-stock { color: var(--warning); }
+  .stock-status.low-stock::before { content: "●"; font-size: 8px; }
+  .prod-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .prod-price { font-family: var(--font-body); font-size: 18px; font-weight: 800; color: var(--near-black); }
+  .add-cart-btn { background: var(--near-black); color: var(--white); border: none; padding: 11px 19px; font-family: var(--font-body); font-size: 12px; font-weight: 600; cursor: pointer; border-radius: var(--r-pill); transition: all 0.25s ease; }
+  .add-cart-btn:hover { background: var(--lake); transform: translateY(-1px); }
+  .prod-badge { position: absolute; top: 14px; left: 14px; background: var(--horizon); color: var(--white); font-family: var(--font-mono); font-size: 10px; font-weight: 700; padding: 5px 13px; border-radius: var(--r-pill); z-index: 2; box-shadow: var(--shadow-sm); }
+
+  /* REVIEWS */
+  .reviews-section { background: var(--off-white); }
+  .review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .review-card { background: var(--white); padding: 30px; border-radius: var(--r-lg); border: 1px solid var(--border-light); transition: all 0.3s ease; }
+  .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: transparent; }
+  .review-stars { color: var(--gold); margin-bottom: 16px; letter-spacing: 3px; font-size: 15px; }
+  .review-text { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 22px; font-family: var(--font-display); font-style: italic; font-weight: 400; }
+  .review-author { font-weight: 700; color: var(--near-black); font-size: 14px; }
+  .review-location { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* NEWSLETTER */
+  .discount-badge { display: inline-block; background: rgba(255,255,255,0.15); padding: 5px 14px; border-radius: var(--r-pill); font-size: 12px; margin-bottom: 18px; font-family: var(--font-mono); }
+  .newsletter-form { display: flex; gap: 12px; }
+
+  /* CONTACT STRIP - BOTTOM */
+  .contact-strip { background: var(--near-black); padding: 16px 5%; display: flex; align-items: center; gap: 24px; overflow: hidden; }
+  .strip-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; white-space: nowrap; border-right: 1px solid rgba(223,166,46,0.4); padding-right: 24px; font-weight: 700; }
+  .strip-scroll { flex: 1; overflow: hidden; }
+  .strip-inner { display: flex; animation: stripScroll 30s linear infinite; white-space: nowrap; }
+  .strip-item { font-family: var(--font-mono); font-size: 12px; color: #a8a69c; padding: 0 32px; }
+  .strip-item::before { content: '📍 '; color: var(--accent-light); }
+  @keyframes stripScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  .about-section { background: var(--off-white); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); position: relative; }
+
+  footer { background: var(--near-black); padding: 64px 5% 40px; border-top: none; color: rgba(255,255,255,0.7); }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 44px; }
+  .footer-brand .logo { color: var(--white); display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 320px; }
+  .footer-col h4 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; font-weight: 700; }
+  .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,0.6); text-decoration: none; margin-bottom: 12px; cursor: pointer; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 26px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.45); font-family: var(--font-mono); flex-wrap: wrap; gap: 16px; }
+
+  /* MODALS */
+  .overlay { position: fixed; inset: 0; background: rgba(15,15,12,0.72); backdrop-filter: blur(6px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--white); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; padding: 42px 38px; border-radius: var(--r-lg); animation: slideUp 0.3s cubic-bezier(.2,.8,.2,1); box-shadow: var(--shadow-lg); }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .modal-close { position: absolute; top: 20px; right: 24px; background: var(--off-white); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .modal-close:hover { background: var(--mid-gray); color: var(--near-black); }
+  .modal-title { font-family: var(--font-display); font-size: 28px; font-weight: 600; margin-bottom: 6px; }
+  .modal-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--lake); text-transform: uppercase; margin-bottom: 30px; font-weight: 700; }
+  .modal-switch { text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-secondary); }
+  .modal-switch a { color: var(--lake); font-weight: 600; cursor: pointer; text-decoration: none; }
+  .form-group { margin-bottom: 22px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+  .form-group input { width: 100%; padding: 13px 16px; border: 1.5px solid var(--mid-gray); border-radius: var(--r-sm); font-size: 15px; font-family: var(--font-body); transition: border-color 0.2s, box-shadow 0.2s; }
+  .form-group input:focus { border-color: var(--lake); outline: none; box-shadow: 0 0 0 4px var(--accent-glow); }
+  .btn-primary { width: 100%; background: var(--near-black); color: var(--white); border: none; padding: 16px; font-weight: 600; font-family: var(--font-body); font-size: 14px; border-radius: var(--r-pill); cursor: pointer; transition: all 0.25s ease; }
+  .btn-primary:hover { background: var(--lake-deep); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .cart-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border-light); align-items: center; }
+  .cart-item-img { width: 66px; height: 66px; background-size: cover; background-position: center; border-radius: var(--r-sm); flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--near-black); margin-bottom: 4px; }
+  .cart-item-price { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .cart-qty-controls { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+  .cart-qty-btn { background: var(--light-gray); border: none; width: 26px; height: 26px; border-radius: var(--r-pill); cursor: pointer; font-weight: 700; color: var(--text-primary); transition: background 0.2s; }
+  .cart-qty-btn:hover { background: var(--mid-gray); }
+  .cart-qty-num { font-weight: 600; min-width: 16px; text-align: center; display: inline-block; }
+  .cart-item-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 15px; padding: 8px; transition: color 0.2s; }
+  .cart-item-remove:hover { color: var(--clay); }
+  .cart-empty { text-align: center; padding: 50px 20px; color: var(--text-muted); }
+  .cart-total { display: flex; justify-content: space-between; padding: 22px 0; font-size: 18px; font-weight: 700; border-top: 2px solid var(--border-light); margin-bottom: 20px; }
+  .agent-codes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .agent-box { border: 1.5px solid var(--border-light); padding: 20px; text-align: center; background: var(--off-white); border-radius: var(--r-md); }
+  .agent-box .network { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--lake); font-weight: 700; margin-bottom: 8px; }
+  .agent-box .code { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--near-black); margin-bottom: 6px; }
+  .agent-box .owner { font-size: 11px; color: var(--text-muted); }
+  .payment-note { background: var(--accent-glow); padding: 16px 18px; border-radius: var(--r-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 20px 0; }
+  .payment-note strong { color: var(--near-black); }
+  .prod-detail-img { width: 100%; height: 260px; background-size: cover; background-position: center; margin-bottom: 22px; border-radius: var(--r-md); }
+  .detail-dimensions { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .prod-detail-price { font-size: 28px; font-weight: 800; color: var(--lake); margin-bottom: 16px; }
+  .prod-detail-desc { font-size: 14px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 18px; }
+  .artist-popup { position: fixed; bottom: 24px; right: 24px; width: 310px; background: var(--white); padding: 24px; z-index: 3000; display: none; border-radius: var(--r-md); box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); }
+  .artist-popup::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--horizon); border-radius: var(--r-md) 0 0 var(--r-md); }
+  .artist-popup.show { display: block; animation: popIn 0.35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes popIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+  .popup-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 15px; cursor: pointer; color: var(--text-muted); }
+  .popup-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+  .popup-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--near-black); }
+  .popup-text { font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 16px; }
+  .popup-btn { background: var(--near-black); color: var(--white); border: none; padding: 9px 18px; font-size: 12px; font-weight: 600; border-radius: var(--r-pill); cursor: pointer; }
+  .popup-btn:hover { background: var(--lake); }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--near-black); color: var(--white); padding: 15px 34px; font-size: 13px; font-weight: 500; z-index: 9999; opacity: 0; transition: opacity 0.3s; border-radius: var(--r-pill); white-space: nowrap; box-shadow: var(--shadow-lg); }
+  .toast.show { opacity: 1; }
+  .success-box { text-align: center; padding: 20px; }
+  .success-icon { font-size: 55px; margin-bottom: 16px; }
+
+  @media (max-width: 900px) {
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .prod-grid { grid-template-columns: repeat(2, 1fr); }
+    .review-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hamburger { display: inline-flex; }
+    .nav-actions { gap:8px; }
+    .newsletter-form { flex-direction: column; }
+  }
+  @media (max-width: 600px) {
+    .prod-grid { grid-template-columns: 1fr; }
+    .section { padding: 56px 5%; }
+    .section-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <img id="siteLogo" src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.classList.add('hidden'); document.getElementById('logoBadge').style.display='inline-flex';">
+    <div id="logoBadge" class="logo-badge" aria-hidden="true">M</div>
+    <span class="logo" id="logoHome">MTHUNZI <span>CREATIONS</span></span>
+  </div>
+  <button id="hamburger" class="hamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+  <div class="nav-links">
+    <a id="navShop">Shop</a>
+    <a id="navGallery">Gallery</a>
+    <a id="navContact">Contact</a>
+    <a id="navAbout">About</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-nav btn-outline" id="btnSignIn">Sign In</button>
+    <button class="btn-nav btn-fill" id="btnSignUp">Sign Up</button>
+    <button class="cart-btn" id="btnCart"><i class="fas fa-shopping-bag"></i> Cart <span class="cart-badge" id="cartBadge">0</span></button>
+  </div>
+</nav>
+<!-- Mobile menu overlay -->
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <div class="nav-links">
+    <a id="mNavShop">Shop</a>
+    <a id="mNavGallery">Gallery</a>
+    <a id="mNavContact">Contact</a>
+    <a id="mNavAbout">About</a>
+    <div style="margin-top:16px;display:flex;gap:8px;">
+      <button class="btn-nav btn-outline" id="mBtnSignIn">Sign In</button>
+      <button class="btn-nav btn-fill" id="mBtnSignUp">Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><i class="fas fa-map-marker-alt"></i> Blantyre, Malawi</div>
+    <div class="hero-inner">
+      <h1><span>Art that</span><span class="emphasize">speaks</span><span>your soul</span></h1>
+      <p>Original paintings, hand-crafted drawings, wearable art — created by Malawian artist Mthunzi.</p>
+      <div class="hero-search">
+        <input type="text" placeholder="Search paintings, t-shirts, sculptures…" id="heroSearch">
+        <button id="btnSearch"><i class="fas fa-search"></i> Search</button>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:6px;align-items:center;">
+        <button class="btn-fill" id="shopNow">Shop Collection</button>
+      </div>
+      <div class="hero-tags">
+        <span class="tag" data-cat="Paintings">Paintings</span>
+        <span class="tag" data-cat="T-Shirts">T-Shirts</span>
+        <span class="tag" data-cat="Drawings">Drawings</span>
+        <span class="tag" data-cat="Sculptures">Sculptures</span>
+        <span class="tag" data-cat="Prints">Prints</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-banner">
+  <div class="trust-item"><i class="fas fa-truck"></i> Free shipping over MK50,000</div>
+  <div class="trust-item"><i class="fas fa-shield-alt"></i> Secure payments</div>
+  <div class="trust-item"><i class="fas fa-undo-alt"></i> 14-day returns</div>
+  <div class="trust-item"><i class="fas fa-hand-sparkles"></i> Handmade in Malawi</div>
+</div>
+
+<section class="section" id="gallery">
+  <div class="section-header"><h2 class="section-title">Browse by Category</h2><span class="section-sub">All Collections</span></div>
+  <div class="cat-grid">
+    <div class="cat-card" data-cat="Paintings"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Paintings</div><div class="cat-count">12 pieces</div></div></div>
+    <div class="cat-card" data-cat="Drawings"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Drawings</div><div class="cat-count">8 pieces</div></div></div>
+    <div class="cat-card" data-cat="T-Shirts"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">T-Shirts</div><div class="cat-count">24 designs</div></div></div>
+    <div class="cat-card" data-cat="Sculptures"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1536924940840-4c65e12e6b8e?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Sculptures</div><div class="cat-count">6 pieces</div></div></div>
+    <div class="cat-card" data-cat="Prints"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1544967082-d9d25d867d43?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Art Prints</div><div class="cat-count">18 designs</div></div></div>
+  </div>
+</section>
+
+<section class="section products-bg" id="shop">
+  <div class="section-header"><h2 class="section-title">Featured Works</h2><span class="section-sub" id="filterLabel">All Items</span></div>
+  <div class="prod-grid" id="prodGrid"></div>
+</section>
+
+<section class="section reviews-section">
+  <div class="section-header"><h2 class="section-title">What Collectors Say</h2><span class="section-sub">Real Reviews</span></div>
+  <div class="review-grid">
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"The Sunrise painting transformed my living room. The colors are even more vibrant in person. Mthunzi is a true talent."</p><div class="review-author">— Tawonga C.</div><div class="review-location">Lilongwe, Malawi</div></div>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Bought the Heritage hoodie as a gift. The quality is exceptional and the print is stunning. Will definitely order again."</p><div class="review-author">— Chimwemwe B.</div><div class="review-location">Blantyre, Malawi</div></div>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"The charcoal drawing arrived beautifully packaged. It captures so much emotion. Highly recommend Mthunzi Creations."</p><div class="review-author">— Grace M.</div><div class="review-location">Zomba, Malawi</div></div>
+  </div>
+</section>
+
+<section class="about-section section" id="about">
+  <div style="max-width:700px;margin:0 auto;text-align:center;">
+    <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:16px;">The Artist</div>
+    <h2 style="font-family:'Fraunces',serif;font-size:44px;font-weight:600;margin-bottom:20px;">Mthunzi <em style="color:var(--accent);">Born to Create</em></h2>
+    <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);">Rooted in the heart of Malawi's commercial capital Blantyre, Mthunzi Creations is a celebration of African beauty, storytelling, and soul. From vibrant canvases to hand-printed wearables, every piece carries the spirit of Blantyre's creative energy and its people.</p>
+  </div>
+</section>
+<!-- contact strip moved to bottom to act as footer strip (moved) -->
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><span class="logo">MTHUNZI <span>CREATIONS</span></span><p>Original African art born in Blantyre, Malawi. Every piece is a story waiting to be told.</p></div>
+    <div class="footer-col"><h4>Shop</h4><a class="footer-cat" data-cat="Paintings">Paintings</a><a class="footer-cat" data-cat="Drawings">Drawings</a><a class="footer-cat" data-cat="T-Shirts">T-Shirts</a><a class="footer-cat" data-cat="Sculptures">Sculptures</a><a class="footer-cat" data-cat="Prints">Prints</a></div>
+    <div class="footer-col"><h4>Info</h4><a id="footerAbout">About Mthunzi</a><a id="footerShipping">Shipping Policy</a><a id="footerReturns">Returns</a><a id="footerCustom">Custom Orders</a></div>
+    <div class="footer-col"><h4>Connect</h4><a id="footerWhatsApp">WhatsApp</a><a id="footerInstagram">Instagram</a><a id="footerFacebook">Facebook</a><a id="footerContactBtn">Email Us</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 MTHUNZI CREATIONS — All rights reserved</span><span><i class="fas fa-map-marker-alt"></i> Blantyre, Malawi</span></div>
+</footer>
+
+<!-- contact-strip moved here as final bottom strip -->
+<div class="contact-strip" id="contact">
+  <div class="strip-label"><i class="fas fa-circle-info"></i> Connect</div>
+  <div class="strip-scroll"><div class="strip-inner">
+    <span class="strip-item">WhatsApp: +265 991 234 567</span><span class="strip-item">Email: mthunzi.creations@gmail.com</span>
+    <span class="strip-item">Location: Blantyre, Malawi</span><span class="strip-item">Instagram: @MthunziCreations</span>
+    <span class="strip-item">Open: Mon-Sat 8AM - 6PM</span><span class="strip-item">Free Shipping over MK50,000</span>
+    <span class="strip-item">WhatsApp: +265 991 234 567</span><span class="strip-item">Email: mthunzi.creations@gmail.com</span>
+    <span class="strip-item">Location: Blantyre, Malawi</span><span class="strip-item">Instagram: @MthunziCreations</span>
+    <span class="strip-item">Open: Mon-Sat 8AM - 6PM</span><span class="strip-item">Free Shipping over MK50,000</span>
+  </div></div>
+</div>
+
+<div class="artist-popup" id="artistPopup"><button class="popup-close" id="popupCloseBtn">✕</button><div class="popup-label">Did you know?</div><div class="popup-title" id="popupTitle"></div><p class="popup-text" id="popupText"></p><button class="popup-btn" id="popupLearnMore">Learn More</button></div>
+<div class="toast" id="toast"></div>
+
+<!-- MODALS -->
+<div class="overlay" id="loginModal"><div class="modal"><button class="modal-close" data-close="loginModal">✕</button><div class="modal-title">Welcome Back</div><div class="modal-sub">Sign in to your account</div><div class="form-group"><label>Email</label><input type="email" id="loginEmail"></div><div class="form-group"><label>Password</label><input type="password" id="loginPassword"></div><button class="btn-primary" id="btnDoLogin">Sign In</button><div class="modal-switch">No account? <a id="switchToSignup">Create one</a></div></div></div>
+<div class="overlay" id="signupModal"><div class="modal"><button class="modal-close" data-close="signupModal">✕</button><div class="modal-title">Join Us</div><div class="modal-sub">Create your account</div><div class="form-group"><label>Full Name</label><input type="text" id="signupName"></div><div class="form-group"><label>Email</label><input type="email" id="signupEmail"></div><div class="form-group"><label>Phone</label><input type="tel" id="signupPhone"></div><div class="form-group"><label>Password</label><input type="password" id="signupPassword"></div><div class="form-group"><label>Confirm</label><input type="password" id="signupConfirm"></div><button class="btn-primary" id="btnDoSignup">Create Account</button><div class="modal-switch">Have an account? <a id="switchToLogin">Sign in</a></div></div></div>
+<div class="overlay" id="cartModal"><div class="modal cart-modal"><button class="modal-close" data-close="cartModal">✕</button><div class="modal-title">Your Cart</div><div class="modal-sub">Review your selections</div><div id="cartItems"></div><div class="cart-total" id="cartTotalRow" style="display:none;"><span>Total</span><span id="cartTotalAmt"></span></div><button class="btn-primary" id="checkoutBtn" style="display:none;">Proceed to Payment <i class="fas fa-arrow-right"></i></button></div></div>
+<div class="overlay" id="prodModal"><div class="modal prod-detail-modal"><button class="modal-close" data-close="prodModal">✕</button><div class="prod-detail-img" id="detailImg"></div><div class="modal-sub" id="detailCat"></div><div class="modal-title" id="detailName"></div><div class="detail-dimensions" id="detailDimensions"></div><div class="prod-detail-price" id="detailPrice"></div><p class="prod-detail-desc" id="detailDesc"></p><div class="stock-status in-stock" id="detailStock"></div><button class="btn-primary" id="detailAddBtn"><i class="fas fa-shopping-cart"></i> Add to Cart</button></div></div>
+<div class="overlay" id="paymentModal"><div class="modal payment-modal"><button class="modal-close" data-close="paymentModal">✕</button><div class="modal-title">Payment</div><div class="modal-sub">Complete your purchase</div><div style="background:var(--off-white);padding:18px;border-radius:16px;"><div id="paySummaryItems"></div><div id="payTotal"></div></div><div class="agent-codes"><div class="agent-box"><div class="network">TNM Mpamba</div><div class="code">*838*2*4501#</div><div class="owner">Mthunzi Creations</div></div><div class="agent-box"><div class="network">Airtel Money</div><div class="code">*211*8*3302#</div><div class="owner">Mthunzi Creations</div></div></div><div class="payment-note"><strong><i class="fas fa-info-circle"></i> How to pay:</strong> Dial the agent code, follow prompts, then send receipt to +265 991 234 567</div><button class="btn-primary" id="btnConfirmPayment">I Have Made Payment</button></div></div>
+<div class="overlay" id="contactModal"><div class="modal"><button class="modal-close" data-close="contactModal">✕</button><div class="modal-title">Get in Touch</div><div class="modal-sub">We'd love to hear from you</div><div class="form-group"><label>Name</label><input type="text" id="contactName"></div><div class="form-group"><label>Email</label><input type="email" id="contactEmail"></div><div class="form-group"><label>Message</label><input type="text" id="contactMsg"></div><button class="btn-primary" id="btnSendContact">Send Message</button></div></div>
+<div class="overlay" id="successModal"><div class="modal"><button class="modal-close" data-close="successModal">✕</button><div class="success-box"><div class="success-icon"><i class="fas fa-check-circle" style="color:var(--success);font-size:55px;"></i></div><h2 id="successTitle">Done!</h2><p id="successMsg"></p><button class="btn-primary" id="btnSuccessClose">Continue Shopping</button></div></div></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // REAL PRODUCTS WITH MATCHING IMAGES FOR EACH CATEGORY
+  var products = [
+    { id:1, name:'Sunrise Over Lake Malawi', cat:'Paintings', img:'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&h=450&fit=crop', price:45000, dimensions:'60 × 90 cm', stock:'in-stock', desc:'A breathtaking oil on canvas capturing the golden dawn light reflecting on Lake Malawi. Hand-painted by Mthunzi. Framed and ready to hang.', badge:'New' },
+    { id:2, name:'Urban Warrior Tee', cat:'T-Shirts', img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=450&fit=crop', price:8500, dimensions:'S, M, L, XL, XXL', stock:'in-stock', desc:'100% cotton screen-printed tee featuring original Mthunzi illustration. Premium quality, pre-shrunk fabric.', badge:null },
+    { id:3, name:'Ancestor Charcoal Study', cat:'Drawings', img:'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&h=450&fit=crop', price:18000, dimensions:'50 × 70 cm', stock:'in-stock', desc:'Detailed charcoal drawing on 300gsm cartridge paper. A tribute to elder storytellers. Signed by the artist.', badge:'Featured' },
+    { id:4, name:'Bamboo Spirit Sculpture', cat:'Sculptures', img:'https://images.unsplash.com/photo-1536924940840-4c65e12e6b8e?w=600&h=450&fit=crop', price:32000, dimensions:'35 cm height', stock:'low-stock', desc:'Hand-carved from local hardwood. Each piece is unique and comes with a certificate of authenticity.', badge:null },
+    { id:5, name:'Baobab Dreams Print', cat:'Prints', img:'https://images.unsplash.com/photo-1544967082-d9d25d867d43?w=600&h=450&fit=crop', price:6500, dimensions:'40 × 50 cm', stock:'in-stock', desc:'Limited edition Giclee print on fine art paper. Signed and numbered. Edition of 50.', badge:'Limited' },
+    { id:6, name:'Chisomo Abstract Canvas', cat:'Paintings', img:'https://images.unsplash.com/photo-1549887552-cb1071d3e5ca?w=600&h=450&fit=crop', price:55000, dimensions:'80 × 100 cm', stock:'in-stock', desc:'Bold expressionist painting. Mixed media on stretched canvas. Certificate of authenticity included.', badge:null },
+    { id:7, name:'Heritage Pride Hoodie', cat:'T-Shirts', img:'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&h=450&fit=crop', price:14000, dimensions:'S, M, L, XL, XXL', stock:'in-stock', desc:'Premium fleece hoodie with hand-printed African pattern. Warm, comfortable, and uniquely Malawian.', badge:'New' },
+    { id:8, name:'Village Life Ink Series', cat:'Drawings', img:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&h=450&fit=crop', price:22000, dimensions:'30 × 40 cm each', stock:'low-stock', desc:'Set of 3 ink illustrations depicting daily life in rural Malawi. Unframed, perfect for framing.', badge:null },
+    { id:9, name:'Spirit of Malawi Canvas', cat:'Paintings', img:'https://images.unsplash.com/photo-1515405295579-ba7b45403062?w=600&h=450&fit=crop', price:48000, dimensions:'70 × 90 cm', stock:'in-stock', desc:'Vibrant acrylic painting celebrating Malawian culture and tradition. Rich colors and textured finish.', badge:null },
+    { id:10, name:'Tribal Rhythm Tee', cat:'T-Shirts', img:'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=450&fit=crop', price:7500, dimensions:'S, M, L, XL', stock:'in-stock', desc:'Bold African pattern t-shirt. 100% combed cotton, screen-printed in Blantyre.', badge:null },
+    { id:11, name:'Mother Earth Sculpture', cat:'Sculptures', img:'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=600&h=450&fit=crop', price:45000, dimensions:'45 cm height', stock:'in-stock', desc:'Hand-carved wooden sculpture celebrating African motherhood. One of a kind.', badge:'Featured' },
+    { id:12, name:'Malawi Sunset Print', cat:'Prints', img:'https://images.unsplash.com/photo-1509316975850-ff9c5e7f699f?w=600&h=450&fit=crop', price:5500, dimensions:'30 × 40 cm', stock:'in-stock', desc:'Beautiful giclee print of Lake Malawi sunset. Signed open edition.', badge:null }
+  ];
+  
+  var cart = [];
+  var detailProductId = null;
+  function fmt(n){ return 'MK ' + n.toLocaleString(); }
+  function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2500); }
+  function scrollToId(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
+  function success(title,msg){ document.getElementById('successTitle').textContent=title; document.getElementById('successMsg').textContent=msg; openModal('successModal'); }
+  function openModal(id){ if(id==='cartModal') renderCart(); var el=document.getElementById(id); if(el){ el.classList.add('open'); document.body.style.overflow='hidden'; } }
+  function closeModal(id){ var el=document.getElementById(id); if(el){ el.classList.remove('open'); document.body.style.overflow=''; } }
+  
+  document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',function(){ closeModal(btn.getAttribute('data-close')); }));
+  document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',function(e){ if(e.target===el) closeModal(el.id); }));
+  document.getElementById('logoHome').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  // Mobile menu toggle
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  if(hamburger){
+    hamburger.addEventListener('click', function(){
+      mobileMenu.classList.toggle('open');
+      mobileMenu.setAttribute('aria-hidden', !mobileMenu.classList.contains('open'));
+    });
+  }
+  // Wire mobile nav links
+  document.getElementById('mNavShop').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('shop'); });
+  document.getElementById('mNavGallery').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('gallery'); });
+  document.getElementById('mNavContact').addEventListener('click',function(){ mobileMenu.classList.remove('open'); openModal('contactModal'); });
+  document.getElementById('mNavAbout').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('about'); });
+  document.getElementById('mBtnSignIn').addEventListener('click',function(){ mobileMenu.classList.remove('open'); openModal('loginModal'); });
+  document.getElementById('mBtnSignUp').addEventListener('click',function(){ mobileMenu.classList.remove('open'); openModal('signupModal'); });
+  document.getElementById('navShop').addEventListener('click',()=>scrollToId('shop'));
+  document.getElementById('navGallery').addEventListener('click',()=>scrollToId('gallery'));
+  document.getElementById('navContact').addEventListener('click',()=>openModal('contactModal'));
+  document.getElementById('navAbout').addEventListener('click',()=>scrollToId('about'));
+  document.getElementById('btnSignIn').addEventListener('click',()=>openModal('loginModal'));
+  document.getElementById('btnSignUp').addEventListener('click',()=>openModal('signupModal'));
+  document.getElementById('btnCart').addEventListener('click',()=>openModal('cartModal'));
+  document.getElementById('footerContactBtn').addEventListener('click',()=>openModal('contactModal'));
+  document.getElementById('footerAbout').addEventListener('click',()=>scrollToId('about'));
+  document.getElementById('footerShipping').addEventListener('click',()=>showToast('Free shipping on orders over MK50,000. Delivery within 3-5 business days.'));
+  document.getElementById('footerReturns').addEventListener('click',()=>showToast('14-day return policy. Items must be unused and in original packaging.'));
+  document.getElementById('footerCustom').addEventListener('click',()=>openModal('contactModal'));
+  document.getElementById('footerWhatsApp').addEventListener('click',()=>window.open('https://wa.me/265991234567', '_blank'));
+  document.getElementById('footerInstagram').addEventListener('click',()=>window.open('https://instagram.com', '_blank'));
+  document.getElementById('footerFacebook').addEventListener('click',()=>window.open('https://facebook.com', '_blank'));
+  document.getElementById('switchToSignup').addEventListener('click',()=>{ closeModal('loginModal'); setTimeout(()=>openModal('signupModal'),150); });
+  document.getElementById('switchToLogin').addEventListener('click',()=>{ closeModal('signupModal'); setTimeout(()=>openModal('loginModal'),150); });
+  document.getElementById('btnDoLogin').addEventListener('click',()=>{ if(document.getElementById('loginEmail').value){ closeModal('loginModal'); success('Welcome Back!','You have signed in successfully.'); } else { showToast('Please enter your email'); } });
+  document.getElementById('btnDoSignup').addEventListener('click',()=>{ if(document.getElementById('signupName').value){ closeModal('signupModal'); success('Account Created!','Welcome to Mthunzi Creations!'); } else { showToast('Please fill all fields'); } });
+  document.getElementById('btnSendContact').addEventListener('click',()=>{ if(document.getElementById('contactName').value){ closeModal('contactModal'); success('Message Sent!','Mthunzi will get back to you within 24 hours.'); } else { showToast('Please enter your name'); } });
+  document.getElementById('btnSuccessClose').addEventListener('click',()=>closeModal('successModal'));
+  document.getElementById('btnSearch').addEventListener('click',doSearch);
+  document.getElementById('heroSearch').addEventListener('keydown',e=>{ if(e.key==='Enter') doSearch(); });
+  var shopNowBtn = document.getElementById('shopNow');
+  if(shopNowBtn) shopNowBtn.addEventListener('click', function(){ scrollToId('shop'); });
+  
+  function doSearch(){ var q=document.getElementById('heroSearch').value.toLowerCase().trim(); if(!q){ renderFiltered(products,'All Items'); scrollToId('shop'); return; } var filtered=products.filter(p=>p.name.toLowerCase().indexOf(q)>-1||p.cat.toLowerCase().indexOf(q)>-1); renderFiltered(filtered,'Results: '+q); scrollToId('shop'); }
+  
+  document.querySelectorAll('.tag').forEach(t=>t.addEventListener('click',()=>filterCat(t.getAttribute('data-cat'))));
+  document.querySelectorAll('.cat-card').forEach(c=>c.addEventListener('click',()=>filterCat(c.getAttribute('data-cat'))));
+  document.querySelectorAll('.footer-cat').forEach(a=>a.addEventListener('click',()=>filterCat(a.getAttribute('data-cat'))));
+  
+  function filterCat(cat){ var filtered=products.filter(p=>p.cat===cat); renderFiltered(filtered,cat); scrollToId('shop'); }
+  
+  function renderFiltered(list,label){ 
+    document.getElementById('filterLabel').textContent=label; 
+    var grid=document.getElementById('prodGrid'); 
+    grid.innerHTML=''; 
+    if(!list.length){ 
+      var empty=document.createElement('div'); 
+      empty.style.cssText='grid-column:1/-1;text-align:center;padding:60px;font-size:18px;color:var(--text-muted);'; 
+      empty.innerHTML='<i class="fas fa-search" style="font-size:40px;margin-bottom:16px;display:block;"></i>No items found.'; 
+      grid.appendChild(empty); 
+      return; 
+    } 
+    list.forEach(p=>{ 
+      var card=document.createElement('div'); 
+      card.className='prod-card'; 
+      var badgeHtml=p.badge?'<div class="prod-badge">'+p.badge+'</div>':''; 
+      var stockHtml = p.stock === 'in-stock' ? '<div class="stock-status in-stock">✓ In Stock</div>' : '<div class="stock-status low-stock">⚠ Low Stock</div>'; 
+      card.innerHTML=badgeHtml+'<div class="prod-img" style="background-image:url(\''+p.img+'\');"></div><div class="prod-info"><div class="prod-cat">'+p.cat+'</div><div class="prod-name">'+p.name+'</div><div class="prod-dimensions"><i class="fas fa-ruler-combined"></i> '+p.dimensions+'</div>'+stockHtml+'<div class="prod-footer"><div class="prod-price">'+fmt(p.price)+'</div><button class="add-cart-btn" data-id="'+p.id+'"><i class="fas fa-shopping-cart"></i> Add</button></div></div>'; 
+      card.addEventListener('click',()=>{ 
+        detailProductId=p.id; 
+        document.getElementById('detailImg').style.backgroundImage='url('+p.img+')'; 
+        document.getElementById('detailCat').textContent=p.cat; 
+        document.getElementById('detailName').textContent=p.name; 
+        document.getElementById('detailDimensions').innerHTML='<i class="fas fa-ruler-combined"></i> Dimensions: '+p.dimensions; 
+        document.getElementById('detailPrice').textContent=fmt(p.price); 
+        document.getElementById('detailDesc').textContent=p.desc; 
+        document.getElementById('detailStock').className = p.stock === 'in-stock' ? 'stock-status in-stock' : 'stock-status low-stock'; 
+        document.getElementById('detailStock').innerHTML = p.stock === 'in-stock' ? '✓ In Stock — Ready to ship' : '⚠ Low Stock — Only few left!'; 
+        openModal('prodModal'); 
+      }); 
+      card.querySelector('.add-cart-btn').addEventListener('click',e=>{ e.stopPropagation(); addToCart(p.id); }); 
+      grid.appendChild(card); 
+    }); 
+  }
+  
+  function addToCart(id){ 
+    var p=products.find(p=>p.id===id); 
+    if(!p)return; 
+    var found=cart.find(i=>i.id===id); 
+    if(found){ found.qty++; }else{ cart.push({id:p.id,name:p.name,img:p.img,price:p.price,qty:1}); } 
+    updateBadge(); 
+    showToast(p.name+' added to cart'); 
+  }
+  
+  function updateBadge(){ var total=cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartBadge').textContent=total; }
+  
+  function renderCart(){ 
+    var el=document.getElementById('cartItems'); 
+    var totalRow=document.getElementById('cartTotalRow'); 
+    var btn=document.getElementById('checkoutBtn'); 
+    el.innerHTML=''; 
+    if(!cart.length){ 
+      el.innerHTML='<div class="cart-empty"><i class="fas fa-shopping-bag" style="font-size:48px;margin-bottom:16px;display:block;"></i>Your cart is empty</div>'; 
+      totalRow.style.display='none'; 
+      btn.style.display='none'; 
+      return; 
+    } 
+    cart.forEach(p=>{ 
+      var item=document.createElement('div'); 
+      item.className='cart-item'; 
+      item.innerHTML='<div class="cart-item-img" style="background-image:url(\''+p.img+'\');"></div><div class="cart-item-info"><div class="cart-item-name">'+p.name+'</div><div class="cart-item-price">'+fmt(p.price)+'</div><div class="cart-qty-controls"><button class="cart-qty-btn" data-id="'+p.id+'" data-dir="minus">−</button><span class="cart-qty-num">'+p.qty+'</span><button class="cart-qty-btn" data-id="'+p.id+'" data-dir="plus">+</button></div></div><button class="cart-item-remove" data-id="'+p.id+'"><i class="fas fa-trash-alt"></i></button>'; 
+      item.querySelectorAll('.cart-qty-btn').forEach(btn=>{ 
+        btn.addEventListener('click',(e)=>{ 
+          e.stopPropagation(); 
+          var id=parseInt(btn.getAttribute('data-id')); 
+          var dir=btn.getAttribute('data-dir'); 
+          var cartItem=cart.find(i=>i.id===id); 
+          if(cartItem){ 
+            if(dir==='plus'){ cartItem.qty++; } 
+            else if(dir==='minus' && cartItem.qty>1){ cartItem.qty--; } 
+            else if(dir==='minus' && cartItem.qty===1){ cart=cart.filter(i=>i.id!==id); } 
+            updateBadge(); renderCart(); 
+          } 
+        }); 
+      }); 
+      item.querySelector('.cart-item-remove').addEventListener('click',()=>{ cart=cart.filter(i=>i.id!==p.id); updateBadge(); renderCart(); }); 
+      el.appendChild(item); 
+    }); 
+    var total=cart.reduce((s,i)=>s+i.price*i.qty,0); 
+    document.getElementById('cartTotalAmt').textContent=fmt(total); 
+    totalRow.style.display='flex'; 
+    btn.style.display='block'; 
+  }
+  
+  document.getElementById('checkoutBtn').addEventListener('click',()=>{ 
+    closeModal('cartModal'); 
+    var html=''; 
+    var total=0; 
+    cart.forEach(p=>{ html+=p.name+' x '+p.qty+' — '+fmt(p.price*p.qty)+'<br>'; total+=p.price*p.qty; }); 
+    document.getElementById('paySummaryItems').innerHTML=html; 
+    document.getElementById('payTotal').innerHTML='<strong>Total: '+fmt(total)+'</strong>'; 
+    openModal('paymentModal'); 
+  });
+  
+  document.getElementById('btnConfirmPayment').addEventListener('click',()=>{ closeModal('paymentModal'); cart=[]; updateBadge(); success('Payment Submitted!','Thank you! We will process your order after confirmation via WhatsApp.'); });
+  document.getElementById('detailAddBtn').addEventListener('click',()=>{ if(detailProductId!==null){ addToCart(detailProductId); closeModal('prodModal'); } });
+  
+  var popupMessages=[{title:'Born in Blantyre',text:'Mthunzi grew up surrounded by the creative energy of Malawi\'s commercial capital.'},{title:'Self-taught Master',text:'With no formal training, Mthunzi taught himself every medium.'},{title:'Wearable Art',text:'Mthunzi\'s T-shirt prints use eco-friendly inks.'},{title:'Custom Orders Open',text:'Commission a personalised painting or drawing. Contact us today!'},{title:'100% Malawian Made',text:'Every item is hand-made in Blantyre, Malawi.'}]; 
+  var popupIdx=0; 
+  function showPopup(){ var msg=popupMessages[popupIdx%popupMessages.length]; document.getElementById('popupTitle').textContent=msg.title; document.getElementById('popupText').textContent=msg.text; document.getElementById('artistPopup').classList.add('show'); popupIdx++; setTimeout(()=>document.getElementById('artistPopup').classList.remove('show'),8000); } 
+  document.getElementById('popupCloseBtn').addEventListener('click',()=>document.getElementById('artistPopup').classList.remove('show')); 
+  document.getElementById('popupLearnMore').addEventListener('click',()=>{ document.getElementById('artistPopup').classList.remove('show'); openModal('contactModal'); }); 
+  setTimeout(showPopup,3000); 
+  setInterval(showPopup,180000);
+  
+  renderFiltered(products,'All Items');
+});
+</script>
+</body>
+</html>
