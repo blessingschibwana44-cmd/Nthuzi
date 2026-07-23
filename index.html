@@ -66,7 +66,7 @@
     position: sticky;
     top: 0;
     z-index: 999;
-    background: rgba(248, 246, 241, 0.82);
+    background: rgba(248, 246, 241, 0.92);
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     border-bottom: 1px solid var(--border-light);
@@ -74,7 +74,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 76px;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-height: 76px;
     position: relative;
   }
   nav::after {
@@ -90,10 +92,11 @@
   .site-logo.hidden { display:none !important; }
   .logo-badge { width:42px; height:42px; border-radius:50%; display:none; align-items:center; justify-content:center; font-weight:700; background: var(--horizon); color: var(--white); font-family: var(--font-display); font-size:18px; margin-right:12px; box-shadow: var(--shadow-sm); }
   .hamburger { display:none; background: var(--white); border:1px solid var(--border-light); padding:9px 12px; border-radius: var(--r-sm); cursor:pointer; color:var(--text-primary); box-shadow: var(--shadow-sm); }
-  .mobile-menu { position: fixed; inset: 76px 0 0 0; background: rgba(248,246,241,0.98); backdrop-filter: blur(10px); z-index: 1500; display: none; padding: 24px 5%; }
-  .mobile-menu.open { display:block; }
-  .mobile-menu .nav-links { display:flex; flex-direction:column; gap:6px; }
-  .mobile-menu .nav-links a { padding: 14px 4px; border-bottom: 1px solid var(--border-light); }
+  .mobile-menu { position: fixed; inset: 76px 0 0 0; background: rgba(248,246,241,0.98); backdrop-filter: blur(10px); z-index: 1500; display: none; padding: 24px 5%; overflow-y: auto; }
+  .mobile-menu.open { display:flex; flex-direction:column; justify-content:flex-start; }
+  .mobile-menu-close { align-self: flex-end; background: transparent; border: none; color: var(--near-black); font-size: 24px; cursor: pointer; padding: 6px; margin-bottom: 24px; }
+  .mobile-menu .nav-links { display:flex; flex-direction:column; gap:14px; }
+  .mobile-menu .nav-links a { padding: 16px 4px; border-bottom: 1px solid var(--border-light); font-size: 16px; color: var(--near-black); }
   .logo span { color: var(--lake); font-weight: 400; font-style: italic; }
   .nav-links { display: flex; gap: 38px; align-items: center; }
   .nav-links a { position: relative; font-family: var(--font-body); font-size: 13px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; cursor: pointer; font-weight: 600; padding: 4px 0; transition: color 0.2s; }
@@ -331,13 +334,24 @@
     .footer-grid { grid-template-columns: 1fr; }
     .nav-links { display: none; }
     .hamburger { display: inline-flex; }
-    .nav-actions { gap:8px; }
+    .nav-actions { display: none; }
     .newsletter-form { flex-direction: column; }
+    .hero { min-height: 72vh; padding: 0 4%; }
+    .hero-content { width: 100%; max-width: 100%; }
+    .hero-search { flex-direction: column; gap: 10px; }
+    .hero-search input, .hero-search button { width: 100%; }
+    .hero-search button { border-radius: 0 0 28px 28px; }
+    .hero-tags { justify-content: flex-start; }
   }
   @media (max-width: 600px) {
     .prod-grid { grid-template-columns: 1fr; }
     .section { padding: 56px 5%; }
     .section-title { font-size: 28px; }
+    .hero { min-height: 100vh; padding: 0 4%; }
+    .hero-content { padding-top: 28px; }
+    .trust-banner { flex-direction: column; gap: 16px; padding: 22px 4%; }
+    .hero-inner h1 { font-size: clamp(32px, 9vw, 42px); }
+    .hero-badge { padding: 10px 16px; font-size: 12px; }
   }
 </style>
 </head>
@@ -364,12 +378,13 @@
 </nav>
 <!-- Mobile menu overlay -->
 <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <button id="mobileClose" class="mobile-menu-close" aria-label="Close menu">✕</button>
   <div class="nav-links">
     <a id="mNavShop">Shop</a>
     <a id="mNavGallery">Gallery</a>
     <a id="mNavContact">Contact</a>
     <a id="mNavAbout">About</a>
-    <div style="margin-top:16px;display:flex;gap:8px;">
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;">
       <button class="btn-nav btn-outline" id="mBtnSignIn">Sign In</button>
       <button class="btn-nav btn-fill" id="mBtnSignUp">Sign Up</button>
     </div>
@@ -517,6 +532,14 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenu.setAttribute('aria-hidden', !mobileMenu.classList.contains('open'));
     });
   }
+  var mobileClose = document.getElementById('mobileClose');
+  if(mobileClose){
+    mobileClose.addEventListener('click', function(){
+      mobileMenu.classList.remove('open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+    });
+  }
+  window.addEventListener('resize', function(){ if(window.innerWidth > 900 && mobileMenu.classList.contains('open')){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); }});
   // Wire mobile nav links
   document.getElementById('mNavShop').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('shop'); });
   document.getElementById('mNavGallery').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('gallery'); });
