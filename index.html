@@ -448,11 +448,29 @@
 </section>
 
 <section class="section reviews-section">
-  <div class="section-header"><h2 class="section-title">What Collectors Say</h2><span class="section-sub">Real Reviews</span></div>
+  <div class="section-header"><h2 class="section-title">What We Do</h2><span class="section-sub">Creative Services</span></div>
   <div class="review-grid">
-    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"The Sunrise painting transformed my living room. The colors are even more vibrant in person. Mthunzi is a true talent."</p><div class="review-author">— Tawonga C.</div><div class="review-location">Lilongwe, Malawi</div></div>
-    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Bought the Heritage hoodie as a gift. The quality is exceptional and the print is stunning. Will definitely order again."</p><div class="review-author">— Chimwemwe B.</div><div class="review-location">Blantyre, Malawi</div></div>
-    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"The charcoal drawing arrived beautifully packaged. It captures so much emotion. Highly recommend Mthunzi Creations."</p><div class="review-author">— Grace M.</div><div class="review-location">Zomba, Malawi</div></div>
+    <div class="review-card">
+      <div class="review-stars"><i class="fas fa-palette"></i></div>
+      <p class="review-text">We create original artworks, paintings, and drawings that bring stories, culture, and emotion to life.</p>
+      <div class="review-author">Art &amp; Illustration</div>
+      <div class="review-location">Original pieces for homes, studios, and galleries</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><i class="fas fa-tshirt"></i></div>
+      <p class="review-text">We design and print custom t-shirts, wearable art, and branded pieces for personal style or business identity.</p>
+      <div class="review-author">Printed Apparel</div>
+      <div class="review-location">Bold, expressive, and ready to wear</div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><i class="fas fa-building"></i></div>
+      <p class="review-text">We also offer commissioned work for infrastructure spaces, murals, book illustrations, and other creative visual projects.</p>
+      <div class="review-author">Commissioned Projects</div>
+      <div class="review-location">From walls to pages, we bring imagination to structure</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:28px;">
+    <button class="btn-fill" id="contactServiceBtn" style="padding:13px 24px;">Get in Touch</button>
   </div>
 </section>
 
@@ -568,6 +586,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btnSignUp').addEventListener('click',()=>openModal('signupModal'));
   document.getElementById('btnCart').addEventListener('click',()=>openModal('cartModal'));
   document.getElementById('footerContactBtn').addEventListener('click',()=>openModal('contactModal'));
+  document.getElementById('contactServiceBtn').addEventListener('click',()=>openModal('contactModal'));
   document.getElementById('footerAbout').addEventListener('click',()=>scrollToId('about'));
   document.getElementById('footerShipping').addEventListener('click',()=>showToast('Free shipping on orders over MK50,000. Delivery within 3-5 business days.'));
   document.getElementById('footerReturns').addEventListener('click',()=>showToast('14-day return policy. Items must be unused and in original packaging.'));
