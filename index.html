@@ -8,33 +8,32 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   :root {
-    /* Core neutrals — warm paper canvas, cool ink for contrast */
+    /* Core neutrals — clean canvas and calm contrast */
     --white: #ffffff;
-    --off-white: #f8f6f1;
-    --light-gray: #f0ede5;
-    --mid-gray: #e2dcce;
-    --charcoal: #2a2a27;
-    --dark-charcoal: #1b1b18;
-    --near-black: #171714;
-    --border-light: #e7e1d2;
-    --text-primary: #1a1a17;
-    --text-secondary: #55534b;
-    --text-muted: #8c8a7e;
+    --off-white: #f5f8fc;
+    --light-gray: #eef3f8;
+    --mid-gray: #dce6f0;
+    --charcoal: #1b2f45;
+    --dark-charcoal: #13263d;
+    --near-black: #10233b;
+    --border-light: #dfe8f2;
+    --text-primary: #18304a;
+    --text-secondary: #51657a;
+    --text-muted: #74879a;
 
-    /* Signature palette — Lake Malawi at dusk: teal water, gold sky, clay shore */
-    --lake: #0d7d82;
-    --lake-deep: #095b60;
-    --gold: #dfa62e;
-    --clay: #bd4f30;
-    --accent: #0d7d82;
-    --accent-light: #16a3a8;
-    --accent-glow: rgba(13, 125, 130, 0.14);
+    /* Signature palette — deep blue sea with a touch of gold */
+    --lake: #1f5fa8;
+    --lake-deep: #123f6b;
+    --gold: #d9a93b;
+    --accent: #1f5fa8;
+    --accent-light: #4a89d4;
+    --accent-glow: rgba(31, 95, 168, 0.12);
     --success: #2f8f5f;
     --warning: #c9762c;
 
-    /* Signature gradient — used sparingly as the page's one recurring motif */
-    --horizon: linear-gradient(90deg, var(--lake) 0%, var(--gold) 58%, var(--clay) 100%);
-    --horizon-soft: linear-gradient(90deg, rgba(13,125,130,0.16) 0%, rgba(223,166,46,0.16) 58%, rgba(189,79,48,0.16) 100%);
+    /* Signature gradient */
+    --horizon: linear-gradient(90deg, var(--lake) 0%, var(--gold) 100%);
+    --horizon-soft: linear-gradient(90deg, rgba(31,95,168,0.14) 0%, rgba(217,169,59,0.16) 100%);
 
     /* Elevation + shape */
     --shadow-sm: 0 2px 10px rgba(23,23,20,0.05);
@@ -87,16 +86,21 @@
     background: var(--horizon);
     opacity: 0.9;
   }
-  .logo { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: 0.2px; color: var(--near-black); cursor: pointer; }
-  .site-logo { width:42px; height:42px; border-radius:50%; object-fit:cover; display:inline-block; vertical-align:middle; margin-right:12px; box-shadow: var(--shadow-sm); }
+  .nav-brand { display:flex; align-items:center; gap:12px; min-width:0; }
+  .logo { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: 0.2px; color: var(--near-black); cursor: pointer; white-space: nowrap; }
+  .site-logo { width:46px; height:46px; border-radius: 50%; object-fit:cover; display:inline-block; vertical-align:middle; box-shadow: 0 10px 24px rgba(18, 63, 107, 0.16); border: 2px solid rgba(255,255,255,0.9); background: var(--white); }
   .site-logo.hidden { display:none !important; }
-  .logo-badge { width:42px; height:42px; border-radius:50%; display:none; align-items:center; justify-content:center; font-weight:700; background: var(--horizon); color: var(--white); font-family: var(--font-display); font-size:18px; margin-right:12px; box-shadow: var(--shadow-sm); }
+  .logo-badge { width:46px; height:46px; border-radius:50%; display:none; align-items:center; justify-content:center; font-weight:700; background: var(--horizon); color: var(--white); font-family: var(--font-display); font-size:18px; box-shadow: 0 10px 24px rgba(18, 63, 107, 0.16); }
   .hamburger { display:none; background: var(--white); border:1px solid var(--border-light); padding:9px 12px; border-radius: var(--r-sm); cursor:pointer; color:var(--text-primary); box-shadow: var(--shadow-sm); }
-  .mobile-menu { position: fixed; inset: 76px 0 0 0; background: rgba(248,246,241,0.98); backdrop-filter: blur(10px); z-index: 1500; display: none; padding: 24px 5%; overflow-y: auto; }
+  .mobile-menu { position: fixed; inset: 76px 0 0 0; background: rgba(245,248,252,0.86); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); z-index: 1500; display: none; padding: 24px 5%; overflow-y: auto; }
   .mobile-menu.open { display:flex; flex-direction:column; justify-content:flex-start; }
   .mobile-menu-close { align-self: flex-end; background: transparent; border: none; color: var(--near-black); font-size: 24px; cursor: pointer; padding: 6px; margin-bottom: 24px; }
   .mobile-menu .nav-links { display:flex; flex-direction:column; gap:14px; }
-  .mobile-menu .nav-links a { padding: 16px 4px; border-bottom: 1px solid var(--border-light); font-size: 16px; color: var(--near-black); }
+  .mobile-menu .nav-links a { padding: 14px 10px; border-bottom: 1px solid rgba(18,63,107,0.12); font-size: 16px; color: var(--near-black); border-radius: 12px; transition: all 0.2s ease; }
+  .mobile-menu .nav-links a:hover { background: rgba(255,255,255,0.62); color: var(--lake); transform: translateX(4px); }
+  .mobile-menu .btn-nav { width: 100%; padding: 12px 16px; border-radius: 999px; transition: all 0.2s ease; backdrop-filter: blur(8px); }
+  .mobile-menu .btn-outline:hover { background: rgba(255,255,255,0.8); border-color: var(--lake); color: var(--lake); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+  .mobile-menu .btn-fill:hover { background: var(--lake-deep); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   .logo span { color: var(--lake); font-weight: 400; font-style: italic; }
   .nav-links { display: flex; gap: 38px; align-items: center; }
   .nav-links a { position: relative; font-family: var(--font-body); font-size: 13px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; cursor: pointer; font-weight: 600; padding: 4px 0; transition: color 0.2s; }
@@ -334,13 +338,15 @@
     .footer-grid { grid-template-columns: 1fr; }
     .nav-links { display: none; }
     .hamburger { display: inline-flex; }
-    .nav-actions { display: none; }
+    .nav-actions { display: flex; margin-left: auto; }
+    .nav-actions .btn-nav { display: none; }
+    .cart-btn { padding: 9px 14px; }
     .newsletter-form { flex-direction: column; }
     .hero { min-height: 72vh; padding: 0 4%; }
     .hero-content { width: 100%; max-width: 100%; }
-    .hero-search { flex-direction: column; gap: 10px; }
-    .hero-search input, .hero-search button { width: 100%; }
-    .hero-search button { border-radius: 0 0 28px 28px; }
+    .hero-search { flex-direction: row; gap: 0; background: var(--white); box-shadow: var(--shadow-lg); max-width: 100%; width: 100%; border: 1px solid rgba(255,255,255,0.28); }
+    .hero-search input { width: 100%; min-width: 0; border-radius: 999px 0 0 999px; }
+    .hero-search button { width: auto; border-radius: 0 999px 999px 0; white-space: nowrap; }
     .hero-tags { justify-content: flex-start; }
   }
   @media (max-width: 600px) {
@@ -352,13 +358,15 @@
     .trust-banner { flex-direction: column; gap: 16px; padding: 22px 4%; }
     .hero-inner h1 { font-size: clamp(32px, 9vw, 42px); }
     .hero-badge { padding: 10px 16px; font-size: 12px; }
+    .hero-search input { padding: 14px 16px; }
+    .hero-search button { padding: 13px 16px; font-size: 12px; }
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <div style="display:flex;align-items:center;gap:12px;">
+  <div class="nav-brand">
     <img id="siteLogo" src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.classList.add('hidden'); document.getElementById('logoBadge').style.display='inline-flex';">
     <div id="logoBadge" class="logo-badge" aria-hidden="true">M</div>
     <span class="logo" id="logoHome">MTHUNZI <span>CREATIONS</span></span>
