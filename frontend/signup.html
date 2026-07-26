@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Mthunzi Creations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #07131f;
+      --panel: #fff;
+      --text: #10233b;
+      --muted: #6b7c8f;
+      --accent: #1f5fa8;
+      --accent-2: #2d7dd2;
+      --border: #e6edf6;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(31, 95, 168, 0.2), transparent 28%),
+        linear-gradient(135deg, #f7fbff 0%, #eef6ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .page {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(7, 19, 31, 0.16);
+      background: var(--panel);
+    }
+
+    .hero-panel {
+      padding: 44px;
+      position: relative;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      background:
+        linear-gradient(140deg, rgba(17,37,61,0.95) 0%, rgba(24,58,91,0.92) 40%, rgba(31,95,168,0.78) 100%),
+        url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1200&q=80') center/cover;
+      overflow: hidden;
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+
+    .hero-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(0,0,0,0.16), rgba(0,0,0,0.02));
+      pointer-events: none;
+    }
+
+    @keyframes drift {
+      from { transform: scale(1); }
+      to { transform: scale(1.03); }
+    }
+
+    .hero-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-panel h1 {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.14;
+      font-weight: 800;
+    }
+
+    .hero-panel p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .hero-cards {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .hero-cards div {
+      background: rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-panel {
+      padding: 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    }
+
+    .form-title {
+      font-size: 30px;
+      margin: 0 0 8px;
+      font-weight: 800;
+    }
+
+    .form-subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+    .field input { width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 15px; outline: none; }
+    .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(31,95,168,0.12); }
+    .btn { width: 100%; border: 0; border-radius: 14px; padding: 14px 16px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-primary { color: white; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); box-shadow: 0 10px 24px rgba(31,95,168,0.2); }
+    .btn:disabled { opacity: 0.8; cursor: wait; }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status-msg { min-height: 20px; margin-top: 12px; font-size: 14px; color: var(--muted); font-weight: 600; text-align: center; }
+    .status-msg.success { color: #1f9d6a; }
+    .status-msg.error { color: #c0392b; }
+    .row { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 14px; color: var(--muted); }
+    .link-btn { color: var(--accent); font-weight: 700; cursor: pointer; text-decoration: none; }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10233b; color: white; padding: 10px 16px; border-radius: 999px; font-size: 14px; display: none; z-index: 50; }
+
+    @media (max-width: 850px) {
+      .page { grid-template-columns: 1fr; }
+      .hero-panel, .form-panel { padding: 28px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero-panel">
+      <div>
+        <div class="brand" style="color:white;">
+        <img src="assets/mthunzi-logo.png" alt="Mthunzi logo" onerror="this.style.display='none'" style="width:46px;height:46px;border-radius:14px;object-fit:cover;" />
+        <span>MTHUNZI CREATIONS</span>
+      </div>
+        <h1>Create your account and shop with confidence.</h1>
+        <p>Join Mthunzi Creations to save your cart, continue checkout smoothly, and receive updates on new original pieces.</p>
+        <div class="hero-cards">
+          <div><i class="fas fa-user-plus"></i> Personal account dashboard</div>
+          <div><i class="fas fa-credit-card"></i> Faster checkout</div>
+          <div><i class="fas fa-palette"></i> Early access to new collections</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75)">Already have an account? Sign in instead.</div>
+    </section>
+
+    <section class="form-panel">
+      <div class="brand">
+        <span>Create Account</span>
+      </div>
+      <h2 class="form-title">Create account</h2>
+      <p class="form-subtitle">Fill in your details to get started.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input id="name" type="text" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" type="tel" placeholder="0991 234 567" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" />
+        </div>
+        <div class="field">
+          <label for="confirm">Confirm password</label>
+          <input id="confirm" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="submitBtn">Create Account</button>
+      <div class="status-msg" id="statusMessage" aria-live="polite"></div>
+
+      <div class="row">
+        <span>Already joined?</span>
+        <a class="link-btn" href="login.html">Sign in</a>
+      </div>
+      <div class="row">
+        <a class="link-btn" href="index.html">Back to shop</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.style.display = 'none', 2400);
+    }
+
+    function setLoading(button, loading, label) {
+      const status = document.getElementById('statusMessage');
+      button.disabled = loading;
+      if (loading) {
+        button.innerHTML = '<span class="spinner"></span> ' + label;
+        status.className = 'status-msg';
+        status.textContent = 'Creating your account...';
+      } else {
+        button.innerHTML = label;
+      }
+    }
+
+    function setStatus(message, type) {
+      const status = document.getElementById('statusMessage');
+      status.className = `status-msg ${type || ''}`.trim();
+      status.textContent = message;
+    }
+
+    async function authRequest(url, payload) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const body = await response.json().catch(() => ({}));
+      return { response, body };
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', async function () {
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const confirm = document.getElementById('confirm').value.trim();
+
+      if (!name || !email || !password || !confirm) {
+        showToast('Please fill in your name, email, and password.');
+        return;
+      }
+      if (password !== confirm) {
+        showToast('Passwords do not match.');
+        return;
+      }
+
+      const button = document.getElementById('submitBtn');
+      setLoading(button, true, 'Creating Account...');
+
+      const result = await authRequest('/api/signup', { name, email, phone, password });
+      if (!result.response.ok) {
+        setLoading(button, false, 'Create Account');
+        setStatus(result.body.error || 'Signup failed.', 'error');
+        showToast(result.body.error || 'Signup failed.');
+        return;
+      }
+
+      localStorage.setItem('mthunziAuthUser', JSON.stringify(result.body.data));
+      setStatus('Account created successfully! Redirecting...', 'success');
+      showToast('Account created successfully!');
+      const redirect = localStorage.getItem('mthunziAuthRedirect') || 'account.html';
+      localStorage.removeItem('mthunziAuthRedirect');
+      setTimeout(() => {
+        window.location.href = redirect;
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

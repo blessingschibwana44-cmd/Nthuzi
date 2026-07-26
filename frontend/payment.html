@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payment — Mthunzi Creations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    :root{--accent:#1f5fa8;--muted:#6b7c8f;--card:#fff}
+    body{font-family:Inter,system-ui,Arial,Helvetica,sans-serif;margin:0;background:linear-gradient(180deg,#f7fbfe, #ffffff);color:#112233}
+    .wrap{max-width:1100px;margin:28px auto;padding:20px}
+    .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .btn-back{background:none;border:0;color:var(--accent);font-weight:600;cursor:pointer}
+    .layout{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
+    .panel{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 10px 30px rgba(15,30,60,0.06)}
+    .panel h2{margin:0 0 12px;font-size:20px}
+    .methods{display:flex;flex-direction:column;gap:12px}
+    .method{border:1px solid #e6edf6;border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+    .method.chosen{border-color:var(--accent);box-shadow:0 6px 18px rgba(31,95,168,0.06)}
+    .method .meta{flex:1}
+    .method input[type=radio]{margin-top:6px}
+    .method-logo{width:104px;height:56px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .method-logo img{max-width:100%;max-height:100%;object-fit:contain;}
+    .instructions{font-size:14px;color:var(--muted);margin-top:8px}
+    .uploader{margin-top:14px;border:1px dashed #d9e6f6;border-radius:10px;padding:12px;display:flex;gap:12px;align-items:center}
+    .uploader input{display:none}
+    .upload-preview{max-width:140px;max-height:120px;border-radius:8px;object-fit:cover;border:1px solid #eef6ff}
+    .summary{display:flex;flex-direction:column;gap:12px}
+    .summary-toggle{display:none}
+    .summary-sheet{display:none;margin-top:16px;padding:16px 18px;border:1px solid #dce8f4;border-radius:18px;background:linear-gradient(135deg,#f7fbff 0%,#eef6ff 100%);box-shadow:0 14px 34px rgba(31,95,168,.08)}
+    .summary-sheet.open{display:block;animation:slideDown .22s ease}
+    .summary-sheet .summary-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+    .summary-sheet .summary-header h3{margin:0;font-size:16px;color:#10324e}
+    .summary-sheet .summary-header .btn-back{font-size:13px}
+    .summary-sheet .total{font-weight:700;font-size:18px;margin-top:8px}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .item-row{display:flex;gap:10px;align-items:center}
+    .item-row img{width:56px;height:56px;object-fit:cover;border-radius:6px}
+    .total{font-weight:700;font-size:18px;margin-top:8px}
+    .actions{display:flex;gap:12px;margin-top:12px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-secondary{background:#f1f7fb;color:var(--accent)}
+    .note{font-size:13px;color:var(--muted)}
+    .success-panel{margin-top:18px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#f4fbff 0%, #eef7ff 100%);border:1px solid #d7e8f7;box-shadow:0 16px 42px rgba(31,95,168,.08)}
+    .success-panel h3{margin:0 0 8px;font-size:18px;color:#114a7b;display:flex;align-items:center;gap:8px}
+    .success-panel .summary-list{display:flex;flex-direction:column;gap:6px;margin:10px 0 4px}
+    .success-panel .summary-list .item{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:#2f4662}
+    .success-panel .summary-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #e2eef8;font-size:13px;color:#2f4662}
+    .success-panel .summary-row strong{color:#10324e}
+    .btn-download{margin-top:12px;background:#0d7d82;color:#fff}
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10233b;color:#fff;padding:10px 18px;border-radius:999px;display:none}
+    .payment-overlay{position:fixed;inset:0;background:rgba(15,15,12,0.72);backdrop-filter:blur(6px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+    .payment-overlay.open{display:flex}
+    .payment-modal{background:#fff;border-radius:20px;padding:36px;max-width:420px;width:100%;box-shadow:0 30px 60px rgba(0,0,0,0.3);animation:slideUp 0.3s ease}
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .payment-modal h2{margin:0 0 24px;font-size:24px;color:#10233b;text-align:center}
+    .card-form{display:flex;flex-direction:column;gap:16px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-weight:600;font-size:13px;color:#2f4662}
+    .form-group input{padding:12px 14px;border:1.5px solid #dce8f4;border-radius:10px;font-size:15px;font-family:Inter,sans-serif}
+    .form-group input:focus{outline:none;border-color:#1f5fa8;box-shadow:0 0 0 3px rgba(31,95,168,0.1)}
+    .card-number-input{font-family:'Space Mono',monospace;letter-spacing:2px}
+    .card-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .pay-btn{padding:14px;border:none;border-radius:10px;background:linear-gradient(90deg,#1f5fa8,#4a89d4);color:#fff;font-weight:600;font-size:15px;cursor:pointer;margin-top:20px;transition:all 0.2s}
+    .pay-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 24px rgba(31,95,168,0.25)}
+    .pay-btn:disabled{opacity:0.6;cursor:not-allowed}
+    .pay-btn .btn-spinner{display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,0.32);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:text-bottom}
+    .pay-btn.is-processing .btn-spinner{display:inline-block}
+    .pay-btn.is-processing .btn-label{opacity:0.95}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .success-overlay{position:fixed;inset:0;background:rgba(15,15,12,0.72);backdrop-filter:blur(6px);z-index:2001;display:none;align-items:center;justify-content:center;padding:20px}
+    .success-overlay.open{display:flex}
+    .success-card{background:#fff;border-radius:20px;padding:36px;max-width:440px;width:100%;text-align:left;animation:slideUp 0.3s ease}
+    .success-card .success-icon{font-size:64px;color:#2f8f5f;margin-bottom:12px;text-align:center}
+    .success-card h3{margin:0 0 10px;font-size:22px;color:#10233b;text-align:center}
+    .success-card p{margin:0 0 16px;font-size:14px;color:#2f4662;line-height:1.6;text-align:center}
+    .success-summary{background:#f7fbff;border:1px solid #dce8f4;border-radius:14px;padding:12px 14px;margin:14px 0}
+    .success-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:13px;color:#2f4662}
+    .success-row strong{color:#10233b}
+    .success-items{max-height:180px;overflow:auto;border:1px solid #e8f0f7;border-radius:12px;padding:10px;background:#fcfeff;margin-top:12px}
+    .success-item{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #f0f4f8;font-size:13px;color:#2f4662}
+    .success-item:last-child{border-bottom:none}
+    .success-actions{display:flex;gap:10px;margin-top:16px}
+    .success-actions .btn{flex:1}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <button class="btn-back" id="backBtn"><i class="fas fa-arrow-left"></i> Back to Shop</button>
+      </div>
+      <div>
+        <strong>Secure Payment</strong>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <h2>Select Payment Method</h2>
+        <div class="actions" style="margin:0 0 14px;justify-content:flex-start">
+          <button class="btn btn-secondary" id="showSummaryBtn">Review order summary</button>
+        </div>
+        <div class="summary-sheet" id="summarySheet">
+          <div class="summary-header">
+            <h3>Order summary</h3>
+            <button class="btn-back" id="closeSummaryBtn"><i class="fas fa-xmark"></i> Close</button>
+          </div>
+          <div class="summary" id="orderSummary">
+            <div id="items"></div>
+            <div class="total" id="total">Total: MK0</div>
+          </div>
+          <div class="success-panel" id="successPanel" style="display:none;">
+            <h3><i class="fas fa-check-circle"></i> Payment Submitted</h3>
+            <div id="successText">Your payment was submitted successfully. Please wait while we confirm your proof and prepare your order.</div>
+            <div class="summary-list" id="summaryItems"></div>
+            <div class="summary-row"><span>Order ID</span><strong id="summaryOrderId">—</strong></div>
+            <div class="summary-row"><span>Payment Method</span><strong id="summaryPaymentMethod">—</strong></div>
+            <div class="summary-row"><span>Total Paid</span><strong id="summaryTotal">MK0</strong></div>
+            <button class="btn btn-download" id="downloadReceiptBtn">Download Order Summary</button>
+          </div>
+        </div>
+        <div class="methods" id="methods">
+          <label class="method" data-method="tnm">
+            <input type="radio" name="paymethod" value="tnm">
+            <div class="method-logo">
+              <img src="assets/payment-logos/tnm-logo.png" alt="TNM">
+            </div>
+            <div class="meta">
+              <div style="font-weight:700">TNM Mobile Money</div>
+              <div class="instructions">Use your TNM Mobile Money account to send the full order amount, then upload a screenshot of the transfer as proof.</div>
+            </div>
+          </label>
+
+          <label class="method" data-method="airtel">
+            <input type="radio" name="paymethod" value="airtel">
+            <div class="method-logo">
+              <img src="assets/payment-logos/airtel-logo.png" alt="Airtel">
+            </div>
+            <div class="meta">
+              <div style="font-weight:700">Airtel Money</div>
+              <div class="instructions">Use your Airtel Money account to send the full order amount, then upload a screenshot of the transfer as proof.</div>
+            </div>
+          </label>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="note">Upload payment proof (PNG, JPG). This helps us process your order faster.</div>
+          <div class="uploader" id="uploader">
+            <img id="preview" class="upload-preview" src="" alt="" style="display:none">
+            <div style="flex:1">
+              <div id="uploadLabel">No file selected</div>
+              <div style="margin-top:8px"><label class="btn btn-secondary" id="chooseBtn">Choose file</label></div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
+          </div>
+        </div>
+
+        <div style="margin-top:18px" id="methodDetails"></div>
+
+        <div class="actions">
+          <button class="btn btn-secondary" id="saveDraft">Save Draft</button>
+          <button class="btn btn-primary" id="confirmBtn">Confirm Payment</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <div class="payment-overlay" id="paymentOverlay">
+    <div class="payment-modal">
+      <div class="success-icon" id="paymentIcon"><i class="fas fa-shopping-bag"></i></div>
+      <h2 id="paymentModalTitle">Order Summary</h2>
+      <p id="paymentModalSubtitle">We are preparing your order confirmation.</p>
+      <div class="success-summary">
+        <div class="success-row"><span>Order ID</span><strong id="paymentOrderId">Processing…</strong></div>
+        <div class="success-row"><span>Payment Method</span><strong id="paymentMethod">—</strong></div>
+        <div class="success-row"><span>Total</span><strong id="paymentTotal">MK0</strong></div>
+      </div>
+      <div class="success-items" id="paymentItems"></div>
+      <div class="success-actions">
+        <button class="btn btn-secondary" id="downloadOrderBtn" style="display:none;">Download Order Details</button>
+        <button class="btn btn-primary pay-btn" id="payBtn">
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span class="btn-label">Processing Payment</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function isSignedIn() {
+    try {
+      return !!localStorage.getItem('mthunziAuthUser');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  if (!isSignedIn()) {
+    window.location.href = 'index.html?authRequired=payment';
+  }
+
+  // Utilities
+  function $(id){return document.getElementById(id)}
+  function showToast(msg){var t=$('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+  let currentOrderSummary = null;
+
+  function showSuccessSummary(orderId, paymentMethod, total, items){
+    $('paymentModalTitle').textContent = 'Congratulations!';
+    $('paymentModalSubtitle').textContent = '';
+    $('paymentModalSubtitle').style.display = 'none';
+    $('paymentIcon').innerHTML = '<i class="fas fa-check-circle" style="color:#2f8f5f"></i>';
+    $('paymentOrderId').textContent = orderId;
+    $('paymentMethod').textContent = paymentMethod;
+    $('paymentTotal').textContent = 'MK ' + total.toLocaleString();
+    const itemsList = $('paymentItems');
+    if (!items.length) {
+      itemsList.innerHTML = '<div class="success-item"><span>No items</span><strong>—</strong></div>';
+      return;
+    }
+    itemsList.innerHTML = items.map(function(item){
+      const qty = item.qty || item.quantity || 1;
+      return '<div class="success-item"><span>' + item.name + ' × ' + qty + '</span><strong>MK ' + ((item.price * qty)).toLocaleString() + '</strong></div>';
+    }).join('');
+    $('downloadOrderBtn').style.display = 'inline-block';
+    $('payBtn').classList.remove('is-processing');
+    $('payBtn').disabled = false;
+    $('payBtn').querySelector('.btn-label').textContent = 'Done';
+  }
+
+  // Load cart and render summary
+  function loadCart(){try{return JSON.parse(localStorage.getItem('cart')||'[]')}catch(e){return []}}
+  function renderOrder(){const itemsDiv=$('items');itemsDiv.innerHTML='';const cart=loadCart();let total=0;cart.forEach(it=>{const row=document.createElement('div');row.className='item-row';row.innerHTML=`<img src="${it.img||it.image||'assets/mthunzi-logo.png'}"><div style="flex:1"><div style="font-weight:600">${it.name||'Item'}</div><div style="color:#6b7c8f">Qty: ${it.qty||it.quantity||1} — MK ${it.price}</div></div><div style="font-weight:700">MK ${ ((it.price) * ((it.qty||it.quantity||1))) }</div>`;itemsDiv.appendChild(row);total += (it.price * (it.qty||it.quantity||1));});$('total').textContent='Total: MK' + (total||0)}
+
+  // Method selection
+  function updateMethodUI(){document.querySelectorAll('.method').forEach(lbl=>{const radio=lbl.querySelector('input[type=radio]');lbl.classList.toggle('chosen', radio.checked)})}
+  document.querySelectorAll('.method').forEach(lbl=>{lbl.addEventListener('click',()=>{lbl.querySelector('input[type=radio]').checked=true;updateMethodUI();renderMethodDetails();})})
+
+  function renderMethodDetails(){const chosen = document.querySelector('input[name=paymethod]:checked'); const d=$('methodDetails'); if(!chosen){d.innerHTML='';return} if(chosen.value==='tnm'){d.innerHTML=`<div style="margin-top:8px"><strong>TNM Mobile Money</strong><div style="color:#6b7c8f;margin-top:6px">Send the full order amount from your TNM Mobile Money account and upload the proof screenshot after the transfer.</div></div>`}else if(chosen.value==='airtel'){d.innerHTML=`<div style="margin-top:8px"><strong>Airtel Money</strong><div style="color:#6b7c8f;margin-top:6px">Send the full order amount from your Airtel Money account and upload the proof screenshot after the transfer.</div></div>`}else{d.innerHTML='';}}
+
+  // File upload
+  const fileInput=$('fileInput'), preview=$('preview'), uploadLabel=$('uploadLabel'), chooseBtn=$('chooseBtn');
+  chooseBtn.addEventListener('click',()=>fileInput.click());
+  fileInput.addEventListener('change',()=>{
+    const f=fileInput.files[0]; if(!f) { uploadLabel.textContent='No file selected'; preview.style.display='none'; return }
+    uploadLabel.textContent = f.name + ' (' + Math.round(f.size/1024) + ' KB)';
+    const reader=new FileReader(); reader.onload=function(e){ preview.src=e.target.result; preview.style.display='block'; preview.dataset.dataurl=e.target.result }; reader.readAsDataURL(f);
+  });
+
+  // Buttons
+  $('backBtn').addEventListener('click',()=>{window.location.href='index.html'});
+  $('showSummaryBtn').addEventListener('click',()=>{ $('summarySheet').classList.add('open'); $('summarySheet').scrollIntoView({behavior:'smooth', block:'start'}); });
+  $('closeSummaryBtn').addEventListener('click',()=>{$('summarySheet').classList.remove('open');});
+  $('saveDraft').addEventListener('click',()=>{
+    const chosen = document.querySelector('input[name=paymethod]:checked');
+    const draft = { method: chosen ? chosen.value : null, proof: preview.dataset.dataurl || null, savedAt: Date.now(), cart: loadCart() };
+    localStorage.setItem('paymentDraft', JSON.stringify(draft));
+    showToast('Draft saved');
+  });
+
+  async function submitOrder(payload){
+    const response = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return response.json().then(body => ({ ok: response.ok, body }));
+  }
+
+  function downloadReceipt(orderId, paymentMethod, total, items){
+    const lines = [
+      'Mthunzi Creations Order Summary',
+      'Order ID: ' + orderId,
+      'Payment Method: ' + paymentMethod,
+      'Total Paid: MK ' + total.toLocaleString(),
+      '',
+      'Items:',
+      ...items.map(item => `${item.name} × ${item.qty} — MK ${item.price * item.qty}`),
+      '',
+      'Thank you for your order!'
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Mthunzi-order-' + orderId + '.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  $('confirmBtn').addEventListener('click', async ()=>{
+    const chosen = document.querySelector('input[name=paymethod]:checked');
+    if(!chosen){ alert('Please choose a payment method'); return }
+    const cart = loadCart();
+    if(!cart.length){ alert('Your cart is empty'); return }
+    setConfirmButtonProcessing();
+    preparePaymentModal(cart, chosen.value);
+    openPaymentModal();
+    startPaymentProcessing(cart, chosen.value);
+  });
+
+  // Payment Modal Functions
+  function openPaymentModal() {
+    $('paymentOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePaymentModal() {
+    $('paymentOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function preparePaymentModal(cart, paymentValue) {
+    const paymentMethod = paymentValue === 'tnm' ? 'TNM Mobile Money' : 'Airtel Money';
+    const total = cart.reduce((s, item) => s + item.price * (item.qty || item.quantity || 1), 0);
+    $('paymentMethod').textContent = paymentMethod;
+    $('paymentTotal').textContent = 'MK ' + total.toLocaleString();
+    $('paymentOrderId').textContent = 'Processing…';
+    $('paymentModalTitle').textContent = 'Order Summary';
+    $('paymentModalSubtitle').textContent = 'We are preparing your order confirmation.';
+    $('paymentModalSubtitle').style.display = 'block';
+    $('paymentIcon').innerHTML = '<i class="fas fa-shopping-bag"></i>';
+    $('paymentItems').innerHTML = cart.map(function(item){
+      const qty = item.qty || item.quantity || 1;
+      return '<div class="success-item"><span>' + item.name + ' × ' + qty + '</span><strong>MK ' + ((item.price * qty)).toLocaleString() + '</strong></div>';
+    }).join('');
+    $('payBtn').classList.remove('is-processing');
+    $('payBtn').disabled = false;
+    $('payBtn').querySelector('.btn-label').textContent = 'Processing Payment';
+    $('downloadOrderBtn').style.display = 'none';
+  }
+
+  function setConfirmButtonProcessing(){
+    const btn = $('confirmBtn');
+    btn.classList.add('is-processing');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span><span class="btn-label">Processing...</span>';
+  }
+
+  function resetConfirmButton(){
+    const btn = $('confirmBtn');
+    btn.classList.remove('is-processing');
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-label">Confirm Payment</span>';
+  }
+
+  function startPaymentProcessing(cart, paymentValue) {
+    const paymentMethod = paymentValue === 'tnm' ? 'TNM Mobile Money' : 'Airtel Money';
+    $('payBtn').classList.add('is-processing');
+    $('payBtn').disabled = true;
+    $('payBtn').querySelector('.btn-label').textContent = 'Processing Payment';
+    setTimeout(() => {
+      const orderId = 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+      const total = cart.reduce((s, item) => s + item.price * (item.qty || item.quantity || 1), 0);
+      currentOrderSummary = { orderId, paymentMethod, total, items: cart };
+      showSuccessSummary(orderId, paymentMethod, total, cart);
+      resetConfirmButton();
+    }, 1400);
+  }
+
+  $('downloadOrderBtn').addEventListener('click', function() {
+    if (!currentOrderSummary) return;
+    downloadReceipt(currentOrderSummary.orderId, currentOrderSummary.paymentMethod, currentOrderSummary.total, currentOrderSummary.items);
+  });
+
+  $('payBtn').addEventListener('click', function() {
+    if ($('payBtn').querySelector('.btn-label').textContent === 'Done') {
+      closePaymentModal();
+      localStorage.removeItem('cart');
+      window.location.href = 'index.html';
+    }
+  });
+
+  // Close payment modal on overlay click
+  $('paymentOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closePaymentModal();
+    }
+  });
+
+  // Init
+  renderOrder(); updateMethodUI(); renderMethodDetails();
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Mthunzi Creations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+  --lake:#1f5fa8; --lake-deep:#123f6b; --lake-light:#4a89d4;
+  --gold:#d9a93b; --clay:#c47e3e;
+  --ink:#10233b; --ink-2:#13263d; --ink-3:#1b2f45; --ink-line:#dfe8f2;
+  --paper:#f5f8fc; --card:#ffffff; --line:#dfe8f2; --line-2:#eef3f8;
+  --text:#18304a; --text-2:#51657a; --text-3:#74879a;
+  --success:#2f8f5f; --success-bg:#e8f4ee;
+  --warning:#c9762c; --warning-bg:#fbf0e2;
+  --danger:#c47e3e; --danger-bg:#fbeae5;
+  --info:#1f5fa8; --info-bg:#dfe8f2;
+  --horizon: linear-gradient(90deg, var(--lake) 0%, var(--gold) 100%);
+  --r-sm:12px; --r-md:20px; --r-lg:28px; --r-pill:999px;
+  --shadow-sm:0 2px 10px rgba(23,23,20,.05);
+  --shadow-md:0 14px 32px -12px rgba(23,23,20,.14);
+  --shadow-lg:0 30px 60px -20px rgba(23,23,20,.22);
+  --font-d:'Fraunces',serif; --font-b:'Inter',sans-serif; --font-m:'Space Mono',monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-b);
+  background: var(--paper);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 48px 40px;
+  box-shadow: var(--shadow-md);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.brand-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--horizon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-d);
+  font-weight: 700;
+  color: #fff;
+  font-size: 24px;
+  margin: 0 auto 16px;
+}
+
+.site-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
+  object-fit: contain;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+.site-logo.hidden {
+  display: none;
+}
+
+.logo-badge {
+  width: 100px;
+  height: 100px;
+  border-radius: 14px;
+  background: var(--horizon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-d);
+  font-weight: 700;
+  color: #fff;
+  font-size: 44px;
+  margin: 0 auto 16px;
+}
+
+.login-title {
+  font-family: var(--font-d);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.login-sub {
+  font-family: var(--font-m);
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lake);
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  background: var(--paper);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--lake);
+  box-shadow: 0 0 0 4px rgba(31, 95, 168, 0.12);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--lake);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.btn-login:hover {
+  background: var(--lake-deep);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-login:disabled {
+  background: var(--text-3);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error-msg {
+  background: var(--danger-bg);
+  color: var(--clay);
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.error-msg.show {
+  display: block;
+}
+
+.back-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 13px;
+}
+
+.back-link a {
+  color: var(--lake);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  padding: 14px 30px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 3000;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+.toast i {
+  color: var(--gold);
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-header">
+    <img id="siteLogo" src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.classList.add('hidden'); document.getElementById('logoBadge').style.display='inline-flex';">
+    <div id="logoBadge" class="logo-badge" style="display:none;" aria-hidden="true">M</div>
+    <div class="login-title">Admin Login</div>
+    <div class="login-sub">Mthunzi Creations</div>
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <form id="adminLoginForm">
+    <div class="form-group">
+      <label for="adminEmail">Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@mthunzi.com" required>
+    </div>
+
+    <div class="form-group">
+      <label for="adminPassword">Password</label>
+      <input type="password" id="adminPassword" placeholder="••••••••" required>
+    </div>
+
+    <button type="submit" class="btn-login" id="loginBtn">Sign In</button>
+  </form>
+
+  <div class="back-link">
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Storefront</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showError(msg) {
+  var el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function hideError() {
+  document.getElementById('errorMsg').classList.remove('show');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() {
+    t.classList.remove('show');
+  }, 2500);
+}
+
+document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  hideError();
+  
+  var email = document.getElementById('adminEmail').value.trim();
+  var password = document.getElementById('adminPassword').value.trim();
+  var btn = document.getElementById('loginBtn');
+  
+  if (!email || !password) {
+    showError('Please enter email and password');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+
+  try {
+    var response = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password })
+    });
+
+    var result = await response.json().catch(function() { return {}; });
+
+    if (!response.ok) {
+      showError(result.error || 'Login failed');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+      return;
+    }
+
+    // Store admin auth token
+    localStorage.setItem('mthunziAdminAuth', JSON.stringify({
+      id: result.data.id,
+      name: result.data.name,
+      email: result.data.email,
+      token: result.data.token
+    }));
+
+    showToast('Login successful!');
+    setTimeout(function() {
+      window.location.href = 'admin.html';
+    }, 500);
+  } catch (err) {
+    console.error(err);
+    showError('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+});
+</script>
+
+</body>
+</html>

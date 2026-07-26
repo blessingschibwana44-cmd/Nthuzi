@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1784999379666,
+    "name": "Verify Product",
+    "category": "Paintings",
+    "description": "Created from verification",
+    "price": 50000,
+    "image": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&h=600&fit=crop",
+    "stocked": true,
+    "dims": "40x50cm",
+    "stock": 7
+  },
+  {
+    "id": 1,
+    "name": "Sample Painting",
+    "category": "Paintings",
+    "description": "A colorful sample painting.",
+    "price": 25000,
+    "image": "/assets/sample1.jpg",
+    "stocked": true,
+    "dims": "40x60cm",
+    "stock": 10
+  },
+  {
+    "id": 2,
+    "name": "Sample T-Shirt",
+    "category": "T-Shirts",
+    "description": "Printed sample tee.",
+    "price": 8000,
+    "image": "/assets/sample2.jpg",
+    "stocked": true,
+    "dims": "S-XL",
+    "stock": 10
+  }
+]

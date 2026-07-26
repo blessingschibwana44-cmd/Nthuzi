@@ -1,0 +1,9 @@
+ id |           name           |                                     image_url                                     
+----+--------------------------+-----------------------------------------------------------------------------------
+ 11 | Temp Test Product        | /assets/sample1.jpg
+  5 | Sunrise Print            | https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=800&h=600&fit=crop
+  4 | Bronze Essence Sculpture | https://images.unsplash.com/photo-1496317899792-9d7dbcd928a1?w=800&h=600&fit=crop
+  3 | Tribal Tee               | https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&h=600&fit=crop
+  2 | Ink Flow Drawing         | https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop
+(5 rows)
+

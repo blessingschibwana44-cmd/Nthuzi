@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — Mthunzi Creations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f6faff 0%,#eef6ff 100%);color:#10233b;margin:0;padding:0}
+  .page-wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px}
+  .hero-card{background:linear-gradient(135deg,#11253d 0%,#183a5b 38%,#1f5fa8 100%);border-radius:28px;padding:26px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px;box-shadow:0 26px 70px rgba(17,34,58,.15);position:relative;overflow:hidden}
+  .hero-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(255,255,255,.2),transparent 42%);pointer-events:none}
+  .hero-title{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+  .avatar{width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#fff 0%,#dfefff 100%);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#17477a;box-shadow:0 10px 24px rgba(0,0,0,.15)}
+  .hero-card h1{font-size:28px;margin:0 0 6px}
+  .hero-card p{margin:0;color:rgba(255,255,255,.82);max-width:720px;line-height:1.6}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.16);font-size:12px;font-weight:700;backdrop-filter:blur(8px);margin-bottom:12px;text-transform:uppercase;letter-spacing:.12em}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .hero-meta span{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.14);font-size:13px;font-weight:600}
+  .hero-actions{display:flex;flex-direction:column;gap:12px;min-width:220px}
+  .hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:14px;border:0;cursor:pointer;font-weight:700;background:#fff;color:#17477a;box-shadow:0 10px 24px rgba(0,0,0,.16)}
+  .hero-btn.secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.24)}
+  .dashboard-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-bottom:20px}
+  .card{background:rgba(255,255,255,.96);border:1px solid #e5ecf5;border-radius:24px;padding:24px;box-shadow:0 22px 50px rgba(17,34,58,.06)}
+  .card h2{margin:0 0 16px;font-size:20px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#4a5f7f}
+  .field input{width:100%;padding:12px 14px;border:1px solid #d8e2ef;border-radius:12px;font-size:15px;background:#fff;outline:none}
+  .field input:focus{border-color:#1f5fa8;box-shadow:0 0 0 4px rgba(31,95,168,.12)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:14px;border:0;cursor:pointer;font-weight:700}
+  .btn-primary{background:linear-gradient(135deg,#1f5fa8 0%,#2d7dd2 100%);color:#fff;box-shadow:0 10px 24px rgba(31,95,168,.2)}
+  .btn-outline{background:#fff;color:#1f5fa8;border:1px solid #1f5fa8}
+  .note{font-size:13px;color:#6b7c8f;margin-top:12px;line-height:1.6}
+  .detail-list{display:flex;flex-direction:column;gap:12px}
+  .detail-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #e8f0f9}
+  .detail-row:last-child{border-bottom:none;padding-bottom:0}
+  .detail-label{font-weight:700;color:#4a5f7f}
+  .detail-value{font-weight:700;color:#10233b;text-align:right}
+  .status-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:700}
+  .status-pill.pending{background:#fff8e8;color:#a46a12}
+  .status-pill.processing{background:#eef5ff;color:#2358a4}
+  .status-pill.shipped{background:#e8f7ee;color:#2f7f56}
+  .status-pill.delivered{background:#e8f7ee;color:#2f7f56}
+  .status-pill.cancelled{background:#fce9ea;color:#a33b44}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .stat-card{background:#f7fbff;border:1px solid #dceafc;border-radius:18px;padding:16px}
+  .stat-card .label{font-size:12px;font-weight:700;color:#5d7592;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+  .stat-card .value{font-size:22px;font-weight:800;color:#11253d}
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:12px 10px;border-bottom:1px solid #e8f0f9;text-align:left;font-size:14px}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#5d7592;font-weight:700}
+  .muted{color:#6b7c8f}
+  .empty{padding:18px 0;color:#6b7c8f;text-align:center}
+  @media (max-width:960px){.dashboard-grid{grid-template-columns:1fr}.hero-card{flex-direction:column;align-items:flex-start}.hero-actions{width:100%;flex-direction:row;flex-wrap:wrap}} 
+  @media (max-width:640px){.stats-grid{grid-template-columns:1fr}.page-wrap{padding:20px 14px 40px}.hero-card{padding:22px 18px}.card{padding:20px}} 
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <section class="hero-card">
+    <div>
+      <div class="hero-badge"><i class="fas fa-shield-alt"></i> Secure customer account</div>
+      <div class="hero-title">
+        <div class="avatar" id="profileAvatar">M</div>
+        <div>
+          <h1>Welcome back, <span id="welcomeName">there</span></h1>
+          <p>Manage your profile and keep track of every order in one polished place.</p>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <span><i class="fas fa-box"></i><strong id="summaryOrders">0</strong> orders</span>
+        <span><i class="fas fa-check-circle"></i><strong id="summaryDelivered">0</strong> delivered</span>
+        <span><i class="fas fa-wallet"></i><strong id="summarySpend">MK 0</strong></span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button id="backBtn" class="hero-btn secondary"><i class="fas fa-arrow-left"></i> Back to shop</button>
+      <button id="saveProfile" class="hero-btn"><i class="fas fa-save"></i> Save profile</button>
+    </div>
+  </section>
+
+  <div class="dashboard-grid">
+    <section class="card">
+      <h2>Your profile</h2>
+      <div class="field"><label>Name</label><input type="text" id="profileName"></div>
+      <div class="field"><label>Email</label><input type="email" id="profileEmail"></div>
+      <div class="field"><label>Phone</label><input type="tel" id="profilePhone"></div>
+      <div class="field"><label>New Password <span style="font-weight:400;color:#6b7c8f;font-size:13px;">(leave blank to keep current)</span></label><input type="password" id="profilePassword"></div>
+      <p class="note">Keep your details current so future checkout and delivery updates stay accurate.</p>
+    </section>
+
+    <aside class="card">
+      <h2>Account overview</h2>
+      <div class="detail-list">
+        <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" id="loginStatus">Checking...</span></div>
+        <div class="detail-row"><span class="detail-label">Name</span><span class="detail-value" id="loginName">—</span></div>
+        <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value" id="loginEmail">—</span></div>
+        <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value" id="loginPhone">—</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#1f5fa8;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;">Order history</div>
+        <h2 style="margin:0;">Your recent orders</h2>
+      </div>
+      <div class="status-pill processing" id="orderSummaryBadge">0 orders</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="label">Total orders</div><div class="value" id="statTotalOrders">0</div></div>
+      <div class="stat-card"><div class="label">In progress</div><div class="value" id="statPendingOrders">0</div></div>
+      <div class="stat-card"><div class="label">Total spent</div><div class="value" id="statTotalSpend">MK 0</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+          <tr><td colspan="4" class="empty">Loading your orders…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<script>
+  function $(id){return document.getElementById(id)}
+  const currentUser = JSON.parse(localStorage.getItem('mthunziAuthUser') || 'null');
+  const orderSummaryBadge = $('orderSummaryBadge');
+  const ordersTableBody = $('ordersTableBody');
+
+  function showToast(msg){alert(msg)}
+  function redirectHome(){window.location.href='index.html'}
+  function formatCurrency(value){return 'MK ' + Number(value || 0).toLocaleString();}
+  function formatDate(value){
+    if(!value) return '—';
+    const date = new Date(value);
+    return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+  }
+  function getStatusBadge(status){
+    const normalized = (status || 'pending').toLowerCase();
+    const map = {
+      pending: 'pending',
+      processing: 'processing',
+      shipped: 'shipped',
+      delivered: 'delivered',
+      completed: 'delivered',
+      cancelled: 'cancelled'
+    };
+    return map[normalized] || 'pending';
+  }
+  function setAvatar(name){
+    const avatar = $('profileAvatar');
+    if(!avatar) return;
+    const initial = (name || 'M').trim().charAt(0).toUpperCase();
+    avatar.textContent = initial;
+  }
+  function renderProfileState(user){
+    if(!user){
+      $('loginStatus').textContent='Not signed in';
+      $('loginName').textContent='—';
+      $('loginEmail').textContent='—';
+      $('loginPhone').textContent='—';
+      $('welcomeName').textContent='there';
+      setAvatar('M');
+      return;
+    }
+    $('loginStatus').textContent='Signed in';
+    $('loginName').textContent=user.name;
+    $('loginEmail').textContent=user.email;
+    $('loginPhone').textContent=user.phone || '—';
+    $('welcomeName').textContent=user.name;
+    $('profileName').value=user.name;
+    $('profileEmail').value=user.email;
+    $('profilePhone').value=user.phone || '';
+    setAvatar(user.name);
+  }
+  function renderOrders(orders){
+    const totalOrders = orders.length;
+    const pendingOrders = orders.filter(order => {
+      const status = (order.status || '').toLowerCase();
+      return status === 'pending' || status === 'processing' || status === 'shipped';
+    }).length;
+    const deliveredOrders = orders.filter(order => {
+      const status = (order.status || '').toLowerCase();
+      return status === 'delivered' || status === 'completed';
+    }).length;
+    const totalSpend = orders.reduce((sum, order) => sum + Number(order.total_amount || order.total || 0), 0);
+
+    $('summaryOrders').textContent = totalOrders;
+    $('summaryDelivered').textContent = deliveredOrders;
+    $('summarySpend').textContent = formatCurrency(totalSpend);
+    $('statTotalOrders').textContent = totalOrders;
+    $('statPendingOrders').textContent = pendingOrders;
+    $('statTotalSpend').textContent = formatCurrency(totalSpend);
+    orderSummaryBadge.textContent = totalOrders ? `${totalOrders} order${totalOrders > 1 ? 's' : ''}` : 'No orders yet';
+
+    if(!totalOrders){
+      ordersTableBody.innerHTML = '<tr><td colspan="4" class="empty">You have not placed any orders yet.</td></tr>';
+      return;
+    }
+
+    ordersTableBody.innerHTML = orders.slice(0, 8).map(order => {
+      const badge = getStatusBadge(order.status);
+      return `<tr>
+        <td><strong>#${order.id}</strong><div class="muted">${order.items && order.items.length ? order.items.length + ' item' + (order.items.length > 1 ? 's' : '') : 'No items'}</div></td>
+        <td>${formatDate(order.created_at || order.date)}</td>
+        <td><span class="status-pill ${badge}">${(order.status || 'Pending').toUpperCase()}</span></td>
+        <td><strong>${formatCurrency(order.total_amount || order.total || 0)}</strong></td>
+      </tr>`;
+    }).join('');
+  }
+  async function loadUserOrders(user){
+    if(!user){
+      renderOrders([]);
+      return;
+    }
+    try{
+      const res = await fetch('/api/admin/orders');
+      const body = await res.json().catch(()=>({}));
+      const userOrders = (body.data || []).filter(order => Number(order.user_id) === Number(user.id));
+      renderOrders(userOrders);
+    }catch(err){
+      console.error(err);
+      renderOrders([]);
+    }
+  }
+
+  renderProfileState(currentUser);
+  loadUserOrders(currentUser);
+
+  $('backBtn').addEventListener('click', redirectHome);
+  $('saveProfile').addEventListener('click', async function(){
+    if(!currentUser){showToast('Please sign in first.'); redirectHome(); return;}
+    const name=$('profileName').value.trim();
+    const email=$('profileEmail').value.trim();
+    const phone=$('profilePhone').value.trim();
+    const password=$('profilePassword').value.trim();
+    const payload={name,email,phone};
+    if(password) payload.password=password;
+    const res=await fetch('/api/user/'+currentUser.id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const body=await res.json().catch(()=>({}));
+    if(!res.ok){showToast(body.error||'Unable to update profile'); return;}
+    localStorage.setItem('mthunziAuthUser',JSON.stringify(body.data));
+    renderProfileState(body.data);
+    $('profilePassword').value='';
+    showToast('Profile updated successfully');
+  });
+</script>
+</body>
+</html>

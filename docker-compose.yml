@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/mthunzi
+      - NODE_ENV=production
+    depends_on:
+      - db
+    volumes:
+      - .:/app:cached
+      - /app/node_modules
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: mthunzi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+volumes:
+  db_data: {}

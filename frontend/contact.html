@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Mthunzi Creations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: linear-gradient(180deg, #f7fbff 0%, #eef4f9 100%); }
+    .contact-hero {
+      padding: 64px 5% 36px;
+      background: radial-gradient(circle at top left, rgba(31,95,168,0.16), transparent 32%), linear-gradient(135deg, #10233b 0%, #173b63 52%, #1f5fa8 100%);
+      color: #fff;
+    }
+    .contact-shell { max-width: 1200px; margin: 0 auto; }
+    .contact-hero-card {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      padding: 40px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 22px 60px rgba(0,0,0,0.14);
+    }
+    .contact-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      color: #e8f3ff;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+    }
+    .contact-hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+    .contact-hero p { font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.86); max-width: 620px; }
+    .contact-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; }
+    .contact-stat { padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.16); }
+    .contact-stat strong { display: block; font-size: 20px; margin-bottom: 6px; }
+    .contact-support-card { background: rgba(255,255,255,0.95); color: #10233b; border-radius: 24px; padding: 24px; box-shadow: 0 20px 46px rgba(16,35,59,0.16); }
+    .contact-support-card h3 { font-size: 22px; margin-bottom: 10px; }
+    .support-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .support-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #e8eef6; }
+    .support-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .support-item i { color: #1f5fa8; margin-top: 2px; font-size: 16px; }
+    .contact-main { padding: 24px 5% 72px; }
+    .contact-grid { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 24px; max-width: 1200px; margin: 0 auto; }
+    .contact-card, .info-card { background: #fff; border-radius: 24px; border: 1px solid #dfe8f2; box-shadow: 0 18px 46px rgba(16,35,59,0.06); padding: 28px; }
+    .contact-card h2, .info-card h2 { font-family: 'Fraunces', serif; font-size: 24px; margin-bottom: 8px; color: #10233b; }
+    .contact-card p, .info-card p { color: #51657a; line-height: 1.7; }
+    .contact-form { display: grid; gap: 16px; margin-top: 20px; }
+    .contact-form .field { display: grid; gap: 8px; }
+    .contact-form label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #5b728b; }
+    .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 1px solid #d8e2ec; background: #f8fbff; font-size: 15px; color: #10233b; }
+    .contact-form textarea { min-height: 120px; resize: vertical; }
+    .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { outline: none; border-color: #1f5fa8; box-shadow: 0 0 0 4px rgba(31,95,168,0.12); }
+    .contact-btn { width: 100%; padding: 14px 18px; border: none; border-radius: 999px; background: linear-gradient(90deg, #10233b, #1f5fa8); color: #fff; font-weight: 700; cursor: pointer; }
+    .contact-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(31,95,168,0.16); }
+    .info-list { display: grid; gap: 14px; margin-top: 18px; }
+    .info-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: #f8fbff; border: 1px solid #e6edf6; }
+    .info-item i { color: #1f5fa8; margin-top: 2px; }
+    .info-item strong { display: block; margin-bottom: 4px; color: #10233b; }
+    .info-item span { color: #51657a; font-size: 14px; }
+    .faq-list { display: grid; gap: 12px; margin-top: 18px; }
+    .faq-item { padding: 14px 16px; border-radius: 14px; border: 1px solid #e6edf6; background: #fbfdff; }
+    .faq-item strong { display: block; color: #10233b; margin-bottom: 6px; }
+    .faq-item span { color: #51657a; font-size: 14px; line-height: 1.6; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #10233b; color: #fff; padding: 12px 18px; border-radius: 999px; box-shadow: 0 16px 36px rgba(0,0,0,0.18); opacity: 0; transform: translateY(12px); pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) { .contact-hero-card, .contact-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .contact-hero { padding: 44px 4% 28px; } .contact-hero-card { padding: 24px; } .contact-main { padding: 20px 4% 56px; } .contact-card, .info-card { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <nav style="position:sticky;top:0;z-index:1000;">
+    <div class="nav-brand">
+      <img src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.style.display='none'">
+      <span class="logo" onclick="window.location.href='index.html'">MTHUNZI <span>CREATIONS</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html#shop">Shop</a>
+      <a href="index.html#gallery">Gallery</a>
+      <a href="contact.html" class="active" style="color:#10233b">Contact</a>
+      <a href="index.html#about">About</a>
+    </div>
+    <div class="nav-actions">
+      <a class="btn-nav btn-outline" href="index.html">Back to shop</a>
+    </div>
+  </nav>
+
+  <section class="contact-hero">
+    <div class="contact-shell">
+      <div class="contact-hero-card">
+        <div>
+          <div class="contact-kicker"><i class="fas fa-headset"></i> Customer care</div>
+          <h1>We’re here to help you order, enquire, and create with confidence.</h1>
+          <p>Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.</p>
+          <div class="contact-stats">
+            <div class="contact-stat"><strong>24 hrs</strong><span>Typical response time</span></div>
+            <div class="contact-stat"><strong>100%</strong><span>Secure order support</span></div>
+          </div>
+        </div>
+        <div class="contact-support-card">
+          <h3>Support that feels premium</h3>
+          <p>From first enquiry to delivery confirmation, your experience stays clear, friendly, and reassuring.</p>
+          <div class="support-list">
+            <div class="support-item"><i class="fas fa-check-circle"></i><div><strong>Fast replies</strong><span>We reply across call, WhatsApp, and email.</span></div></div>
+            <div class="support-item"><i class="fas fa-shield-alt"></i><div><strong>Secure payments</strong><span>We help verify deposits and payment proof.</span></div></div>
+            <div class="support-item"><i class="fas fa-palette"></i><div><strong>Custom projects</strong><span>Tell us what you need and we’ll guide you.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-main">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h2>Send us a message</h2>
+        <p>Share a few details and we will get back to you with the right next step.</p>
+        <form class="contact-form" id="contactForm">
+          <div class="field">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+          <div class="field">
+            <label for="subject">What do you need help with?</label>
+            <select id="subject" name="subject" required>
+              <option value="">Select an option</option>
+              <option value="Order support">Order support</option>
+              <option value="Payment confirmation">Payment confirmation</option>
+              <option value="Custom commission">Custom commission</option>
+              <option value="General enquiry">General enquiry</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="body">Your message</label>
+            <textarea id="body" name="body" required></textarea>
+          </div>
+          <button type="submit" class="contact-btn">Send message</button>
+        </form>
+      </div>
+
+      <div class="info-card">
+        <h2>Reach us directly</h2>
+        <p>Prefer a quicker route? These are the fastest ways to connect.</p>
+        <div class="info-list">
+          <div class="info-item"><i class="fas fa-phone-alt"></i><div><strong>Call or WhatsApp</strong><span>+265 991 234 567</span></div></div>
+          <div class="info-item"><i class="fas fa-envelope"></i><div><strong>Email</strong><span>mthunzi.creations@gmail.com</span></div></div>
+          <div class="info-item"><i class="fas fa-map-marker-alt"></i><div><strong>Visit</strong><span>Blantyre, Malawi</span></div></div>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <strong>Can I place a custom order?</strong>
+            <span>Yes. Share your preferred style, size, and deadline and we will guide you through the process.</span>
+          </div>
+          <div class="faq-item">
+            <strong>Do you support payment proof?</strong>
+            <span>Absolutely. We can help confirm your payment and make sure your order is processed smoothly.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="contactToast"></div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const toast = document.getElementById('contactToast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        subject: document.getElementById('subject').value.trim(),
+        body: document.getElementById('body').value.trim()
+      };
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || 'Unable to send message');
+        form.reset();
+        showToast('Thanks! Your message has been received.');
+      } catch (error) {
+        showToast(error.message || 'Unable to send message');
+      }
+    });
+  </script>
+</body>
+</html>
