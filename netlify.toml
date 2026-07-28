@@ -1,0 +1,7 @@
+[build]
+  publish = "frontend"
+  command = ""
+
+[dev]
+  framework = "none"
+  publish = "frontend"
