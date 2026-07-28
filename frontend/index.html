@@ -18,6 +18,7 @@
   </div>
   <button id="hamburger" class="hamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
   <div class="nav-links">
+    <a id="navHome" href="index.html">Home</a>
     <a id="navShop" href="shop.html">Shop</a>
     <a id="navContact" href="contact.html">Contact</a>
     <a id="navAbout" href="index.html#about">About</a>
@@ -26,18 +27,18 @@
     <button class="btn-nav btn-outline" id="btnSignIn">Sign In</button>
     <button class="btn-nav btn-fill" id="btnSignUp">Sign Up</button>
     <button class="btn-nav btn-outline" id="btnAccount" style="display:none;">Account</button>
-    <button class="cart-btn" id="btnCart"><i class="fas fa-shopping-bag"></i> Cart <span class="cart-badge" id="cartBadge">0</span></button>
+    <button class="cart-btn" id="btnCart" style="display:none;"><i class="fas fa-shopping-bag"></i> Cart <span class="cart-badge" id="cartBadge">0</span></button>
   </div>
 </nav>
 <!-- Mobile menu overlay -->
 <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
   <button id="mobileClose" class="mobile-menu-close" aria-label="Close menu">✕</button>
   <div class="nav-links">
+    <a id="mNavHome" href="index.html">Home</a>
     <a id="mNavShop" href="shop.html">Shop</a>
-    <a id="mNavGallery">Gallery</a>
-    <a id="mNavContact">Contact</a>
-    <a id="mNavAbout">About</a>
-    <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;">
+    <a id="mNavContact" href="contact.html">Contact</a>
+    <a id="mNavAbout" href="index.html#about">About</a>
+    <div>
       <button class="btn-nav btn-outline" id="mBtnSignIn">Sign In</button>
       <button class="btn-nav btn-fill" id="mBtnSignUp">Sign Up</button>
       <button class="btn-nav btn-outline" id="mBtnAccount" style="display:none;">Account</button>
@@ -200,6 +201,12 @@ document.addEventListener('DOMContentLoaded', function() {
   function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); }
   cart = loadCart();
   function fmt(n){ return 'MK ' + n.toLocaleString(); }
+  function updateCartButtonVisibility() {
+    var cartButton = document.getElementById('btnCart');
+    if (!cartButton) return;
+    var shouldShow = isSignedIn() && cart.length > 0;
+    cartButton.style.display = shouldShow ? 'flex' : 'none';
+  }
   function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2500); }
   function scrollToId(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
   function success(title,msg){ document.getElementById('successTitle').textContent=title; document.getElementById('successMsg').textContent=msg; openModal('successModal'); }
@@ -227,19 +234,32 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   window.addEventListener('resize', function(){ if(window.innerWidth > 900 && mobileMenu.classList.contains('open')){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); }});
   // Wire mobile nav links
-  document.getElementById('mNavShop').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('shop'); });
-  document.getElementById('mNavGallery').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('gallery'); });
-  document.getElementById('mNavContact').addEventListener('click',function(){ mobileMenu.classList.remove('open'); openModal('contactModal'); });
-  document.getElementById('mNavAbout').addEventListener('click',function(){ mobileMenu.classList.remove('open'); scrollToId('about'); });
-  document.getElementById('mBtnSignIn').addEventListener('click',function(){ mobileMenu.classList.remove('open'); window.location.href='login.html'; });
-  document.getElementById('mBtnSignUp').addEventListener('click',function(){ mobileMenu.classList.remove('open'); window.location.href='signup.html'; });
-  document.getElementById('navShop').addEventListener('click',function(e){ e.preventDefault(); window.location.href='shop.html'; });
+  var mNavHome = document.getElementById('mNavHome');
+  if (mNavHome) mNavHome.addEventListener('click', function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); window.location.href='index.html'; });
+  var mNavShop = document.getElementById('mNavShop');
+  if (mNavShop) mNavShop.addEventListener('click',function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); scrollToId('shop'); });
+  var mNavGallery = document.getElementById('mNavGallery');
+  if (mNavGallery) mNavGallery.addEventListener('click',function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); scrollToId('gallery'); });
+  var mNavContact = document.getElementById('mNavContact');
+  if (mNavContact) mNavContact.addEventListener('click',function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); openModal('contactModal'); });
+  var mNavAbout = document.getElementById('mNavAbout');
+  if (mNavAbout) mNavAbout.addEventListener('click',function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); scrollToId('about'); });
+  var mBtnSignIn = document.getElementById('mBtnSignIn');
+  if (mBtnSignIn) mBtnSignIn.addEventListener('click',function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); window.location.href='login.html'; });
+  var mBtnSignUp = document.getElementById('mBtnSignUp');
+  if (mBtnSignUp) mBtnSignUp.addEventListener('click',function(){ mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); window.location.href='signup.html'; });
+  var navHome = document.getElementById('navHome');
+  if (navHome) navHome.addEventListener('click',function(e){ e.preventDefault(); window.location.href='index.html'; });
+  var navShop = document.getElementById('navShop');
+  if (navShop) navShop.addEventListener('click',function(e){ e.preventDefault(); window.location.href='shop.html'; });
   var navGallery = document.getElementById('navGallery');
   if (navGallery) {
     navGallery.addEventListener('click',()=>scrollToId('gallery'));
   }
-  document.getElementById('navContact').addEventListener('click',()=>window.location.href='contact.html');
-  document.getElementById('navAbout').addEventListener('click',()=>scrollToId('about'));
+  var navContact = document.getElementById('navContact');
+  if (navContact) navContact.addEventListener('click',function(e){ e.preventDefault(); window.location.href='contact.html'; });
+  var navAbout = document.getElementById('navAbout');
+  if (navAbout) navAbout.addEventListener('click',()=>scrollToId('about'));
   document.getElementById('btnSignIn').addEventListener('click',()=>window.location.href='login.html');
   document.getElementById('btnSignUp').addEventListener('click',()=>window.location.href='signup.html');
   document.getElementById('btnCart').addEventListener('click', function() {
@@ -258,11 +278,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function isSignedIn() {
     return !!currentUser || !!localStorage.getItem('mthunziAuthUser');
-  }
-
-  function toggleCartButton(isSignedIn) {
-    var cartButton = document.getElementById('btnCart');
-    if (cartButton) cartButton.style.display = isSignedIn ? '' : 'none';
   }
 
   function requireAuth(redirectTarget, message) {
@@ -290,14 +305,20 @@ document.addEventListener('DOMContentLoaded', function() {
     var accountButton = document.getElementById('btnAccount');
     if (signInButton) signInButton.style.display = isSignedIn ? 'none' : '';
     if (signUpButton) signUpButton.style.display = isSignedIn ? 'none' : '';
-    if (accountButton) accountButton.style.display = isSignedIn ? '' : 'none';
+    if (accountButton) {
+      accountButton.style.display = isSignedIn ? '' : 'none';
+      accountButton.textContent = isSignedIn && currentUser && currentUser.name ? 'Hi ' + currentUser.name.split(' ')[0] : 'Account';
+    }
     var mobileSignIn = document.getElementById('mBtnSignIn');
     var mobileSignUp = document.getElementById('mBtnSignUp');
     var mobileAccount = document.getElementById('mBtnAccount');
     if (mobileSignIn) mobileSignIn.style.display = isSignedIn ? 'none' : '';
     if (mobileSignUp) mobileSignUp.style.display = isSignedIn ? 'none' : '';
-    if (mobileAccount) mobileAccount.style.display = isSignedIn ? '' : 'none';
-    toggleCartButton(isSignedIn);
+    if (mobileAccount) {
+      mobileAccount.style.display = isSignedIn ? '' : 'none';
+      mobileAccount.textContent = isSignedIn && currentUser && currentUser.name ? 'Hi ' + currentUser.name.split(' ')[0] : 'Account';
+    }
+    updateCartButtonVisibility();
   }
   function createLogoutButtons() {
     var navActions = document.querySelector('.nav-actions');
@@ -482,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showToast(p.name+' added to cart'); 
   }
   
-  function updateBadge(){ cart = loadCart(); var total=cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartBadge').textContent=total; }
+  function updateBadge(){ cart = loadCart(); var total=cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartBadge').textContent=total; updateCartButtonVisibility(); }
   
   function renderCart(){ 
     cart = loadCart();

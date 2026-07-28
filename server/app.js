@@ -1,11 +1,45 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 const cors = require('cors');
 const db = require('./services/db');
 const auth = require('./services/auth');
 
 const app = express();
+
+function ensureSchema() {
+  return db.query("ALTER TABLE products ADD COLUMN IF NOT EXISTS badge VARCHAR(40) DEFAULT ''");
+}
+
+function normalizeProductPayload(payload) {
+  const next = { ...payload };
+  if (typeof next.image_url === 'string' && next.image_url.startsWith('data:image/')) {
+    const match = next.image_url.match(/^data:image\/([^;]+);base64,(.+)$/i);
+    if (!match) {
+      throw new Error('Invalid image data payload.');
+    }
+    const maxBytes = Number(process.env.MAX_PRODUCT_IMAGE_BYTES || 80 * 1024 * 1024);
+    const buffer = Buffer.from(match[2], 'base64');
+    if (buffer.length > maxBytes) {
+      throw new Error(`Image is too large. Maximum size is ${Math.round(maxBytes / (1024 * 1024))} MB.`);
+    }
+
+    const ext = match[1].toLowerCase() || 'png';
+    const uploadsDir = path.join(__dirname, '..', 'assets', 'uploads');
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    const fileName = `${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${ext}`;
+    const filePath = path.join(uploadsDir, fileName);
+    fs.writeFileSync(filePath, buffer);
+    next.image_url = `/assets/uploads/${fileName}`;
+  }
+  return next;
+}
+
+ensureSchema().catch(err => {
+  console.error('Schema initialization failed:', err);
+});
 
 function startServer(port) {
   const server = app.listen(port, '0.0.0.0', () => {
@@ -203,7 +237,8 @@ app.post('/api/order', async (req, res) => {
 
 app.post('/api/admin/products', async (req, res) => {
   try {
-    const product = await db.createProduct(req.body);
+    const payload = normalizeProductPayload(req.body);
+    const product = await db.createProduct(payload);
     res.status(201).json({ data: product });
   } catch (err) {
     console.error(err);
@@ -229,7 +264,8 @@ app.delete('/api/admin/products/:id', async (req, res) => {
 
 app.patch('/api/admin/products/:id', async (req, res) => {
   try {
-    const product = await db.updateProduct(req.params.id, req.body);
+    const payload = normalizeProductPayload(req.body);
+    const product = await db.updateProduct(req.params.id, payload);
     if (!product) {
       return res.status(404).json({ error: 'Product not found.' });
     }

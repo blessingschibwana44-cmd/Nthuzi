@@ -21,8 +21,8 @@
     .method.chosen{border-color:var(--accent);box-shadow:0 6px 18px rgba(31,95,168,0.06)}
     .method .meta{flex:1}
     .method input[type=radio]{margin-top:6px}
-    .method-logo{width:104px;height:56px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .method-logo img{max-width:100%;max-height:100%;object-fit:contain;}
+    .method-logo{width:140px;height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:6px 8px;background:#f8fbff;border-radius:10px;border:1px solid #e7f0f9;}
+    .method-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
     .instructions{font-size:14px;color:var(--muted);margin-top:8px}
     .uploader{margin-top:14px;border:1px dashed #d9e6f6;border-radius:10px;padding:12px;display:flex;gap:12px;align-items:center}
     .uploader input{display:none}
@@ -203,7 +203,8 @@
   }
 
   if (!isSignedIn()) {
-    window.location.href = 'index.html?authRequired=payment';
+    localStorage.setItem('mthunziAuthRedirect', 'payment.html');
+    window.location.href = 'login.html';
   }
 
   // Utilities
@@ -254,7 +255,7 @@
   });
 
   // Buttons
-  $('backBtn').addEventListener('click',()=>{window.location.href='index.html'});
+  $('backBtn').addEventListener('click',()=>{window.location.href='shop.html'});
   $('showSummaryBtn').addEventListener('click',()=>{ $('summarySheet').classList.add('open'); $('summarySheet').scrollIntoView({behavior:'smooth', block:'start'}); });
   $('closeSummaryBtn').addEventListener('click',()=>{$('summarySheet').classList.remove('open');});
   $('saveDraft').addEventListener('click',()=>{
@@ -270,7 +271,8 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return response.json().then(body => ({ ok: response.ok, body }));
+    const body = await response.json().catch(() => ({}));
+    return { ok: response.ok, body };
   }
 
   function downloadReceipt(orderId, paymentMethod, total, items){
@@ -352,18 +354,40 @@
     btn.innerHTML = '<span class="btn-label">Confirm Payment</span>';
   }
 
-  function startPaymentProcessing(cart, paymentValue) {
+  async function startPaymentProcessing(cart, paymentValue) {
     const paymentMethod = paymentValue === 'tnm' ? 'TNM Mobile Money' : 'Airtel Money';
     $('payBtn').classList.add('is-processing');
     $('payBtn').disabled = true;
     $('payBtn').querySelector('.btn-label').textContent = 'Processing Payment';
-    setTimeout(() => {
-      const orderId = 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-      const total = cart.reduce((s, item) => s + item.price * (item.qty || item.quantity || 1), 0);
+
+    const savedUser = JSON.parse(localStorage.getItem('mthunziAuthUser') || 'null');
+    const total = cart.reduce((s, item) => s + item.price * (item.qty || item.quantity || 1), 0);
+    const payload = {
+      userId: savedUser ? savedUser.id : null,
+      items: cart.map(item => ({
+        product_id: item.id,
+        quantity: item.qty || item.quantity || 1,
+        price: item.price
+      })),
+      totalAmount: total,
+      paymentType: paymentMethod,
+      screenshotUrl: preview.dataset.dataurl || null
+    };
+
+    try {
+      const result = await submitOrder(payload);
+      if (!result.ok) {
+        throw new Error(result.body.error || 'Unable to place your order.');
+      }
+
+      const orderId = result.body?.data?.id ? 'ORD-' + String(result.body.data.id).padStart(4, '0') : 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
       currentOrderSummary = { orderId, paymentMethod, total, items: cart };
       showSuccessSummary(orderId, paymentMethod, total, cart);
       resetConfirmButton();
-    }, 1400);
+    } catch (error) {
+      showToast(error.message || 'Unable to place your order.');
+      resetConfirmButton();
+    }
   }
 
   $('downloadOrderBtn').addEventListener('click', function() {
@@ -375,7 +399,7 @@
     if ($('payBtn').querySelector('.btn-label').textContent === 'Done') {
       closePaymentModal();
       localStorage.removeItem('cart');
-      window.location.href = 'index.html';
+      window.location.href = 'shop.html';
     }
   });
 

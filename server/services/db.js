@@ -16,6 +16,8 @@ function mapProductRow(row) {
     stocked: row.in_stock,
     dims: row.dimensions,
     stock: row.in_stock ? 10 : 0,
+    badge: row.badge || '',
+    featured: row.badge === 'Featured',
   };
 }
 
@@ -24,7 +26,7 @@ async function query(text, params) {
 }
 
 async function getProducts() {
-  const result = await query('SELECT id, name, category, description, price, image_url, in_stock, dimensions FROM products ORDER BY id');
+  const result = await query('SELECT id, name, category, description, price, image_url, in_stock, dimensions, badge FROM products ORDER BY id');
   return result.rows.map(mapProductRow);
 }
 
@@ -38,11 +40,12 @@ async function createProduct(product) {
     in_stock: product.in_stock !== false,
     dimensions: product.dimensions || 'N/A',
     stock: Number(product.stock || 10),
+    badge: product.badge || '',
   };
 
   const result = await query(
-    'INSERT INTO products (name, category, description, price, image_url, in_stock, dimensions) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, name, category, description, price, image_url, in_stock, dimensions',
-    [payload.name, payload.category, payload.description, payload.price, payload.image_url, payload.in_stock, payload.dimensions]
+    'INSERT INTO products (name, category, description, price, image_url, in_stock, dimensions, badge) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, name, category, description, price, image_url, in_stock, dimensions, badge',
+    [payload.name, payload.category, payload.description, payload.price, payload.image_url, payload.in_stock, payload.dimensions, payload.badge]
   );
   return mapProductRow(result.rows[0]);
 }
@@ -57,11 +60,12 @@ async function updateProduct(id, product) {
     in_stock: product.in_stock !== false,
     dimensions: product.dimensions || 'N/A',
     stock: Number(product.stock || 10),
+    badge: product.badge || '',
   };
 
   const result = await query(
-    'UPDATE products SET name=$1, category=$2, description=$3, price=$4, image_url=$5, in_stock=$6, dimensions=$7 WHERE id=$8 RETURNING id, name, category, description, price, image_url, in_stock, dimensions',
-    [payload.name, payload.category, payload.description, payload.price, payload.image_url, payload.in_stock, payload.dimensions, id]
+    'UPDATE products SET name=$1, category=$2, description=$3, price=$4, image_url=$5, in_stock=$6, dimensions=$7, badge=$8 WHERE id=$9 RETURNING id, name, category, description, price, image_url, in_stock, dimensions, badge',
+    [payload.name, payload.category, payload.description, payload.price, payload.image_url, payload.in_stock, payload.dimensions, payload.badge, id]
   );
   return mapProductRow(result.rows[0]);
 }

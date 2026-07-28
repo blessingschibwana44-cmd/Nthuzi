@@ -6,6 +6,7 @@
   <title>Product Detail — MTHUNZI CREATIONS</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
   <style>
     :root {
       --white: #ffffff;
@@ -108,9 +109,41 @@
       cursor: zoom-in;
     }
 
-    .detail-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
-    .top-cart-btn { padding:10px 12px; border-radius:999px; background:var(--white); border:1.5px solid var(--border-light); font-size:16px; cursor:pointer; box-shadow:var(--shadow-sm); }
-    .top-cart-btn:hover { border-color:var(--lake); color:var(--lake); transform:translateY(-2px); }
+    .detail-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; gap:12px; }
+    .detail-cart-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--white);
+      border: 1.5px solid var(--border-light);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+    .detail-cart-btn:hover {
+      border-color: var(--lake);
+      color: var(--lake);
+      transform: translateY(-2px);
+    }
+    .detail-cart-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: var(--lake);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+    }
     
     .image-container.zoomed {
       cursor: zoom-out;
@@ -354,8 +387,10 @@
     <button class="back-btn" id="backBtn">
       <i class="fas fa-arrow-left"></i> Back to Shop
     </button>
-    <button class="top-cart-btn" id="topCartBtn" title="View Cart">
-      <i class="fas fa-shopping-cart"></i>
+    <button class="detail-cart-btn" id="topCartBtn" title="View Cart" style="display:none;">
+      <i class="fas fa-shopping-bag"></i>
+      <span>Cart</span>
+      <span class="detail-cart-badge" id="cartBadge">0</span>
     </button>
   </div>
 
@@ -433,8 +468,24 @@
     return 'MK ' + value.toLocaleString();
   }
 
+  function isSignedIn() {
+    try {
+      return !!localStorage.getItem('mthunziAuthUser');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function requireAuth(message) {
+    if (isSignedIn()) return true;
+    localStorage.setItem('mthunziAuthRedirect', window.location.pathname + window.location.search);
+    showToast(message || 'Please sign in to continue.');
+    window.location.href = 'login.html';
+    return false;
+  }
+
   function renderCart() {
-    var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = JSON.parse(localStorage.getItem('cart') || '[]');
     var cartItems = document.getElementById('cartItems');
     var cartTotalRow = document.getElementById('cartTotalRow');
     var cartTotalAmt = document.getElementById('cartTotalAmt');
@@ -445,6 +496,7 @@
       cartItems.innerHTML = '<div class="cart-empty"><i class="fas fa-shopping-bag" style="font-size:48px;margin-bottom:16px;display:block;"></i>Your cart is empty</div>';
       if (cartTotalRow) cartTotalRow.style.display = 'none';
       if (checkoutBtn) checkoutBtn.style.display = 'none';
+      updateCartBadge();
       return;
     }
     cart.forEach(function(product) {
@@ -479,12 +531,21 @@
     if (cartTotalAmt) cartTotalAmt.textContent = formatPrice(total);
     if (cartTotalRow) cartTotalRow.style.display = 'flex';
     if (checkoutBtn) checkoutBtn.style.display = 'block';
+    updateCartBadge();
   }
 
   function updateCartBadge() {
-    var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = JSON.parse(localStorage.getItem('cart') || '[]');
     var cartBadge = document.getElementById('cartBadge');
     if (cartBadge) cartBadge.textContent = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+    updateCartButtonVisibility();
+  }
+
+  function updateCartButtonVisibility() {
+    var cartButton = document.getElementById('topCartBtn');
+    if (!cartButton) return;
+    var cartCount = cart.reduce(function(total, item) { return total + (item.qty || 0); }, 0);
+    cartButton.style.display = isSignedIn() && cartCount > 0 ? 'inline-flex' : 'none';
   }
 
   // Modal close handlers
@@ -658,6 +719,7 @@
   });
 
   document.getElementById('addToCartBtn').addEventListener('click', () => {
+    if (!requireAuth('Please sign in to add items to your cart.')) return;
     const existingItem = cart.find(item => item.id === currentProduct.id);
     if (existingItem) {
       existingItem.qty = (existingItem.qty || existingItem.quantity || 0) + 1;
@@ -674,7 +736,7 @@
   });
 
   document.getElementById('proceedBtn').addEventListener('click', () => {
-    // add to cart and redirect to checkout on the store page
+    if (!requireAuth('Please sign in to continue to payment.')) return;
     const existingItem = cart.find(item => item.id === currentProduct.id);
     if (!existingItem) {
       cart.push({ id: currentProduct.id, name: currentProduct.name, img: currentProduct.image, price: currentProduct.price, qty: 1 });
@@ -682,14 +744,17 @@
     } else {
       localStorage.setItem('cart', JSON.stringify(cart));
     }
-    // redirect to the dedicated payment page which reads cart from localStorage
     window.location.href = 'payment.html';
   });
 
-  document.getElementById('topCartBtn').addEventListener('click', () => {
+  document.getElementById('topCartBtn').addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!requireAuth('Please sign in to view your cart.')) return;
     openModal('cartModal');
   });
 
+  updateCartBadge();
   loadProducts().then(() => loadProductDetail());
 </script>
 

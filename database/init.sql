@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS products (
   price NUMERIC(10, 2) NOT NULL,
   image_url TEXT NOT NULL,
   in_stock BOOLEAN NOT NULL DEFAULT true,
-  dimensions VARCHAR(60) NOT NULL
+  dimensions VARCHAR(60) NOT NULL,
+  badge VARCHAR(40) DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS orders (

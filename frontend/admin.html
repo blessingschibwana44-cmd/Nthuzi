@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function(){
           price: p.price,
           dims: p.dims,
           stock: 10,
-          badge: '',
+          badge: p.badge || '',
           desc: p.description
         };
       });
@@ -758,6 +758,11 @@ document.addEventListener('DOMContentLoaded', function(){
   function handleProductImageFile(file){
     if (!file || !file.type || !file.type.startsWith('image/')) {
       showToast('Please choose an image file');
+      return;
+    }
+    var maxImageSizeBytes = 80 * 1024 * 1024;
+    if (file.size > maxImageSizeBytes) {
+      showToast('Image is too large. Please use an image smaller than 80 MB.');
       return;
     }
     var reader = new FileReader();
@@ -976,7 +981,8 @@ document.addEventListener('DOMContentLoaded', function(){
         image_url: data.img,
         in_stock: stockValue > 0,
         dimensions: data.dims,
-        stock: stockValue
+        stock: stockValue,
+        badge: data.badge || ''
       };
 
       if(editingProductId===null){
