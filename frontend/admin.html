@@ -464,13 +464,17 @@ tbody tr:hover { background: var(--paper); }
           <div class="panel-head"><div><div class="panel-title">Store Details</div><div class="panel-sub">Basic information shown to customers</div></div></div>
           <div class="settings-grid">
             <div class="form-group"><label>Store Name</label><input type="text" id="setStoreName" value="Mthunzi Creations"></div>
-            <div class="form-group"><label>Contact Email</label><input type="email" id="setEmail" value="mthunzi.creations@gmail.com"></div>
-            <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="setPhone" value="+265 991 234 567"></div>
+            <div class="form-group"><label>Contact Email</label><input type="email" id="setEmail" value="mthunzicreations@gmail.com"></div>
+            <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="setPhone" value="+265 881799537"></div>
             <div class="form-group"><label>Currency</label><select id="setCurrency"><option>MK — Malawian Kwacha</option><option>USD — US Dollar</option></select></div>
             <div class="form-group"><label>Free Shipping Threshold</label><input type="text" id="setShipping" value="MK 50,000"></div>
-            <div class="form-group"><label>Store Address</label><input type="text" id="setAddress" value="Blantyre, Malawi"></div>
+            <div class="form-group"><label>Store Address</label><input type="text" id="setAddress" value="Lunzu Trading Centre, Off M1 Road, Blantyre."></div>
           </div>
-          <div class="form-group" style="max-width:100%;"><label>Store Description</label><textarea id="setDesc">Original African art born in Blantyre, Malawi. Every piece is a story waiting to be told.</textarea></div>
+          <div class="form-group" style="max-width:100%;"><label>Store Description</label><textarea id="setDesc">Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.</textarea></div>
+          <div class="form-group" style="max-width:100%;"><label>About Page Title</label><input type="text" id="setAboutTitle" value="Mthunzi Born to Create"></div>
+          <div class="form-group" style="max-width:100%;"><label>About Page Text</label><textarea id="setAboutText">Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.</textarea></div>
+          <div class="form-group" style="max-width:100%;"><label>Contact Heading</label><input type="text" id="setContactHeading" value="We’re here to help you order, enquire, and create with confidence."></div>
+          <div class="form-group" style="max-width:100%;"><label>Contact Intro</label><textarea id="setContactIntro">Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.</textarea></div>
         </div>
 
         <div class="panel" style="max-width:880px;margin-top:18px;">
@@ -1224,8 +1228,50 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   /* ================= SETTINGS ================= */
-  document.getElementById('btnSaveSettings').addEventListener('click', function(){
-    showToast('Settings saved');
+  async function loadSiteSettings(){
+    try {
+      const res = await fetch('/api/site-settings');
+      const json = await res.json();
+      const settings = json.data || {};
+      document.getElementById('setStoreName').value = settings.storeName || 'Mthunzi Creations';
+      document.getElementById('setEmail').value = settings.storeEmail || 'mthunzicreations@gmail.com';
+      document.getElementById('setPhone').value = settings.storePhone || '+265 881799537';
+      document.getElementById('setAddress').value = settings.storeAddress || 'Lunzu Trading Centre, Off M1 Road, Blantyre.';
+      document.getElementById('setDesc').value = settings.storeDescription || 'Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.';
+      document.getElementById('setAboutTitle').value = settings.aboutTitle || 'Mthunzi Born to Create';
+      document.getElementById('setAboutText').value = settings.aboutText || settings.storeDescription || 'Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs.';
+      document.getElementById('setContactHeading').value = settings.contactHeading || 'We’re here to help you order, enquire, and create with confidence.';
+      document.getElementById('setContactIntro').value = settings.contactIntro || 'Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.';
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  document.getElementById('btnSaveSettings').addEventListener('click', async function(){
+    try {
+      const payload = {
+        storeName: document.getElementById('setStoreName').value.trim(),
+        storeEmail: document.getElementById('setEmail').value.trim(),
+        storePhone: document.getElementById('setPhone').value.trim(),
+        storeAddress: document.getElementById('setAddress').value.trim(),
+        storeDescription: document.getElementById('setDesc').value.trim(),
+        aboutTitle: document.getElementById('setAboutTitle').value.trim(),
+        aboutText: document.getElementById('setAboutText').value.trim(),
+        contactHeading: document.getElementById('setContactHeading').value.trim(),
+        contactIntro: document.getElementById('setContactIntro').value.trim()
+      };
+      const res = await fetch('/api/admin/site-settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'Unable to save settings');
+      showToast('Settings saved');
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || 'Unable to save settings');
+    }
   });
 
   /* ---------- INITIAL RENDER ---------- */
@@ -1233,6 +1279,7 @@ document.addEventListener('DOMContentLoaded', function(){
   loadOrders();
   loadCustomers();
   loadMessages();
+  loadSiteSettings();
 });
 </script>
 </body>

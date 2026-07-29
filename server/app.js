@@ -6,8 +6,23 @@ const crypto = require('crypto');
 const cors = require('cors');
 const db = require('./services/db');
 const auth = require('./services/auth');
+const settingsPath = path.join(__dirname, 'data', 'site-settings.json');
 
 const app = express();
+
+function readSiteSettings() {
+  try {
+    const raw = fs.readFileSync(settingsPath, 'utf8');
+    return JSON.parse(raw);
+  } catch (error) {
+    return {};
+  }
+}
+
+function writeSiteSettings(nextSettings) {
+  fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+  fs.writeFileSync(settingsPath, JSON.stringify(nextSettings, null, 2));
+}
 
 function ensureSchema() {
   return db.query("ALTER TABLE products ADD COLUMN IF NOT EXISTS badge VARCHAR(40) DEFAULT ''");
@@ -291,6 +306,27 @@ app.post('/api/contact', async (req, res) => {
 });
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+
+app.get('/api/site-settings', (req, res) => {
+  try {
+    res.json({ data: readSiteSettings() });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Unable to load site settings.' });
+  }
+});
+
+app.put('/api/admin/site-settings', (req, res) => {
+  try {
+    const current = readSiteSettings();
+    const next = { ...current, ...req.body };
+    writeSiteSettings(next);
+    res.json({ data: next });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Unable to save site settings.' });
+  }
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));

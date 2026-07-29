@@ -14,7 +14,10 @@
   <div class="nav-brand">
     <img id="siteLogo" src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.classList.add('hidden'); document.getElementById('logoBadge').style.display='inline-flex';">
     <div id="logoBadge" class="logo-badge" aria-hidden="true">M</div>
-    <span class="logo" id="logoHome">MTHUNZI <span>CREATIONS</span></span>
+    <span class="logo" id="logoHome">
+      <span class="brand-word brand-word-first">MTHUNZI</span>
+      <span class="brand-word brand-word-second">CREATIONS</span>
+    </span>
   </div>
   <button id="hamburger" class="hamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
   <div class="nav-links">
@@ -52,7 +55,10 @@
   <div class="hero-content">
     <div class="hero-badge"><i class="fas fa-map-marker-alt"></i> Blantyre, Malawi</div>
     <div class="hero-inner">
-      <h1><span>Art that</span><span class="emphasize">speaks</span><span>your soul</span></h1>
+      <h1>
+        <span class="hero-line hero-line-intro">A Breeze Of</span>
+        <span class="hero-line hero-line-last">Creativity</span>
+      </h1>
       <p>Original paintings, hand-crafted drawings, wearable art — created by Malawian artist Mthunzi.</p>
       <div class="hero-search">
         <input type="text" placeholder="Search paintings, t-shirts, sculptures…" id="heroSearch">
@@ -122,8 +128,8 @@
 <section class="about-section section" id="about">
   <div style="max-width:700px;margin:0 auto;text-align:center;">
     <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:16px;">The Artist</div>
-    <h2 style="font-family:'Fraunces',serif;font-size:44px;font-weight:600;margin-bottom:20px;">Mthunzi <em style="color:var(--accent);">Born to Create</em></h2>
-    <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);">Rooted in the heart of Malawi's commercial capital Blantyre, Mthunzi Creations is a celebration of African beauty, storytelling, and soul. From vibrant canvases to hand-printed wearables, every piece carries the spirit of Blantyre's creative energy and its people.</p>
+    <h2 id="aboutTitle" style="font-family:'Fraunces',serif;font-size:44px;font-weight:600;margin-bottom:20px;">Mthunzi Born to Create</h2>
+    <p id="aboutText" style="font-size:17px;line-height:1.8;color:var(--text-secondary);">Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.</p>
   </div>
 </section>
 <!-- contact strip moved to bottom to act as footer strip (moved) -->
@@ -193,6 +199,21 @@ document.addEventListener('DOMContentLoaded', function() {
       console.warn('API product load failed.', error);
       products = [];
       renderFiltered([], 'Featured Items');
+    }
+  }
+
+  async function loadSiteSettings() {
+    try {
+      const response = await fetch('/api/site-settings');
+      if (!response.ok) throw new Error('Unable to load site settings');
+      const result = await response.json();
+      const settings = result.data || {};
+      const aboutTitleEl = document.getElementById('aboutTitle');
+      const aboutTextEl = document.getElementById('aboutText');
+      if (aboutTitleEl) aboutTitleEl.textContent = settings.aboutTitle || 'Mthunzi Born to Create';
+      if (aboutTextEl) aboutTextEl.textContent = settings.aboutText || settings.storeDescription || 'Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs.';
+    } catch (error) {
+      console.warn('Site settings load failed.', error);
     }
   }
 
@@ -574,6 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   toggleAuthButtons(false);
   loadProducts();
+  loadSiteSettings();
   loadPersistedUser();
 
   var authParam = new URLSearchParams(window.location.search).get('authRequired');

@@ -175,6 +175,23 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+    }
+
     .field input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 4px rgba(31,95,168,0.12);
@@ -293,7 +310,10 @@
 
       <div class="field">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="••••••••" />
+        <div class="password-wrap">
+          <input id="password" type="password" placeholder="••••••••" />
+          <button type="button" class="password-toggle" id="togglePassword" aria-label="Show password"><i class="fas fa-eye"></i></button>
+        </div>
       </div>
 
       <button class="btn btn-primary" id="submitBtn">Sign In</button>
@@ -346,6 +366,21 @@
       });
       const body = await response.json().catch(() => ({}));
       return { response, body };
+    }
+
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    if (togglePassword && passwordInput) {
+      togglePassword.addEventListener('click', function () {
+        const isHidden = passwordInput.type === 'password';
+        passwordInput.type = isHidden ? 'text' : 'password';
+        const icon = togglePassword.querySelector('i');
+        if (icon) {
+          icon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+        }
+        togglePassword.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+      });
     }
 
     document.getElementById('submitBtn').addEventListener('click', async function () {
