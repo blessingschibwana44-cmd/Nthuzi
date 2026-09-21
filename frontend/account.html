@@ -20,7 +20,7 @@
   .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
   .hero-meta span{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.14);font-size:13px;font-weight:600}
   .hero-actions{display:flex;flex-direction:column;gap:12px;min-width:220px}
-  .hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:14px;border:0;cursor:pointer;font-weight:700;background:#fff;color:#17477a;box-shadow:0 10px 24px rgba(0,0,0,.16)}
+  .hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:6px;border:0;cursor:pointer;font-weight:700;background:#fff;color:#17477a;box-shadow:0 10px 24px rgba(0,0,0,.16)}
   .hero-btn.secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.24)}
   .dashboard-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-bottom:20px}
   .card{background:rgba(255,255,255,.96);border:1px solid #e5ecf5;border-radius:24px;padding:24px;box-shadow:0 22px 50px rgba(17,34,58,.06)}
@@ -29,7 +29,7 @@
   .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#4a5f7f}
   .field input{width:100%;padding:12px 14px;border:1px solid #d8e2ef;border-radius:12px;font-size:15px;background:#fff;outline:none}
   .field input:focus{border-color:#1f5fa8;box-shadow:0 0 0 4px rgba(31,95,168,.12)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:14px;border:0;cursor:pointer;font-weight:700}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;border-radius:6px;border:0;cursor:pointer;font-weight:700}
   .btn-primary{background:linear-gradient(135deg,#1f5fa8 0%,#2d7dd2 100%);color:#fff;box-shadow:0 10px 24px rgba(31,95,168,.2)}
   .btn-outline{background:#fff;color:#1f5fa8;border:1px solid #1f5fa8}
   .note{font-size:13px;color:#6b7c8f;margin-top:12px;line-height:1.6}
@@ -142,7 +142,7 @@
   const ordersTableBody = $('ordersTableBody');
 
   function showToast(msg){alert(msg)}
-  function redirectHome(){window.location.href='index.html'}
+  function redirectHome(){window.location.href='shop.html'}
   function formatCurrency(value){return 'MK ' + Number(value || 0).toLocaleString();}
   function formatDate(value){
     if(!value) return '—';

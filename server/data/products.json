@@ -11,25 +11,29 @@
     "stock": 7
   },
   {
-    "id": 1,
-    "name": "Sample Painting",
+    "id": 1785615990453,
+    "name": "mkula fa",
     "category": "Paintings",
-    "description": "A colorful sample painting.",
-    "price": 25000,
-    "image": "/assets/sample1.jpg",
+    "description": "",
+    "price": 0,
+    "image": "/assets/uploads/1788623483489-ac4dde9a.jpeg",
     "stocked": true,
-    "dims": "40x60cm",
-    "stock": 10
+    "dims": "N/A",
+    "stock": 9,
+    "badge": "Bestseller",
+    "featured": false
   },
   {
-    "id": 2,
-    "name": "Sample T-Shirt",
+    "id": 1788601767682,
+    "name": "rt",
     "category": "T-Shirts",
-    "description": "Printed sample tee.",
-    "price": 8000,
-    "image": "/assets/sample2.jpg",
+    "description": "",
+    "price": 5000,
+    "image": "/assets/uploads/1788601767546-65b06fad.jpeg",
     "stocked": true,
-    "dims": "S-XL",
-    "stock": 10
+    "dims": "N/A",
+    "stock": 7,
+    "badge": "Featured",
+    "featured": true
   }
 ]

@@ -16,9 +16,19 @@
     .layout{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
     .panel{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 10px 30px rgba(15,30,60,0.06)}
     .panel h2{margin:0 0 12px;font-size:20px}
+    .payment-hero{margin-bottom:18px;padding:18px 20px;border-radius:18px;background:linear-gradient(135deg,#eef7ff 0%,#f5f9ff 100%);border:1px solid #dfeaf8;box-shadow:0 14px 34px rgba(31,95,168,.08)}
+    .payment-hero h3{margin:0 0 10px;font-size:18px;color:#10324e}
+    .payment-hero p{margin:0;color:#44607d;line-height:1.65;font-size:14px}
+    .payment-account-row{display:grid;grid-template-columns:repeat(2,minmax(160px,1fr));gap:12px;margin-top:14px}
+    .payment-account-box{background:#fff;border:1px solid #dfeaf8;border-radius:12px;padding:12px 14px}
+    .payment-account-box .label{display:block;font-size:11px;font-weight:700;color:#6b7c8f;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+    .payment-account-box .value{font-size:15px;font-weight:800;color:#11233b}
+    .ref-warning{margin-top:12px;padding:10px 12px;border:1px solid #f1d6a3;background:#fff9ed;border-radius:10px;color:#7a4f0d;font-size:12px;line-height:1.5;font-weight:600;display:flex;align-items:flex-start;gap:8px}
+    .ref-warning i{margin-top:2px}
     .methods{display:flex;flex-direction:column;gap:12px}
-    .method{border:1px solid #e6edf6;border-radius:10px;padding:14px;display:flex;gap:12px;align-items:flex-start}
-    .method.chosen{border-color:var(--accent);box-shadow:0 6px 18px rgba(31,95,168,0.06)}
+    .method{border:1px solid #e6edf6;border-radius:12px;padding:14px;display:flex;gap:12px;align-items:flex-start;transition:all .18s ease;background:#fff}
+    .method:hover{border-color:#bfd7f8;transform:translateY(-1px)}
+    .method.chosen{border-color:var(--accent);box-shadow:0 10px 24px rgba(31,95,168,0.09);background:linear-gradient(180deg,#f8fbff 0%,#f1f7ff 100%)}
     .method .meta{flex:1}
     .method input[type=radio]{margin-top:6px}
     .method-logo{width:140px;height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:6px 8px;background:#f8fbff;border-radius:10px;border:1px solid #e7f0f9;}
@@ -40,7 +50,7 @@
     .item-row img{width:56px;height:56px;object-fit:cover;border-radius:6px}
     .total{font-weight:700;font-size:18px;margin-top:8px}
     .actions{display:flex;gap:12px;margin-top:12px}
-    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+    .btn{padding:10px 14px;border-radius:6px;border:0;cursor:pointer}
     .btn-primary{background:var(--accent);color:#fff}
     .btn-secondary{background:#f1f7fb;color:var(--accent)}
     .note{font-size:13px;color:var(--muted)}
@@ -64,7 +74,7 @@
     .form-group input:focus{outline:none;border-color:#1f5fa8;box-shadow:0 0 0 3px rgba(31,95,168,0.1)}
     .card-number-input{font-family:'Space Mono',monospace;letter-spacing:2px}
     .card-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .pay-btn{padding:14px;border:none;border-radius:10px;background:linear-gradient(90deg,#1f5fa8,#4a89d4);color:#fff;font-weight:600;font-size:15px;cursor:pointer;margin-top:20px;transition:all 0.2s}
+    .pay-btn{padding:14px;border:none;border-radius:6px;background:linear-gradient(90deg,#1f5fa8,#4a89d4);color:#fff;font-weight:600;font-size:15px;cursor:pointer;margin-top:20px;transition:all 0.2s}
     .pay-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 24px rgba(31,95,168,0.25)}
     .pay-btn:disabled{opacity:0.6;cursor:not-allowed}
     .pay-btn .btn-spinner{display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,0.32);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:text-bottom}
@@ -85,6 +95,26 @@
     .success-item:last-child{border-bottom:none}
     .success-actions{display:flex;gap:10px;margin-top:16px}
     .success-actions .btn{flex:1}
+
+    @media (max-width: 700px) {
+      body { padding: 0 12px; }
+      .wrap { max-width: 100%; margin: 18px auto 28px; padding: 0; }
+      .top { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .layout { gap: 16px; }
+      .panel { padding: 16px; border-radius: 14px; }
+      .payment-hero { padding: 16px; }
+      .payment-account-row { grid-template-columns: 1fr; }
+      .method { flex-direction: column; }
+      .method-logo { width: 100%; max-width: 180px; }
+      .actions { flex-direction: column; }
+      .actions .btn { width: 100%; }
+      .uploader { flex-direction: column; align-items: flex-start; }
+      .upload-preview { max-width: 100%; width: 100%; max-height: 180px; }
+      .summary-sheet { padding: 14px; }
+      .payment-modal { padding: 24px 18px; }
+      .card-row, .success-actions { grid-template-columns: 1fr; display: grid; }
+      .success-actions .btn { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -130,7 +160,7 @@
               <img src="assets/payment-logos/tnm-logo.png" alt="TNM">
             </div>
             <div class="meta">
-              <div style="font-weight:700">TNM Mobile Money</div>
+              <div style="font-weight:700">TNM Mpamba</div>
               <div class="instructions">Use your TNM Mobile Money account to send the full order amount, then upload a screenshot of the transfer as proof.</div>
             </div>
           </label>
@@ -148,7 +178,8 @@
         </div>
 
         <div style="margin-top:16px">
-          <div class="note">Upload payment proof (PNG, JPG). This helps us process your order faster.</div>
+          <div class="note">Upload payment proof (PNG, JPG). Please ensure the reference number is clearly visible in the screenshot before submitting.</div>
+          <div class="ref-warning"><i class="fas fa-exclamation-circle"></i><span>Take a clear screenshot of the payment confirmation and make sure the reference number is visible in the image before uploading.</span></div>
           <div class="uploader" id="uploader">
             <img id="preview" class="upload-preview" src="" alt="" style="display:none">
             <div style="flex:1">
@@ -235,15 +266,89 @@
     $('payBtn').querySelector('.btn-label').textContent = 'Done';
   }
 
-  // Load cart and render summary
-  function loadCart(){try{return JSON.parse(localStorage.getItem('cart')||'[]')}catch(e){return []}}
+  function getStoredUser(){
+    try {
+      var stored = localStorage.getItem('mthunziAuthUser');
+      if (!stored) return null;
+      return JSON.parse(stored);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function getCartStorageKey(){
+    var user = getStoredUser();
+    return user && user.id ? 'mthunziCart:' + String(user.id) : 'mthunziCart:guest';
+  }
+
+  function loadCart(){
+    var user = getStoredUser();
+    var primaryKey = user && user.id ? 'mthunziCart:' + String(user.id) : 'mthunziCart:guest';
+    var legacyKey = 'mthunziCart';
+    try {
+      var cart = JSON.parse(localStorage.getItem(primaryKey) || '[]');
+      if (Array.isArray(cart) && cart.length) return cart;
+      var legacyCart = JSON.parse(localStorage.getItem(legacyKey) || '[]');
+      if (Array.isArray(legacyCart) && legacyCart.length) {
+        if (user && user.id) localStorage.setItem(primaryKey, JSON.stringify(legacyCart));
+        return legacyCart;
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function saveCart(items){
+    var user = getStoredUser();
+    var primaryKey = user && user.id ? 'mthunziCart:' + String(user.id) : 'mthunziCart:guest';
+    localStorage.setItem(primaryKey, JSON.stringify(items));
+    localStorage.removeItem('mthunziCart');
+  }
+  function clearCart(){
+    var user = getStoredUser();
+    if (user && user.id) localStorage.removeItem('mthunziCart:' + String(user.id));
+    localStorage.removeItem('mthunziCart:guest');
+    localStorage.removeItem('mthunziCart');
+  }
   function renderOrder(){const itemsDiv=$('items');itemsDiv.innerHTML='';const cart=loadCart();let total=0;cart.forEach(it=>{const row=document.createElement('div');row.className='item-row';row.innerHTML=`<img src="${it.img||it.image||'assets/mthunzi-logo.png'}"><div style="flex:1"><div style="font-weight:600">${it.name||'Item'}</div><div style="color:#6b7c8f">Qty: ${it.qty||it.quantity||1} — MK ${it.price}</div></div><div style="font-weight:700">MK ${ ((it.price) * ((it.qty||it.quantity||1))) }</div>`;itemsDiv.appendChild(row);total += (it.price * (it.qty||it.quantity||1));});$('total').textContent='Total: MK' + (total||0)}
 
   // Method selection
   function updateMethodUI(){document.querySelectorAll('.method').forEach(lbl=>{const radio=lbl.querySelector('input[type=radio]');lbl.classList.toggle('chosen', radio.checked)})}
   document.querySelectorAll('.method').forEach(lbl=>{lbl.addEventListener('click',()=>{lbl.querySelector('input[type=radio]').checked=true;updateMethodUI();renderMethodDetails();})})
 
-  function renderMethodDetails(){const chosen = document.querySelector('input[name=paymethod]:checked'); const d=$('methodDetails'); if(!chosen){d.innerHTML='';return} if(chosen.value==='tnm'){d.innerHTML=`<div style="margin-top:8px"><strong>TNM Mobile Money</strong><div style="color:#6b7c8f;margin-top:6px">Send the full order amount from your TNM Mobile Money account and upload the proof screenshot after the transfer.</div></div>`}else if(chosen.value==='airtel'){d.innerHTML=`<div style="margin-top:8px"><strong>Airtel Money</strong><div style="color:#6b7c8f;margin-top:6px">Send the full order amount from your Airtel Money account and upload the proof screenshot after the transfer.</div></div>`}else{d.innerHTML='';}}
+  async function loadPaymentSettings(){
+    try {
+      const res = await fetch('/api/site-settings');
+      const json = await res.json();
+      return json.data || {};
+    } catch (err) {
+      console.error(err);
+      return {};
+    }
+  }
+
+  function renderMethodDetails(){
+    const chosen = document.querySelector('input[name=paymethod]:checked');
+    const d=$('methodDetails');
+    if(!chosen){d.innerHTML='';return}
+    loadPaymentSettings().then(function(settings){
+      const accountName = settings.paymentAccountName || 'John Botha';
+      const accountNumber = settings.paymentAccountNumber || '0880058488';
+      const referenceLabel = settings.paymentReferenceLabel || 'Reference number';
+      const instructions = settings.paymentInstructions || 'Send the money to that number and the account name is John Botha. Please include the reference number in your payment note so we can match it quickly.';
+      const accountNameEl = document.getElementById('paymentAccountNameDisplay');
+      const accountNumberEl = document.getElementById('paymentAccountNumberDisplay');
+      if (accountNameEl) accountNameEl.textContent = accountName;
+      if (accountNumberEl) accountNumberEl.textContent = accountNumber;
+      if(chosen.value==='tnm'){
+        d.innerHTML = `<div style="margin-top:8px;border:1px solid #dfeaf8;border-radius:12px;padding:14px 16px;background:#f8fbff"><div style="font-weight:800;color:#11233b; margin-bottom:10px;">TNM Mobile Money</div><div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:#2f4662;line-height:1.6"><div><strong>Account name:</strong> ${accountName}</div><div><strong>Number:</strong> ${accountNumber}</div><div><strong>${referenceLabel}:</strong> Use your order reference or your name</div><div>${instructions}</div></div></div>`;
+      } else if(chosen.value==='airtel'){
+        d.innerHTML = `<div style="margin-top:8px;border:1px solid #dfeaf8;border-radius:12px;padding:14px 16px;background:#f8fbff"><div style="font-weight:800;color:#11233b; margin-bottom:10px;">Airtel Money</div><div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:#2f4662;line-height:1.6"><div><strong>Account name:</strong> ${accountName}</div><div><strong>Number:</strong> ${accountNumber}</div><div><strong>${referenceLabel}:</strong> Use your order reference or your name</div><div>${instructions}</div></div></div>`;
+      } else {
+        d.innerHTML='';
+      }
+    });
+  }
 
   // File upload
   const fileInput=$('fileInput'), preview=$('preview'), uploadLabel=$('uploadLabel'), chooseBtn=$('chooseBtn');
@@ -302,7 +407,11 @@
     const chosen = document.querySelector('input[name=paymethod]:checked');
     if(!chosen){ alert('Please choose a payment method'); return }
     const cart = loadCart();
-    if(!cart.length){ alert('Your cart is empty'); return }
+    if(!cart.length){ alert('Your cart is empty. Please add an item before making a payment.'); window.location.href='shop.html'; return }
+    if (!preview.dataset.dataurl) {
+      alert('Please upload a payment screenshot. Make sure the reference number is clearly visible before submitting.');
+      return;
+    }
     setConfirmButtonProcessing();
     preparePaymentModal(cart, chosen.value);
     openPaymentModal();
@@ -398,7 +507,7 @@
   $('payBtn').addEventListener('click', function() {
     if ($('payBtn').querySelector('.btn-label').textContent === 'Done') {
       closePaymentModal();
-      localStorage.removeItem('cart');
+      clearCart();
       window.location.href = 'shop.html';
     }
   });

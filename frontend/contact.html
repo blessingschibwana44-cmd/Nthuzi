@@ -21,7 +21,7 @@
       gap: 24px;
       align-items: center;
       padding: 40px;
-      border-radius: 28px;
+      border-radius: 6px;
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(255,255,255,0.22);
@@ -49,17 +49,17 @@
     }
     .contact-hero p { font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.86); max-width: 620px; }
     .contact-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; }
-    .contact-stat { padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.16); }
+    .contact-stat { padding: 16px; border-radius: 6px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.16); }
     .contact-stat strong { display: block; font-size: 20px; margin-bottom: 6px; }
-    .contact-support-card { background: rgba(255,255,255,0.95); color: #10233b; border-radius: 24px; padding: 24px; box-shadow: 0 20px 46px rgba(16,35,59,0.16); }
+    .contact-support-card { background: rgba(255,255,255,0.95); color: #10233b; border-radius: 6px; padding: 24px; box-shadow: 0 20px 46px rgba(16,35,59,0.16); }
     .contact-support-card h3 { font-size: 22px; margin-bottom: 10px; }
     .support-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
     .support-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #e8eef6; }
     .support-item:last-child { border-bottom: none; padding-bottom: 0; }
     .support-item i { color: #1f5fa8; margin-top: 2px; font-size: 16px; }
     .contact-main { padding: 24px 5% 72px; }
-    .contact-grid { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 24px; max-width: 1200px; margin: 0 auto; }
-    .contact-card, .info-card { background: #fff; border-radius: 24px; border: 1px solid #dfe8f2; box-shadow: 0 18px 46px rgba(16,35,59,0.06); padding: 28px; }
+    .contact-grid { display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 24px; max-width: 1200px; margin: 0 auto; justify-content: center; align-items: center; }
+    .contact-card, .info-card { background: #fff; border-radius: 6px; border: 1px solid #dfe8f2; box-shadow: 0 18px 46px rgba(16,35,59,0.06); padding: 28px; width: 100%; max-width: 570px; justify-self: center; }
     .contact-card h2, .info-card h2 { font-family: 'Fraunces', serif; font-size: 24px; margin-bottom: 8px; color: #10233b; }
     .contact-card p, .info-card p { color: #51657a; line-height: 1.7; }
     .contact-form { display: grid; gap: 16px; margin-top: 20px; }
@@ -68,25 +68,25 @@
     .contact-form input, .contact-form textarea, .contact-form select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 1px solid #d8e2ec; background: #f8fbff; font-size: 15px; color: #10233b; }
     .contact-form textarea { min-height: 120px; resize: vertical; }
     .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { outline: none; border-color: #1f5fa8; box-shadow: 0 0 0 4px rgba(31,95,168,0.12); }
-    .contact-btn { width: 100%; padding: 14px 18px; border: none; border-radius: 999px; background: linear-gradient(90deg, #10233b, #1f5fa8); color: #fff; font-weight: 700; cursor: pointer; }
+    .contact-btn { width: 100%; padding: 14px 18px; border: none; border-radius: 6px; background: linear-gradient(90deg, #10233b, #1f5fa8); color: #fff; font-weight: 700; cursor: pointer; }
     .contact-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(31,95,168,0.16); }
     .info-list { display: grid; gap: 14px; margin-top: 18px; }
-    .info-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: #f8fbff; border: 1px solid #e6edf6; }
+    .info-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 6px; background: #f8fbff; border: 1px solid #e6edf6; }
     .info-item i { color: #1f5fa8; margin-top: 2px; }
     .info-item strong { display: block; margin-bottom: 4px; color: #10233b; }
     .info-item span { color: #51657a; font-size: 14px; }
     .faq-list { display: grid; gap: 12px; margin-top: 18px; }
-    .faq-item { padding: 14px 16px; border-radius: 14px; border: 1px solid #e6edf6; background: #fbfdff; }
+    .faq-item { padding: 14px 16px; border-radius: 6px; border: 1px solid #e6edf6; background: #fbfdff; }
     .faq-item strong { display: block; color: #10233b; margin-bottom: 6px; }
     .faq-item span { color: #51657a; font-size: 14px; line-height: 1.6; }
-    .toast { position: fixed; bottom: 24px; right: 24px; background: #10233b; color: #fff; padding: 12px 18px; border-radius: 999px; box-shadow: 0 16px 36px rgba(0,0,0,0.18); opacity: 0; transform: translateY(12px); pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #10233b; color: #fff; padding: 12px 18px; border-radius: 10px; box-shadow: 0 12px 26px rgba(0,0,0,0.18); opacity: 0; transform: translateY(12px); pointer-events: none; transition: all 0.25s ease; z-index: 3000; }
     .toast.show { opacity: 1; transform: translateY(0); }
     @media (max-width: 900px) { .contact-hero-card, .contact-grid { grid-template-columns: 1fr; } }
     @media (max-width: 640px) { .contact-hero { padding: 44px 4% 28px; } .contact-hero-card { padding: 24px; } .contact-main { padding: 20px 4% 56px; } .contact-card, .info-card { padding: 20px; } }
   </style>
 </head>
 <body>
-  <nav style="position:sticky;top:0;z-index:1000;">
+  <nav style="position:fixed;top:0;left:0;width:100%;z-index:1000;">
     <div class="nav-brand">
       <img src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.style.display='none'">
       <span class="logo" onclick="window.location.href='index.html'">MTHUNZI <span>CREATIONS</span></span>
@@ -98,7 +98,12 @@
       <a href="index.html#about">About</a>
     </div>
     <button id="hamburger" class="hamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
-    <div class="nav-actions"></div>
+    <div class="nav-actions">
+      <button class="btn-nav btn-outline" id="btnSignIn" type="button">Sign In</button>
+      <button class="btn-nav btn-fill" id="btnSignUp" type="button">Sign Up</button>
+      <button class="btn-nav btn-outline" id="btnAccount" type="button" style="display:none;">Account</button>
+      <button class="btn-nav btn-outline" id="btnLogout" type="button" style="display:none;">Logout</button>
+    </div>
   </nav>
 
   <div id="mobileMenu" class="mobile-menu" aria-hidden="true" style="top:76px;">
@@ -122,8 +127,8 @@
       <div class="contact-hero-card">
         <div>
           <div class="contact-kicker"><i class="fas fa-headset"></i> Customer care</div>
-          <h1 id="contactHeading">We’re here to help you order, enquire, and create with confidence.</h1>
-          <p id="contactIntro">Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.</p>
+          <h1>We’re here to help you order, enquire, and create with confidence.</h1>
+          <p>Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.</p>
           <div class="contact-stats">
             <div class="contact-stat"><strong>24 hrs</strong><span>Typical response time</span></div>
             <div class="contact-stat"><strong>100%</strong><span>Secure order support</span></div>
@@ -178,9 +183,9 @@
         <h2>Reach us directly</h2>
         <p>Prefer a quicker route? These are the fastest ways to connect.</p>
         <div class="info-list">
-          <div class="info-item"><i class="fas fa-phone-alt"></i><div><strong>Call or WhatsApp</strong><span id="contactPhone">+265 881799537</span></div></div>
-          <div class="info-item"><i class="fas fa-envelope"></i><div><strong>Email</strong><span id="contactEmail">mthunzicreations@gmail.com</span></div></div>
-          <div class="info-item"><i class="fas fa-map-marker-alt"></i><div><strong>Visit</strong><span id="contactAddress">Lunzu Trading Centre, Off M1 Road, Blantyre.</span></div></div>
+          <div class="info-item"><i class="fas fa-phone-alt"></i><div><strong>Call or WhatsApp</strong><span>+265 991 234 567</span></div></div>
+          <div class="info-item"><i class="fas fa-envelope"></i><div><strong>Email</strong><span>mthunzi.creations@gmail.com</span></div></div>
+          <div class="info-item"><i class="fas fa-map-marker-alt"></i><div><strong>Visit</strong><span>Blantyre, Malawi</span></div></div>
         </div>
 
         <div class="faq-list">
@@ -209,27 +214,12 @@
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2600);
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
     }
 
-    async function loadSiteSettings() {
-      try {
-        const res = await fetch('/api/site-settings');
-        const json = await res.json();
-        const settings = json.data || {};
-        const headingEl = document.getElementById('contactHeading');
-        const introEl = document.getElementById('contactIntro');
-        const phoneEl = document.getElementById('contactPhone');
-        const emailEl = document.getElementById('contactEmail');
-        const addressEl = document.getElementById('contactAddress');
-        if (headingEl) headingEl.textContent = settings.contactHeading || 'We’re here to help you order, enquire, and create with confidence.';
-        if (introEl) introEl.textContent = settings.contactIntro || 'Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.';
-        if (phoneEl) phoneEl.textContent = settings.contactPhone || settings.storePhone || '+265 881799537';
-        if (emailEl) emailEl.textContent = settings.contactEmail || settings.storeEmail || 'mthunzicreations@gmail.com';
-        if (addressEl) addressEl.textContent = settings.contactAddress || settings.storeAddress || 'Lunzu Trading Centre, Off M1 Road, Blantyre.';
-      } catch (error) {
-        console.warn('Site settings load failed.', error);
-      }
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value || '').trim());
     }
 
     function closeMobileMenu() {
@@ -255,6 +245,10 @@
       const signUpButton = document.getElementById('mBtnSignUp');
       const accountButton = document.getElementById('mBtnAccount');
       const logoutButton = document.getElementById('mBtnLogout');
+      const desktopSignInButton = document.getElementById('btnSignIn');
+      const desktopSignUpButton = document.getElementById('btnSignUp');
+      const desktopAccountButton = document.getElementById('btnAccount');
+      const desktopLogoutButton = document.getElementById('btnLogout');
 
       if (signInButton) signInButton.style.display = signedIn ? 'none' : '';
       if (signUpButton) signUpButton.style.display = signedIn ? 'none' : '';
@@ -263,6 +257,13 @@
         accountButton.textContent = signedIn && user.name ? 'Hi ' + user.name.split(' ')[0] : 'Account';
       }
       if (logoutButton) logoutButton.style.display = signedIn ? '' : 'none';
+      if (desktopSignInButton) desktopSignInButton.style.display = signedIn ? 'none' : '';
+      if (desktopSignUpButton) desktopSignUpButton.style.display = signedIn ? 'none' : '';
+      if (desktopAccountButton) {
+        desktopAccountButton.style.display = signedIn ? '' : 'none';
+        desktopAccountButton.textContent = signedIn && user.name ? 'Hi ' + user.name.split(' ')[0] : 'Account';
+      }
+      if (desktopLogoutButton) desktopLogoutButton.style.display = signedIn ? '' : 'none';
     }
 
     function handleLogout() {
@@ -304,6 +305,15 @@
       });
     });
 
+    document.querySelectorAll('.nav-actions button').forEach(function (element) {
+      element.addEventListener('click', function () {
+        if (element.id === 'btnLogout') handleLogout();
+        else if (element.id === 'btnSignIn') window.location.href = 'login.html';
+        else if (element.id === 'btnSignUp') window.location.href = 'signup.html';
+        else if (element.id === 'btnAccount') window.location.href = 'account.html';
+      });
+    });
+
     window.addEventListener('resize', function () {
       if (window.innerWidth > 900 && mobileMenu && mobileMenu.classList.contains('open')) {
         mobileMenu.classList.remove('open');
@@ -312,7 +322,6 @@
     });
 
     updateMobileAuthButtons();
-    loadSiteSettings();
 
     form.addEventListener('submit', async function (event) {
       event.preventDefault();
@@ -322,6 +331,15 @@
         subject: document.getElementById('subject').value.trim(),
         body: document.getElementById('body').value.trim()
       };
+
+      if (!payload.name || !payload.email || !payload.subject || !payload.body) {
+        showToast('Please complete all contact fields.');
+        return;
+      }
+      if (!isValidEmail(payload.email)) {
+        showToast('Please enter a valid email address.');
+        return;
+      }
 
       try {
         const res = await fetch('/api/contact', {

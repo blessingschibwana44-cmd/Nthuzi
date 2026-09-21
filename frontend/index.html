@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<nav>
+<nav class="home-header">
   <div class="nav-brand">
     <img id="siteLogo" src="assets/mthunzi-logo.png" alt="Mthunzi logo" class="site-logo" onerror="this.classList.add('hidden'); document.getElementById('logoBadge').style.display='inline-flex';">
     <div id="logoBadge" class="logo-badge" aria-hidden="true">M</div>
@@ -30,6 +30,7 @@
     <button class="btn-nav btn-outline" id="btnSignIn">Sign In</button>
     <button class="btn-nav btn-fill" id="btnSignUp">Sign Up</button>
     <button class="btn-nav btn-outline" id="btnAccount" style="display:none;">Account</button>
+    <button class="btn-nav btn-outline" id="btnLogout" style="display:none;">Logout</button>
     <button class="cart-btn" id="btnCart" style="display:none;"><i class="fas fa-shopping-bag"></i> Cart <span class="cart-badge" id="cartBadge">0</span></button>
   </div>
 </nav>
@@ -45,6 +46,7 @@
       <button class="btn-nav btn-outline" id="mBtnSignIn">Sign In</button>
       <button class="btn-nav btn-fill" id="mBtnSignUp">Sign Up</button>
       <button class="btn-nav btn-outline" id="mBtnAccount" style="display:none;">Account</button>
+      <button class="btn-nav btn-outline" id="mBtnLogout" style="display:none;">Logout</button>
     </div>
   </div>
 </div>
@@ -75,22 +77,10 @@
   </div>
 </section>
 
-<div class="trust-banner">
-  <div class="trust-item"><i class="fas fa-truck"></i> Free shipping over MK50,000</div>
-  <div class="trust-item"><i class="fas fa-shield-alt"></i> Secure payments</div>
-  <div class="trust-item"><i class="fas fa-undo-alt"></i> 14-day returns</div>
-  <div class="trust-item"><i class="fas fa-hand-sparkles"></i> Handmade in Malawi</div>
-</div>
 
 <section class="section" id="gallery">
   <div class="section-header"><h2 class="section-title">Browse by Category</h2><span class="section-sub">All Collections</span></div>
-  <div class="cat-grid">
-    <div class="cat-card" data-cat="Paintings"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Paintings</div><div class="cat-count">12 pieces</div></div></div>
-    <div class="cat-card" data-cat="Drawings"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Drawings</div><div class="cat-count">8 pieces</div></div></div>
-    <div class="cat-card" data-cat="T-Shirts"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">T-Shirts</div><div class="cat-count">24 designs</div></div></div>
-    <div class="cat-card" data-cat="Sculptures"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1536924940840-4c65e12e6b8e?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Sculptures</div><div class="cat-count">6 pieces</div></div></div>
-    <div class="cat-card" data-cat="Prints"><div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1544967082-d9d25d867d43?w=400&h=500&fit=crop')"></div><div class="cat-overlay"><div class="cat-name">Art Prints</div><div class="cat-count">18 designs</div></div></div>
-  </div>
+  <div class="cat-grid" id="homeCategoryGrid"></div>
 </section>
 
 <section class="section products-bg" id="shop">
@@ -164,9 +154,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const id = Number(product.id ?? product.product_id ?? 0);
     const category = product.category || product.cat || 'Paintings';
     const image = product.image || product.img || '/assets/sample1.jpg';
-    const stocked = product.stocked ?? product.in_stock ?? (product.stock === 'in-stock' || product.stock === true);
     const dimensions = product.dims || product.dimensions || 'N/A';
     const description = product.description || product.desc || '';
+    const stockAmount = Number(product.stock ?? (product.stocked ?? product.in_stock ? 10 : 0));
+    const stocked = stockAmount > 0;
 
     return {
       ...product,
@@ -176,9 +167,9 @@ document.addEventListener('DOMContentLoaded', function() {
       description,
       price: Number(product.price || 0),
       image,
-      stocked: stocked !== false,
+      stocked,
       dims: dimensions,
-      stock: product.stock ?? (stocked ? 'in-stock' : 'low-stock'),
+      stock: stockAmount,
       img: image,
       cat: category,
       dimensions,
@@ -212,21 +203,74 @@ document.addEventListener('DOMContentLoaded', function() {
       const aboutTextEl = document.getElementById('aboutText');
       if (aboutTitleEl) aboutTitleEl.textContent = settings.aboutTitle || 'Mthunzi Born to Create';
       if (aboutTextEl) aboutTextEl.textContent = settings.aboutText || settings.storeDescription || 'Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs.';
+      renderHomeCategories(settings.categories || []);
     } catch (error) {
       console.warn('Site settings load failed.', error);
     }
   }
 
+  function navigateToShop(categoryName) {
+    if (!categoryName) return;
+    window.location.href = 'shop.html?cat=' + encodeURIComponent(categoryName);
+  }
+
+  function renderHomeCategories(categories) {
+    const grid = document.getElementById('homeCategoryGrid');
+    if (!grid) return;
+    const items = Array.isArray(categories) && categories.length ? categories : [
+      { name: 'Paintings' },
+      { name: 'Drawings' },
+      { name: 'T-Shirts' },
+      { name: 'Sculptures' },
+      { name: 'Prints' }
+    ];
+    grid.innerHTML = items.map(function(category, index) {
+      const name = category.name || 'Category';
+      const count = ['12 pieces', '8 pieces', '24 designs', '6 pieces', '18 designs'][index] || 'New collection';
+      return '<button type="button" class="cat-card" data-cat="' + name + '"><div class="cat-bg" style="background-image:url(\'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=500&fit=crop\')"></div><div class="cat-overlay"><div class="cat-name">' + name + '</div><div class="cat-count">' + count + '</div></div></button>';
+    }).join('');
+  }
+
   var detailProductId = null;
-  function loadCart(){ try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch (e) { return []; } }
-  function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)); }
+  function getStoredUser() {
+    try {
+      var stored = localStorage.getItem('mthunziAuthUser');
+      if (!stored) return null;
+      return JSON.parse(stored);
+    } catch (error) {
+      return null;
+    }
+  }
+  function getCartStorageKey() {
+    var user = getStoredUser();
+    return user && user.id ? 'mthunziCart:' + String(user.id) : 'mthunziCart:guest';
+  }
+  function loadCart(){
+    var user = getStoredUser();
+    var key = getCartStorageKey();
+    var legacyKey = 'mthunziCart';
+    try {
+      var currentCart = JSON.parse(localStorage.getItem(key) || '[]');
+      if (Array.isArray(currentCart) && currentCart.length) return currentCart;
+      var legacyCart = JSON.parse(localStorage.getItem(legacyKey) || '[]');
+      if (Array.isArray(legacyCart) && legacyCart.length) {
+        if (user && user.id) localStorage.setItem(key, JSON.stringify(legacyCart));
+        return legacyCart;
+      }
+      return [];
+    } catch (e) { return []; }
+  }
+  function saveCart(){ localStorage.setItem(getCartStorageKey(), JSON.stringify(cart)); }
   cart = loadCart();
   function fmt(n){ return 'MK ' + n.toLocaleString(); }
   function updateCartButtonVisibility() {
     var cartButton = document.getElementById('btnCart');
     if (!cartButton) return;
-    var shouldShow = isSignedIn() && cart.length > 0;
+    var totalItems = cart.reduce(function(sum, item) { return sum + (Number(item.qty) || Number(item.quantity) || 0); }, 0);
+    var shouldShow = isSignedIn() && totalItems > 0;
     cartButton.style.display = shouldShow ? 'flex' : 'none';
+    var badge = document.getElementById('cartBadge');
+    if (badge) badge.textContent = totalItems;
   }
   function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2500); }
   function scrollToId(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
@@ -324,60 +368,31 @@ document.addEventListener('DOMContentLoaded', function() {
     var signInButton = document.getElementById('btnSignIn');
     var signUpButton = document.getElementById('btnSignUp');
     var accountButton = document.getElementById('btnAccount');
+    var logoutButton = document.getElementById('btnLogout');
     if (signInButton) signInButton.style.display = isSignedIn ? 'none' : '';
     if (signUpButton) signUpButton.style.display = isSignedIn ? 'none' : '';
     if (accountButton) {
       accountButton.style.display = isSignedIn ? '' : 'none';
       accountButton.textContent = isSignedIn && currentUser && currentUser.name ? 'Hi ' + currentUser.name.split(' ')[0] : 'Account';
     }
+    if (logoutButton) logoutButton.style.display = isSignedIn ? '' : 'none';
     var mobileSignIn = document.getElementById('mBtnSignIn');
     var mobileSignUp = document.getElementById('mBtnSignUp');
     var mobileAccount = document.getElementById('mBtnAccount');
+    var mobileLogout = document.getElementById('mBtnLogout');
     if (mobileSignIn) mobileSignIn.style.display = isSignedIn ? 'none' : '';
     if (mobileSignUp) mobileSignUp.style.display = isSignedIn ? 'none' : '';
     if (mobileAccount) {
       mobileAccount.style.display = isSignedIn ? '' : 'none';
       mobileAccount.textContent = isSignedIn && currentUser && currentUser.name ? 'Hi ' + currentUser.name.split(' ')[0] : 'Account';
     }
+    if (mobileLogout) mobileLogout.style.display = isSignedIn ? '' : 'none';
     updateCartButtonVisibility();
-  }
-  function createLogoutButtons() {
-    var navActions = document.querySelector('.nav-actions');
-    if (navActions && !document.getElementById('btnLogout')) {
-      var logoutBtn = document.createElement('button');
-      logoutBtn.id = 'btnLogout';
-      logoutBtn.className = 'btn-nav btn-outline';
-      logoutBtn.textContent = 'Logout';
-      logoutBtn.addEventListener('click', clearUser);
-      navActions.insertBefore(logoutBtn, navActions.firstChild);
-    }
-    var mobileMenuLinks = document.querySelector('#mobileMenu .nav-links');
-    if (mobileMenuLinks && !document.getElementById('mBtnLogout')) {
-      var logoutBtnMobile = document.createElement('button');
-      logoutBtnMobile.id = 'mBtnLogout';
-      logoutBtnMobile.className = 'btn-nav btn-outline';
-      logoutBtnMobile.style.width = '100%';
-      logoutBtnMobile.style.marginTop = '12px';
-      logoutBtnMobile.textContent = 'Logout';
-      logoutBtnMobile.addEventListener('click', function() {
-        mobileMenu.classList.remove('open');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        clearUser();
-      });
-      mobileMenuLinks.appendChild(logoutBtnMobile);
-    }
-  }
-  function removeLogoutButtons() {
-    var desktop = document.getElementById('btnLogout');
-    if (desktop) desktop.remove();
-    var mobile = document.getElementById('mBtnLogout');
-    if (mobile) mobile.remove();
   }
   function saveUser(user) {
     currentUser = user;
     localStorage.setItem('mthunziAuthUser', JSON.stringify(user));
     toggleAuthButtons(true);
-    createLogoutButtons();
   }
 
   function saveUserAndGreet(user) {
@@ -388,11 +403,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileAccountButton) mobileAccountButton.textContent = 'Hi ' + user.name.split(' ')[0];
   }
   function clearUser() {
+    var user = getStoredUser();
+    if (user && user.id) {
+      localStorage.removeItem('mthunziCart:' + String(user.id));
+    }
+    localStorage.removeItem('mthunziCart');
+    localStorage.removeItem('mthunziCart:guest');
     currentUser = null;
     localStorage.removeItem('mthunziAuthUser');
     localStorage.removeItem('mthunziAuthRedirect');
     toggleAuthButtons(false);
-    removeLogoutButtons();
     showToast('You have logged out.');
   }
   function loadPersistedUser() {
@@ -483,9 +503,17 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function doSearch(){ var q=document.getElementById('heroSearch').value.toLowerCase().trim(); if(!q){ window.location.href='shop.html'; return; } window.location.href='shop.html?q='+encodeURIComponent(q); }
   
-  document.querySelectorAll('.tag').forEach(t=>t.addEventListener('click',function(){ window.location.href='shop.html?cat='+encodeURIComponent(t.getAttribute('data-cat')); }));
-  document.querySelectorAll('.cat-card').forEach(c=>c.addEventListener('click',function(){ window.location.href='shop.html?cat='+encodeURIComponent(c.getAttribute('data-cat')); }));
-  document.querySelectorAll('.footer-cat').forEach(a=>a.addEventListener('click',function(){ window.location.href='shop.html?cat='+encodeURIComponent(a.getAttribute('data-cat')); }));
+  document.querySelectorAll('.tag').forEach(t=>t.addEventListener('click',function(){ navigateToShop(t.getAttribute('data-cat')); }));
+  const homeCategoryGrid = document.getElementById('homeCategoryGrid');
+  if (homeCategoryGrid) {
+    homeCategoryGrid.addEventListener('click', function(event) {
+      const card = event.target.closest('.cat-card');
+      if (card) {
+        navigateToShop(card.getAttribute('data-cat'));
+      }
+    });
+  }
+  document.querySelectorAll('.footer-cat').forEach(a=>a.addEventListener('click',function(e){ e.preventDefault(); navigateToShop(a.getAttribute('data-cat')); }));
   
   function filterCat(cat){ window.location.href='shop.html?cat='+encodeURIComponent(cat); }
   
@@ -504,7 +532,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var card=document.createElement('div'); 
       card.className='prod-card'; 
       var badgeHtml=p.badge?'<div class="prod-badge">'+p.badge+'</div>':''; 
-      var stockHtml = p.stock === 'in-stock' ? '<div class="stock-status in-stock">✓ In Stock</div>' : '<div class="stock-status low-stock">⚠ Low Stock</div>'; 
+      var stockAmount = Number(p.stock) || 0;
+      var stockHtml = stockAmount <= 0 ? '<div class="stock-status low-stock">⚠ Out of Stock</div>' : stockAmount < 5 ? '<div class="stock-status low-stock">⚠ Low Stock: '+stockAmount+'</div>' : '<div class="stock-status in-stock">✓ High Stock: '+stockAmount+'</div>';
       card.innerHTML=badgeHtml+'<div class="prod-img" style="background-image:url(\''+p.img+'\');"></div><div class="prod-info"><div class="prod-cat">'+p.cat+'</div><div class="prod-name">'+p.name+'</div><div class="prod-dimensions"><i class="fas fa-ruler-combined"></i> '+p.dimensions+'</div>'+stockHtml+'<div class="prod-footer"><div class="prod-price">'+fmt(p.price)+'</div><button class="add-cart-btn" data-id="'+p.id+'"><i class="fas fa-shopping-cart"></i> Add</button></div></div>'; 
       card.addEventListener('click',()=>{ 
         window.location.href = 'product-detail.html?id=' + p.id; 
@@ -524,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showToast(p.name+' added to cart'); 
   }
   
-  function updateBadge(){ cart = loadCart(); var total=cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartBadge').textContent=total; updateCartButtonVisibility(); }
+  function updateBadge(){ cart = loadCart(); var total=cart.reduce((s,i)=>s+i.qty,0); var badge = document.getElementById('cartBadge'); if (badge) badge.textContent = total; updateCartButtonVisibility(); }
   
   function renderCart(){ 
     cart = loadCart();

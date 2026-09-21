@@ -18,7 +18,7 @@
   --danger:#c47e3e; --danger-bg:#fbeae5;
   --info:#1f5fa8; --info-bg:#dfe8f2;
   --horizon: linear-gradient(90deg, var(--lake) 0%, var(--gold) 100%);
-  --r-sm:12px; --r-md:20px; --r-lg:28px; --r-pill:999px;
+  --r-sm:12px; --r-md:20px; --r-lg:28px; --r-button:6px; --r-pill:999px;
   --shadow-sm:0 2px 10px rgba(23,23,20,.05);
   --shadow-md:0 14px 32px -12px rgba(23,23,20,.14);
   --shadow-lg:0 30px 60px -20px rgba(23,23,20,.22);
@@ -191,7 +191,7 @@ tbody tr:hover { background: var(--paper); }
 .search-input input { width:100%; padding:10px 14px 10px 36px; border:1.5px solid var(--line); border-radius:var(--r-pill); background:var(--card); font-size:13px; }
 .search-input input:focus { outline:none; border-color:var(--lake); box-shadow:0 0 0 4px rgba(13,125,130,0.12); }
 .select-filter { padding:10px 16px; border:1.5px solid var(--line); border-radius:var(--r-pill); background:var(--card); font-size:13px; color:var(--text-2); }
-.btn { font-family:var(--font-b); font-size:13px; font-weight:600; padding:10px 20px; border-radius:var(--r-pill); border:none; transition: all .2s ease; display:inline-flex; align-items:center; gap:8px; }
+.btn { font-family:var(--font-b); font-size:13px; font-weight:600; padding:10px 20px; border-radius:var(--r-button); border:none; transition: all .2s ease; display:inline-flex; align-items:center; gap:8px; }
 .btn-primary { background:var(--ink); color:#fff; }
 .btn-primary:hover { background:var(--lake-deep); transform:translateY(-1px); box-shadow:var(--shadow-sm); }
 .btn-outline { background:var(--card); color:var(--text); border:1.5px solid var(--line); }
@@ -243,6 +243,7 @@ tbody tr:hover { background: var(--paper); }
 .switch input:checked + .track::before { transform:translateX(19px); }
 
 /* ===== MODALS ===== */
+.category-panel-highlight { box-shadow: 0 0 0 2px rgba(31, 95, 168, 0.25); border-radius: var(--r-md); }
 .image-dropzone { display:flex; align-items:center; gap:12px; padding:14px 16px; border:1.5px dashed var(--line); border-radius:var(--r-md); background:var(--paper); }
 .image-dropzone #productImageInput { display:none; }
 .image-dropzone .preview-thumb { width:68px; height:68px; object-fit:cover; border-radius:12px; border:1px solid var(--line); background:var(--card); flex-shrink:0; display:none; }
@@ -321,7 +322,7 @@ tbody tr:hover { background: var(--paper); }
       <div class="nav-item" data-view="settings"><i class="fas fa-gear"></i> Settings</div>
     </nav>
     <div class="sidebar-foot">
-      <button id="logoutBtn" style="width:100%;padding:11px 14px;background:var(--danger-bg);color:var(--clay);border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      <button id="logoutBtn" style="width:100%;padding:11px 14px;background:var(--danger-bg);color:var(--clay);border:none;border-radius:var(--r-button);font-size:13.5px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
   </aside>
 
@@ -349,7 +350,7 @@ tbody tr:hover { background: var(--paper); }
         <div class="stat-grid">
           <div class="stat-card">
             <div class="stat-top"><div class="stat-icon lake"><i class="fas fa-sack-dollar"></i></div><div class="stat-delta up">▲ 12.4%</div></div>
-            <div class="stat-value" id="statRevenue">MK 0</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;"><div class="stat-value" id="statRevenue">MK 0</div><button class="icon-action" id="btnResetRevenue" type="button" title="Reset revenue"><i class="fas fa-undo"></i></button></div>
             <div class="stat-label">Total Revenue</div>
           </div>
           <div class="stat-card">
@@ -409,7 +410,10 @@ tbody tr:hover { background: var(--paper); }
             <option value="">All Categories</option>
             <option>Paintings</option><option>Drawings</option><option>T-Shirts</option><option>Sculptures</option><option>Prints</option>
           </select>
-          <button class="btn btn-primary" id="btnAddProduct" style="margin-left:auto;"><i class="fas fa-plus"></i> Add Product</button>
+          <div style="margin-left:auto; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-outline" id="btnOpenCategoryModal"><i class="fas fa-tags"></i> Add Category</button>
+            <button class="btn btn-primary" id="btnAddProduct"><i class="fas fa-plus"></i> Add Product</button>
+          </div>
         </div>
         <div class="panel" style="padding:0;">
           <div class="table-wrap">
@@ -475,6 +479,25 @@ tbody tr:hover { background: var(--paper); }
           <div class="form-group" style="max-width:100%;"><label>About Page Text</label><textarea id="setAboutText">Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.</textarea></div>
           <div class="form-group" style="max-width:100%;"><label>Contact Heading</label><input type="text" id="setContactHeading" value="We’re here to help you order, enquire, and create with confidence."></div>
           <div class="form-group" style="max-width:100%;"><label>Contact Intro</label><textarea id="setContactIntro">Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.</textarea></div>
+
+          <div class="panel-head" style="margin-top:18px;"><div><div class="panel-title">Payment Details</div><div class="panel-sub">Update the mobile money account shown during checkout</div></div></div>
+          <div class="settings-grid">
+            <div class="form-group"><label>Account Name</label><input type="text" id="setPaymentAccountName" value="John Botha"></div>
+            <div class="form-group"><label>Account Number</label><input type="text" id="setPaymentAccountNumber" value="0880058488"></div>
+            <div class="form-group" style="grid-column:1 / -1;"><label>Reference Label</label><input type="text" id="setPaymentReferenceLabel" value="Reference number"></div>
+            <div class="form-group" style="grid-column:1 / -1;"><label>Payment Instructions</label><textarea id="setPaymentInstructions">Send the money to that number and the account name is John Botha. Please include the reference number in your payment note so we can match it quickly.</textarea></div>
+          </div>
+        </div>
+
+        <div class="panel" style="max-width:880px;margin-top:18px;">
+          <div class="panel-head">
+            <div><div class="panel-title">Categories</div><div class="panel-sub">Manage the categories shown on the storefront</div></div>
+            <div class="row-actions">
+              <button class="btn btn-outline btn-sm" id="btnShowCategories"><i class="fas fa-list"></i> Show All Categories</button>
+              <button class="btn btn-outline btn-sm" id="btnAddCategory"><i class="fas fa-plus"></i> Add Category</button>
+            </div>
+          </div>
+          <div id="categoryList"></div>
         </div>
 
         <div class="panel" style="max-width:880px;margin-top:18px;">
@@ -533,6 +556,18 @@ tbody tr:hover { background: var(--paper); }
     </div>
     <div class="form-group"><label>Description</label><textarea id="pfDesc" placeholder="Short description of the piece…"></textarea></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnSaveProduct">Save Product</button>
+  </div>
+</div>
+
+<!-- ===== CATEGORY MODAL ===== -->
+<div class="overlay" id="categoryModal">
+  <div class="modal" style="max-width:420px;">
+    <button class="modal-close" data-close="categoryModal">✕</button>
+    <div class="modal-title" id="categoryModalTitle">Add Category</div>
+    <div class="modal-sub">Storefront category</div>
+    <input type="hidden" id="catId">
+    <div class="form-group"><label>Category Name</label><input type="text" id="catName" placeholder="e.g. Prints"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;" id="btnSaveCategory">Save Category</button>
   </div>
 </div>
 
@@ -603,6 +638,7 @@ document.addEventListener('DOMContentLoaded', function(){
   var orders = [];
   var customers = [];
   var messages = [];
+  var categories = [];
   var nextProductId = 13;
 
   /* ---------- API FUNCTIONS ---------- */
@@ -669,11 +705,85 @@ document.addEventListener('DOMContentLoaded', function(){
           date: new Date(m.created_at).toLocaleDateString('en-US')
         };
       });
+      syncUnreadMessages();
       renderDashboard();
       renderMessages();
+      updateMessageBell();
     } catch (err) {
       console.error('Error loading messages:', err);
     }
+  }
+
+  async function loadCategories(){
+    try {
+      const res = await fetch('/api/categories');
+      const json = await res.json();
+      categories = Array.isArray(json.data) ? json.data : [];
+      renderCategoryManager();
+      populateCategorySelects();
+    } catch (err) {
+      console.error('Error loading categories:', err);
+    }
+  }
+
+  function populateCategorySelects(){
+    const productCatSelect = document.getElementById('pfCat');
+    if (productCatSelect) {
+      const currentValue = productCatSelect.value || '';
+      productCatSelect.innerHTML = categories.map(function(category){ return '<option value="' + category.name + '">' + category.name + '</option>'; }).join('');
+      if (currentValue && Array.from(productCatSelect.options).some(function(option){ return option.value === currentValue; })) {
+        productCatSelect.value = currentValue;
+      } else if (categories.length) {
+        productCatSelect.value = categories[0].name;
+      }
+    }
+    const filterSelect = document.getElementById('productCatFilter');
+    if (filterSelect) {
+      const currentValue = filterSelect.value || '';
+      const options = ['<option value="">All Categories</option>'].concat(categories.map(function(category){ return '<option>' + category.name + '</option>'; }));
+      filterSelect.innerHTML = options.join('');
+      if (currentValue && Array.from(filterSelect.options).some(function(option){ return option.value === currentValue; })) {
+        filterSelect.value = currentValue;
+      }
+    }
+  }
+
+  function renderCategoryManager(){
+    const list = document.getElementById('categoryList');
+    if (!list) return;
+    if (!categories.length) {
+      list.innerHTML = '<div class="empty-state" style="padding:24px 10px;"><i class="fas fa-tags"></i>No categories yet</div>';
+      return;
+    }
+    list.innerHTML = categories.map(function(category){
+      return '<div class="cat-row" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-2);"><div><div style="font-weight:600;">' + category.name + '</div><div style="font-size:11px;color:var(--text-3);">' + category.id + '</div></div><div class="row-actions"><button class="icon-action" data-edit-cat="' + category.id + '"><i class="fas fa-pen"></i></button><button class="icon-action danger" data-delete-cat="' + category.id + '"><i class="fas fa-trash-alt"></i></button></div></div>';
+    }).join('');
+    list.querySelectorAll('[data-edit-cat]').forEach(function(button){
+      button.addEventListener('click', function(){
+        const id = button.getAttribute('data-edit-cat');
+        const category = categories.find(function(item){ return item.id === id; });
+        if (!category) return;
+        document.getElementById('catName').value = category.name;
+        document.getElementById('catId').value = category.id;
+        openModal('categoryModal');
+      });
+    });
+    list.querySelectorAll('[data-delete-cat]').forEach(function(button){
+      button.addEventListener('click', async function(){
+        const id = button.getAttribute('data-delete-cat');
+        try {
+          const res = await fetch('/api/admin/categories/' + id, { method: 'DELETE' });
+          const result = await parseResponsePayload(res, 'Unable to delete category');
+          if (!result.ok) throw new Error(result.data.error || 'Unable to delete category');
+          await loadCategories();
+          await loadProducts();
+          showToast('Category deleted');
+        } catch (err) {
+          console.error(err);
+          showToast(err.message || 'Unable to delete category');
+        }
+      });
+    });
   }
 
   async function loadProducts(){
@@ -688,7 +798,7 @@ document.addEventListener('DOMContentLoaded', function(){
           img: p.image,
           price: p.price,
           dims: p.dims,
-          stock: 10,
+          stock: Number.isFinite(Number(p.stock)) ? Number(p.stock) : 0,
           badge: p.badge || '',
           desc: p.description
         };
@@ -701,10 +811,12 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   var revenueLast7 = [];
   var categoryShare = [];
+  var revenueReset = Number(localStorage.getItem('mthunziRevenueReset') || 0);
 
   function calculateDashboardMetrics(){
     var completedOrders = orders.filter(function(o){ return o.status !== 'Cancelled'; });
     var totalRevenue = completedOrders.reduce(function(sum, o){ return sum + Number(o.total || orderTotal(o) || 0); }, 0);
+    var displayRevenue = Math.max(0, totalRevenue - revenueReset);
 
     var now = new Date();
     revenueLast7 = [];
@@ -734,7 +846,7 @@ document.addEventListener('DOMContentLoaded', function(){
       };
     }).sort(function(a, b){ return b.pct - a.pct; }).slice(0, 5);
 
-    return { totalRevenue: totalRevenue };
+    return { totalRevenue: displayRevenue };
   }
 
   var editingProductId = null;
@@ -785,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function fmt(n){ return 'MK ' + n.toLocaleString(); }
   function initials(name){ var p=name.trim().split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
   function avatarHue(name){ var colors=['#0d7d82','#dfa62e','#bd4f30','#095b60']; var sum=0; for(var i=0;i<name.length;i++) sum+=name.charCodeAt(i); return colors[sum%colors.length]; }
-  function stockStatus(stock){ if(stock<=0) return {label:'Out of Stock',cls:'danger'}; if(stock<=4) return {label:'Low Stock',cls:'warning'}; return {label:'In Stock',cls:'success'}; }
+  function stockStatus(stock){ if(stock<=0) return {label:'Out of Stock',cls:'danger'}; if(stock<5) return {label:'Low Stock',cls:'warning'}; return {label:'High Stock',cls:'success'}; }
   function statusPillClass(s){ return {Pending:'warning',Processing:'info',Shipped:'neutral',Delivered:'success',Cancelled:'danger'}[s] || 'neutral'; }
   function showToast(msg){ var t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(window._toastT); window._toastT=setTimeout(function(){ t.classList.remove('show'); },2600); }
   function openModal(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
@@ -832,6 +944,13 @@ document.addEventListener('DOMContentLoaded', function(){
     window.location.href = 'admin-login.html';
   });
 
+  document.getElementById('btnResetRevenue').addEventListener('click', function(){
+    revenueReset += calculateDashboardMetrics().totalRevenue;
+    localStorage.setItem('mthunziRevenueReset', String(revenueReset));
+    renderDashboard();
+    showToast('Revenue reset');
+  });
+
   document.getElementById('bellBtn').addEventListener('click', function(){
     goToView('messages');
   });
@@ -875,7 +994,7 @@ document.addEventListener('DOMContentLoaded', function(){
       return '<tr><td><strong>'+o.id+'</strong></td><td>'+o.customer+'</td><td>'+fmt(Number(o.total || orderTotal(o) || 0))+'</td><td><span class="pill '+statusPillClass(o.status)+'">'+o.status+'</span></td></tr>';
     }).join('');
 
-    var low = products.filter(function(p){ return p.stock<=4; }).sort(function(a,b){ return a.stock-b.stock; });
+    var low = products.filter(function(p){ return Number(p.stock || 0) < 5; }).sort(function(a,b){ return Number(a.stock || 0) - Number(b.stock || 0); });
     var lowEl = document.getElementById('lowStockList');
     if(!low.length){
       lowEl.innerHTML = '<div class="empty-state" style="padding:30px 10px;"><i class="fas fa-circle-check"></i>All items well stocked</div>';
@@ -924,6 +1043,18 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('productCatFilter').addEventListener('change', renderProducts);
   }
 
+  async function parseResponsePayload(res, fallbackError){
+    var text = await res.text();
+    if (!text) {
+      return { ok: res.ok, data: {} };
+    }
+    try {
+      return { ok: res.ok, data: JSON.parse(text) };
+    } catch (err) {
+      return { ok: res.ok, data: { error: text || fallbackError } };
+    }
+  }
+
   function openProductModal(id){
     editingProductId = id;
     var title = document.getElementById('productModalTitle');
@@ -958,12 +1089,20 @@ document.addEventListener('DOMContentLoaded', function(){
     openModal('productModal');
   }
   document.getElementById('btnAddProduct').addEventListener('click', function(){ openProductModal(null); });
+  document.getElementById('btnOpenCategoryModal').addEventListener('click', function(){
+    document.getElementById('catName').value = '';
+    document.getElementById('catId').value = '';
+    openModal('categoryModal');
+  });
 
   document.getElementById('btnSaveProduct').addEventListener('click', async function(){
     var name = document.getElementById('pfName').value.trim();
     if(!name){ showToast('Please enter a product name'); return; }
 
-    var stockValue = parseInt(document.getElementById('pfStock').value, 10) || 10;
+    var existingProduct = editingProductId !== null ? products.find(function(product){ return product.id === editingProductId; }) : null;
+    var stockInput = document.getElementById('pfStock').value.trim();
+    var parsedStock = parseInt(stockInput, 10);
+    var stockValue = stockInput === '' ? (existingProduct ? Number(existingProduct.stock || 0) : 0) : (Number.isInteger(parsedStock) ? Math.max(0, parsedStock) : (existingProduct ? Number(existingProduct.stock || 0) : 0));
     var imageValue = document.getElementById('pfImg').value.trim() || 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=200&fit=crop';
     var data = {
       name: name,
@@ -995,8 +1134,8 @@ document.addEventListener('DOMContentLoaded', function(){
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        var json = await res.json();
-        if(!res.ok) throw new Error(json.error || 'Unable to create product');
+        var result = await parseResponsePayload(res, 'Unable to create product');
+        if(!result.ok) throw new Error(result.data.error || 'Unable to create product');
         await loadProducts();
         showToast('Product added');
       } else {
@@ -1005,8 +1144,8 @@ document.addEventListener('DOMContentLoaded', function(){
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        var updateJson = await updateRes.json();
-        if(!updateRes.ok) throw new Error(updateJson.error || 'Unable to update product');
+        var updateResult = await parseResponsePayload(updateRes, 'Unable to update product');
+        if(!updateResult.ok) throw new Error(updateResult.data.error || 'Unable to update product');
         await loadProducts();
         showToast('Product updated');
       }
@@ -1034,8 +1173,8 @@ document.addEventListener('DOMContentLoaded', function(){
     if (!deleteTargetId) return;
     try {
       var res = await fetch('/api/admin/products/' + deleteTargetId, { method: 'DELETE' });
-      var json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Unable to delete product');
+      var deleteResult = await parseResponsePayload(res, 'Unable to delete product');
+      if (!deleteResult.ok) throw new Error(deleteResult.data.error || 'Unable to delete product');
       await loadProducts();
       closeModal('confirmModal');
       showToast('Product deleted');
@@ -1191,6 +1330,68 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   /* ================= MESSAGES ================= */
+  function getUnreadMessageIds() {
+    try {
+      var raw = localStorage.getItem('mthunziAdminUnreadMessages');
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function updateMessageBell() {
+    var bellDot = document.getElementById('bellDot');
+    if (!bellDot) return;
+    var unreadIds = getUnreadMessageIds();
+    var unreadCount = unreadIds.length;
+    bellDot.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+    if (unreadCount > 0) {
+      bellDot.textContent = unreadCount > 9 ? '9+' : unreadCount;
+    } else {
+      bellDot.textContent = '';
+    }
+  }
+
+  function syncUnreadMessages() {
+    var unreadIds = getUnreadMessageIds().map(Number);
+    var seenIds = [];
+    try {
+      var rawSeen = localStorage.getItem('mthunziAdminSeenMessages');
+      var parsedSeen = rawSeen ? JSON.parse(rawSeen) : [];
+      seenIds = Array.isArray(parsedSeen) ? parsedSeen.map(Number) : [];
+    } catch (error) {
+      seenIds = [];
+    }
+    messages.forEach(function(message) {
+      var id = Number(message.id);
+      if (!seenIds.includes(id)) {
+        seenIds.push(id);
+        unreadIds.push(id);
+      }
+    });
+    var currentIds = messages.map(function(message) { return Number(message.id); });
+    unreadIds = unreadIds.filter(function(id) { return currentIds.includes(id); });
+    seenIds = seenIds.filter(function(id) { return currentIds.includes(id); });
+    localStorage.setItem('mthunziAdminUnreadMessages', JSON.stringify(unreadIds));
+    localStorage.setItem('mthunziAdminSeenMessages', JSON.stringify(seenIds));
+    updateMessageBell();
+  }
+
+  function refreshMessageBellFromMessages() {
+    if (!Array.isArray(messages)) return;
+    var unreadIds = messages.map(function(message) { return Number(message.id); });
+    localStorage.setItem('mthunziAdminUnreadMessages', JSON.stringify(unreadIds));
+    updateMessageBell();
+  }
+
+  function markMessageRead(id) {
+    var unreadIds = getUnreadMessageIds().map(Number).filter(function(item){ return item !== Number(id); });
+    localStorage.setItem('mthunziAdminUnreadMessages', JSON.stringify(unreadIds));
+    updateMessageBell();
+  }
+
   function renderMessages(){
     var searchInput = document.getElementById('messageSearch');
     var q = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -1219,6 +1420,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function openMessageDetail(id){
     var m = messages.find(function(x){ return x.id===id; });
+    if (!m) return;
+    markMessageRead(id);
     document.getElementById('msgTitle').textContent = m.subject;
     document.getElementById('msgDate').textContent = m.date;
     document.getElementById('msgName').textContent = m.name;
@@ -1242,6 +1445,15 @@ document.addEventListener('DOMContentLoaded', function(){
       document.getElementById('setAboutText').value = settings.aboutText || settings.storeDescription || 'Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs.';
       document.getElementById('setContactHeading').value = settings.contactHeading || 'We’re here to help you order, enquire, and create with confidence.';
       document.getElementById('setContactIntro').value = settings.contactIntro || 'Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.';
+      document.getElementById('setPaymentAccountName').value = settings.paymentAccountName || 'John Botha';
+      document.getElementById('setPaymentAccountNumber').value = settings.paymentAccountNumber || '0880058488';
+      document.getElementById('setPaymentReferenceLabel').value = settings.paymentReferenceLabel || 'Reference number';
+      document.getElementById('setPaymentInstructions').value = settings.paymentInstructions || 'Send the money to that number and the account name is John Botha. Please include the reference number in your payment note so we can match it quickly.';
+      document.getElementById('setCurrency').value = settings.currency || 'MK — Malawian Kwacha';
+      document.getElementById('setShipping').value = settings.shippingThreshold || settings.shipping || 'MK 50,000';
+      document.getElementById('setStoreOpen').checked = settings.storeOpen !== false;
+      document.getElementById('setLowStock').checked = settings.lowStockAlerts !== false;
+      document.getElementById('setOrderNotif').checked = settings.orderNotifications !== false;
     } catch (err) {
       console.error(err);
     }
@@ -1258,7 +1470,16 @@ document.addEventListener('DOMContentLoaded', function(){
         aboutTitle: document.getElementById('setAboutTitle').value.trim(),
         aboutText: document.getElementById('setAboutText').value.trim(),
         contactHeading: document.getElementById('setContactHeading').value.trim(),
-        contactIntro: document.getElementById('setContactIntro').value.trim()
+        contactIntro: document.getElementById('setContactIntro').value.trim(),
+        paymentAccountName: document.getElementById('setPaymentAccountName').value.trim(),
+        paymentAccountNumber: document.getElementById('setPaymentAccountNumber').value.trim(),
+        paymentReferenceLabel: document.getElementById('setPaymentReferenceLabel').value.trim(),
+        paymentInstructions: document.getElementById('setPaymentInstructions').value.trim(),
+        currency: document.getElementById('setCurrency').value,
+        shippingThreshold: document.getElementById('setShipping').value.trim(),
+        storeOpen: document.getElementById('setStoreOpen').checked,
+        lowStockAlerts: document.getElementById('setLowStock').checked,
+        orderNotifications: document.getElementById('setOrderNotif').checked
       };
       const res = await fetch('/api/admin/site-settings', {
         method: 'PUT',
@@ -1274,12 +1495,55 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
 
+  document.getElementById('btnAddCategory').addEventListener('click', function(){
+    document.getElementById('catName').value = '';
+    document.getElementById('catId').value = '';
+    openModal('categoryModal');
+  });
+
+  document.getElementById('btnShowCategories').addEventListener('click', function(){
+    var categoryPanel = document.getElementById('categoryList');
+    if (categoryPanel) {
+      categoryPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      categoryPanel.classList.add('category-panel-highlight');
+      setTimeout(function(){ categoryPanel.classList.remove('category-panel-highlight'); }, 1800);
+    }
+  });
+
+  document.getElementById('btnSaveCategory').addEventListener('click', async function(){
+    const name = document.getElementById('catName').value.trim();
+    const id = document.getElementById('catId').value.trim();
+    if (!name) {
+      showToast('Please enter a category name');
+      return;
+    }
+    try {
+      const url = id ? '/api/admin/categories/' + id : '/api/admin/categories';
+      const method = id ? 'PATCH' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      const result = await parseResponsePayload(res, 'Unable to save category');
+      if (!result.ok) throw new Error(result.data.error || 'Unable to save category');
+      await loadCategories();
+      await loadProducts();
+      showToast(id ? 'Category updated' : 'Category added');
+      closeModal('categoryModal');
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || 'Unable to save category');
+    }
+  });
+
   /* ---------- INITIAL RENDER ---------- */
   loadProducts();
   loadOrders();
   loadCustomers();
   loadMessages();
   loadSiteSettings();
+  loadCategories();
 });
 </script>
 </body>

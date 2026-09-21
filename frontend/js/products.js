@@ -3,7 +3,11 @@
     const id = Number(product.id ?? product.product_id ?? 0);
     const category = product.category || product.cat || 'Paintings';
     const image = product.image || product.img || '/assets/sample1.jpg';
-    const stocked = product.stocked ?? product.in_stock ?? (product.stock === 'in-stock' || product.stock === true);
+    const rawStock = product.stock;
+    const stock = rawStock === undefined || rawStock === null || rawStock === ''
+      ? (product.stocked || product.in_stock ? 10 : 0)
+      : Math.max(0, Number(rawStock) || 0);
+    const stocked = stock > 0;
     const dimensions = product.dims || product.dimensions || 'N/A';
     const description = product.description || product.desc || '';
 
@@ -15,9 +19,9 @@
       description,
       price: Number(product.price || 0),
       image,
-      stocked: stocked !== false,
+      stocked,
       dims: dimensions,
-      stock: product.stock ?? (stocked ? 'in-stock' : 'low-stock'),
+      stock,
       img: image,
       cat: category,
       dimensions,

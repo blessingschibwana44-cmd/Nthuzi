@@ -3,17 +3,26 @@ const db = require('./db');
 
 const SALT_ROUNDS = 10;
 
+function normalizeEmail(value) {
+  return String(value ?? '').trim().toLowerCase();
+}
+
 async function createUser({ name, email, phone, password }) {
+  const normalizedEmail = normalizeEmail(email);
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
   const result = await db.query(
     'INSERT INTO users (name, email, phone, password_hash) VALUES ($1, $2, $3, $4) RETURNING id, name, email, phone, created_at',
-    [name, email, phone, hashedPassword]
+    [name, normalizedEmail, phone, hashedPassword]
   );
   return result.rows[0];
 }
 
 async function findUserByEmail(email) {
-  const result = await db.query('SELECT id, name, email, phone, password_hash FROM users WHERE email = $1', [email]);
+  const normalizedEmail = normalizeEmail(email);
+  const result = await db.query(
+    'SELECT id, name, email, phone, password_hash FROM users WHERE LOWER(email) = LOWER($1)',
+    [normalizedEmail]
+  );
   return result.rows[0] || null;
 }
 
@@ -48,7 +57,7 @@ async function updateUser({ id, name, email, phone, password }) {
   }
   if (email) {
     updates.push(`email = $${idx++}`);
-    values.push(email);
+    values.push(normalizeEmail(email));
   }
   if (phone) {
     updates.push(`phone = $${idx++}`);

@@ -36,6 +36,7 @@
     --r-sm: 12px;
     --r-md: 20px;
     --r-lg: 28px;
+    --r-button: 6px;
     --r-pill: 999px;
 
     /* Type roles */
@@ -207,7 +208,7 @@ tbody tr:hover { background: var(--off-white); }
 .search-input input { width: 100%; padding: 10px 14px 10px 36px; border: 1.5px solid var(--border-light); border-radius: var(--r-pill); background: var(--white); font-size: 13px; color: var(--text-primary); }
 .search-input input:focus { outline: none; border-color: var(--lake); box-shadow: 0 0 0 4px rgba(31, 95, 168, 0.12); }
 .select-filter { padding: 10px 16px; border: 1.5px solid var(--border-light); border-radius: var(--r-pill); background: var(--white); font-size: 13px; color: var(--text-secondary); }
-.btn { font-family: var(--font-body); font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: var(--r-pill); border: none; transition: all .2s ease; display: inline-flex; align-items: center; gap: 8px; }
+.btn { font-family: var(--font-body); font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: var(--r-button); border: none; transition: all .2s ease; display: inline-flex; align-items: center; gap: 8px; }
 .btn-primary { background: var(--near-black); color: #fff; }
 .btn-primary:hover { background: var(--lake); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
 .btn-outline { background: var(--white); color: var(--text-primary); border: 1.5px solid var(--border-light); }

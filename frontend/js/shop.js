@@ -35,6 +35,33 @@ document.addEventListener('DOMContentLoaded', function() {
     return !!getStoredUser();
   }
 
+  function getCartStorageKey() {
+    var user = getStoredUser();
+    return user && user.id ? 'mthunziCart:' + String(user.id) : 'mthunziCart:guest';
+  }
+
+  function getCartItems() {
+    var user = getStoredUser();
+    var key = getCartStorageKey();
+    var legacyKey = 'mthunziCart';
+    try {
+      var cart = JSON.parse(localStorage.getItem(key) || '[]');
+      if (Array.isArray(cart) && cart.length) return cart;
+      var legacyCart = JSON.parse(localStorage.getItem(legacyKey) || '[]');
+      if (Array.isArray(legacyCart) && legacyCart.length) {
+        if (user && user.id) localStorage.setItem(key, JSON.stringify(legacyCart));
+        return legacyCart;
+      }
+      return [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveCartItems(items) {
+    localStorage.setItem(getCartStorageKey(), JSON.stringify(items));
+  }
+
   function requireAuth(message) {
     if (isSignedIn()) return true;
     var redirectTarget = window.location.pathname + window.location.search;
@@ -55,26 +82,26 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateCartButtonVisibility() {
     var cartBtn = document.getElementById('btnCart');
     if (!cartBtn) return;
-    var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    var signedIn = isSignedIn();
-    cartBtn.style.display = signedIn && cart.length > 0 ? '' : 'none';
+    var cartItems = getCartItems();
+    var count = cartItems.reduce(function(total, item) {
+      return total + (Number(item.qty) || Number(item.quantity) || 0);
+    }, 0);
+    cartBtn.style.display = isSignedIn() ? 'flex' : 'none';
+    var badge = document.getElementById('cartBadge');
+    if (badge) badge.textContent = count;
   }
 
   function ensureMobileLogoutButton() {
-    var menu = document.getElementById('mobileMenu');
-    if (!menu) return;
-    var container = menu.querySelector('.nav-links > div');
-    if (!container || document.getElementById('mBtnLogout')) return;
-    var logoutButton = document.createElement('button');
-    logoutButton.id = 'mBtnLogout';
-    logoutButton.className = 'btn-nav btn-outline';
-    logoutButton.type = 'button';
-    logoutButton.textContent = 'Logout';
-    logoutButton.style.display = 'none';
-    container.appendChild(logoutButton);
+    return;
   }
 
   function logoutUser() {
+    var user = getStoredUser();
+    if (user && user.id) {
+      localStorage.removeItem('mthunziCart:' + String(user.id));
+    }
+    localStorage.removeItem('mthunziCart');
+    localStorage.removeItem('mthunziCart:guest');
     localStorage.removeItem('mthunziAuthUser');
     localStorage.removeItem('mthunziAuthRedirect');
     updateAuthHeader(null);
@@ -86,9 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var signInBtn = document.getElementById('btnSignIn');
     var signUpBtn = document.getElementById('btnSignUp');
     var accountBtn = document.getElementById('btnAccount');
+    var logoutBtn = document.getElementById('btnLogout');
     var mobileSignIn = document.getElementById('mBtnSignIn');
     var mobileSignUp = document.getElementById('mBtnSignUp');
     var mobileAccount = document.getElementById('mBtnAccount');
+    var mobileLogout = document.getElementById('mBtnLogout');
 
     if (signInBtn) signInBtn.style.display = isSignedIn ? 'none' : '';
     if (signUpBtn) signUpBtn.style.display = isSignedIn ? 'none' : '';
@@ -96,12 +125,14 @@ document.addEventListener('DOMContentLoaded', function() {
       accountBtn.style.display = isSignedIn ? '' : 'none';
       accountBtn.textContent = isSignedIn && user.name ? 'Hi ' + user.name.split(' ')[0] : 'Account';
     }
+    if (logoutBtn) logoutBtn.style.display = isSignedIn ? '' : 'none';
     if (mobileSignIn) mobileSignIn.style.display = isSignedIn ? 'none' : '';
     if (mobileSignUp) mobileSignUp.style.display = isSignedIn ? 'none' : '';
     if (mobileAccount) {
       mobileAccount.style.display = isSignedIn ? '' : 'none';
-      mobileAccount.textContent = isSignedIn && user.name ? 'Hi ' + user.name.split(' ')[0] : 'Account';
+      mobileAccount.textContent = 'Account settings';
     }
+    if (mobileLogout) mobileLogout.style.display = isSignedIn ? '' : 'none';
 
     updateCartButtonVisibility();
   }
@@ -152,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function renderCart() {
-    var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    var cart = getCartItems();
     var cartItems = document.getElementById('cartItems');
     var cartTotalRow = document.getElementById('cartTotalRow');
     var cartTotalAmt = document.getElementById('cartTotalAmt');
@@ -179,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dir === 'plus') cartItem.qty++;
             else if (dir === 'minus' && cartItem.qty > 1) cartItem.qty--;
             else if (dir === 'minus' && cartItem.qty === 1) cart = cart.filter(function(i) { return i.id !== id; });
-            localStorage.setItem('cart', JSON.stringify(cart));
+            saveCartItems(cart);
             renderCart();
             updateCartBadge();
           }
@@ -187,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       item.querySelector('.cart-item-remove').addEventListener('click', function() {
         cart = cart.filter(function(i) { return i.id !== product.id; });
-        localStorage.setItem('cart', JSON.stringify(cart));
+        saveCartItems(cart);
         renderCart();
         updateCartBadge();
       });
@@ -200,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function updateCartBadge() {
-    var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    var cart = getCartItems();
     var cartBadge = document.getElementById('cartBadge');
     if (cartBadge) cartBadge.textContent = cart.reduce(function(s, i) { return s + i.qty; }, 0);
     updateCartButtonVisibility();
@@ -214,6 +245,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     prodGrid.innerHTML = items.map(function(product) {
       var badgeHtml = product.badge ? '<div class="prod-badge">' + product.badge + '</div>' : '';
+      var stockAmount = Number(product.stock || 0);
+      var stockLabel = stockAmount <= 0 ? 'Out of stock' : (stockAmount < 5 ? 'Low stock' : 'High stock');
+      var stockClass = stockAmount <= 0 ? 'low-stock' : (stockAmount < 5 ? 'low-stock' : 'in-stock');
       return '' +
         '<article class="prod-card" data-id="' + product.id + '">' +
           badgeHtml +
@@ -222,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
             '<div class="prod-cat">' + product.cat + '</div>' +
             '<h3 class="prod-name">' + product.name + '</h3>' +
             '<div class="prod-dimensions">' + product.dimensions + '</div>' +
-            '<div class="stock-status ' + (product.stock === 'in-stock' ? 'in-stock' : 'low-stock') + '">' + (product.stock === 'in-stock' ? 'In stock' : 'Low stock') + '</div>' +
+            '<div class="stock-status ' + stockClass + '">' + stockLabel + ' · ' + stockAmount + ' left</div>' +
             '<div class="prod-footer">' +
               '<span class="prod-price">' + formatPrice(product.price) + '</span>' +
               '<button class="add-cart-btn" data-add="' + product.id + '"><i class="fas fa-shopping-cart"></i> Add</button>' +
@@ -375,6 +409,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  var logoutBtn = document.getElementById('btnLogout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      logoutUser();
+    });
+  }
+
+  var mobileLogoutBtn = document.getElementById('mBtnLogout');
+  if (mobileLogoutBtn) {
+    mobileLogoutBtn.addEventListener('click', function() {
+      closeMobileMenu();
+      logoutUser();
+    });
+  }
+
   var signInBtn = document.getElementById('btnSignIn');
   if (signInBtn) {
     signInBtn.addEventListener('click', function() {
@@ -429,14 +478,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var productId = Number(target.dataset.add);
       var product = products.find(function(item) { return item.id === productId; });
       if (!product) return;
-      var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      var cart = getCartItems();
       var existing = cart.find(function(item) { return item.id === productId; });
       if (existing) {
         existing.qty += 1;
       } else {
         cart.push({ id: product.id, name: product.name, img: product.img, price: product.price, qty: 1 });
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
+      saveCartItems(cart);
       showToast(product.name + ' added to cart');
       updateCartBadge();
     }
@@ -446,6 +495,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  async function refreshCategories() {
+    try {
+      var res = await fetch('/api/site-settings');
+      var json = await res.json();
+      var categories = Array.isArray(json.data && json.data.categories) ? json.data.categories : [];
+      if (categoryFilter) {
+        var current = categoryFilter.value;
+        categoryFilter.innerHTML = '<option value="All">All categories</option>' + categories.map(function(category) {
+          return '<option value="' + category.name + '">' + category.name + '</option>';
+        }).join('');
+        categoryFilter.value = current && Array.from(categoryFilter.options).some(function(option) { return option.value === current; }) ? current : 'All';
+      }
+    } catch (error) {
+      console.warn('Could not load categories.', error);
+    }
+  }
+
   async function refreshProducts() {
     var loaded = await catalog.loadProducts();
     products = loaded;
@@ -453,6 +519,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   syncControls();
+  refreshCategories();
   initAuthHeader();
   refreshProducts();
   updateCartBadge();

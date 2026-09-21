@@ -4,11 +4,46 @@
   "storePhone": "+265 881799537",
   "storeAddress": "Lunzu Trading Centre, Off M1 Road, Blantyre.",
   "storeDescription": "Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.",
-  "aboutTitle": "Mthunzi Born to Create",
+  "aboutTitle": "Mthunzi Born to Created",
   "aboutText": "Mthunzi Creations is a creative enterprise that offers different artistic services to meet your needs. We do screen printing, painting and drawing, illustrations, sign-writing, art lessons and consultancy. We are known for our best quality work.",
   "contactHeading": "We’re here to help you order, enquire, and create with confidence.",
   "contactIntro": "Whether you are looking for a custom piece, a quick order update, or help with payment proof, our team responds quickly and professionally.",
   "contactPhone": "+265 881799537",
   "contactEmail": "mthunzicreations@gmail.com",
-  "contactAddress": "Lunzu Trading Centre, Off M1 Road, Blantyre."
+  "contactAddress": "Lunzu Trading Centre, Off M1 Road, Blantyre.",
+  "paymentAccountName": "John Botha",
+  "paymentAccountNumber": "0880058488",
+  "paymentReferenceLabel": "Reference number",
+  "paymentInstructions": "Send the money to that number and the account name is John Botha. Please include the reference number in your payment note so we can match it quickly.",
+  "currency": "MK — Malawian Kwacha",
+  "shippingThreshold": "MK 50,000",
+  "storeOpen": true,
+  "lowStockAlerts": true,
+  "orderNotifications": true,
+  "categories": [
+    {
+      "id": "paintings",
+      "name": "Paintings"
+    },
+    {
+      "id": "drawings",
+      "name": "Drawings"
+    },
+    {
+      "id": "t-shirts",
+      "name": "T-Shirts"
+    },
+    {
+      "id": "sculptures",
+      "name": "Sculptures"
+    },
+    {
+      "id": "prints",
+      "name": "Prints"
+    },
+    {
+      "id": "others",
+      "name": "Others"
+    }
+  ]
 }

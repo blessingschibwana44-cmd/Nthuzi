@@ -38,7 +38,7 @@
       width: min(1100px, 100%);
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-      border-radius: 28px;
+      border-radius: 0;
       overflow: hidden;
       box-shadow: 0 25px 70px rgba(7, 19, 31, 0.16);
       background: var(--panel);
@@ -200,7 +200,7 @@
     .btn {
       width: 100%;
       border: 0;
-      border-radius: 14px;
+      border-radius: 6px;
       padding: 14px 16px;
       font-size: 15px;
       font-weight: 700;
@@ -331,42 +331,8 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="js/auth-helpers.js"></script>
   <script>
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.display = 'block';
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => toast.style.display = 'none', 2400);
-    }
-
-    function setLoading(button, loading, label) {
-      const status = document.getElementById('statusMessage');
-      button.disabled = loading;
-      if (loading) {
-        button.innerHTML = '<span class="spinner"></span> ' + label;
-        status.className = 'status-msg';
-        status.textContent = 'Please wait...';
-      } else {
-        button.innerHTML = label;
-      }
-    }
-
-    function setStatus(message, type) {
-      const status = document.getElementById('statusMessage');
-      status.className = `status-msg ${type || ''}`.trim();
-      status.textContent = message;
-    }
-
-    async function authRequest(url, payload) {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const body = await response.json().catch(() => ({}));
-      return { response, body };
-    }
 
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
@@ -383,12 +349,28 @@
       });
     }
 
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value || '').trim());
+    }
+
+    function isStrongPassword(value) {
+      return /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(String(value || ''));
+    }
+
     document.getElementById('submitBtn').addEventListener('click', async function () {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
 
       if (!email || !password) {
         showToast('Please enter your email and password.');
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showToast('Please enter a valid email address.');
+        return;
+      }
+      if (password.length < 8) {
+        showToast('Password must be at least 8 characters long.');
         return;
       }
 

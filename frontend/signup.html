@@ -6,6 +6,7 @@
   <title>Create Account — Mthunzi Creations</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css">
   <style>
     :root {
       --bg: #07131f;
@@ -36,7 +37,7 @@
       width: min(1120px, 100%);
       display: grid;
       grid-template-columns: 0.95fr 1.05fr;
-      border-radius: 28px;
+      border-radius: 0;
       overflow: hidden;
       box-shadow: 0 25px 70px rgba(7, 19, 31, 0.16);
       background: var(--panel);
@@ -155,7 +156,7 @@
     .field label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
     .field input { width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; font-size: 15px; outline: none; }
     .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(31,95,168,0.12); }
-    .btn { width: 100%; border: 0; border-radius: 14px; padding: 14px 16px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn { width: 100%; border: 0; border-radius: 6px; padding: 14px 16px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
     .btn-primary { color: white; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); box-shadow: 0 10px 24px rgba(31,95,168,0.2); }
     .btn:disabled { opacity: 0.8; cursor: wait; }
     .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -242,41 +243,15 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="js/auth-helpers.js"></script>
   <script>
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.display = 'block';
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => toast.style.display = 'none', 2400);
+
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value || '').trim());
     }
 
-    function setLoading(button, loading, label) {
-      const status = document.getElementById('statusMessage');
-      button.disabled = loading;
-      if (loading) {
-        button.innerHTML = '<span class="spinner"></span> ' + label;
-        status.className = 'status-msg';
-        status.textContent = 'Creating your account...';
-      } else {
-        button.innerHTML = label;
-      }
-    }
-
-    function setStatus(message, type) {
-      const status = document.getElementById('statusMessage');
-      status.className = `status-msg ${type || ''}`.trim();
-      status.textContent = message;
-    }
-
-    async function authRequest(url, payload) {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const body = await response.json().catch(() => ({}));
-      return { response, body };
+    function isStrongPassword(value) {
+      return /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/.test(String(value || ''));
     }
 
     document.getElementById('submitBtn').addEventListener('click', async function () {
@@ -288,6 +263,14 @@
 
       if (!name || !email || !password || !confirm) {
         showToast('Please fill in your name, email, and password.');
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showToast('Please enter a valid email address.');
+        return;
+      }
+      if (!isStrongPassword(password)) {
+        showToast('Password must be at least 8 characters and include a letter and number.');
         return;
       }
       if (password !== confirm) {

@@ -72,7 +72,7 @@
       background: var(--near-black);
       color: var(--white);
       border: none;
-      border-radius: var(--r-pill);
+      border-radius: var(--r-button);
       font-weight: 600;
       font-size: 13px;
       cursor: pointer;
@@ -103,7 +103,7 @@
       aspect-ratio: 1;
       background: var(--white);
       border: 1px solid var(--border-light);
-      border-radius: var(--r-lg);
+      border-radius: 0;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
       cursor: zoom-in;
@@ -115,7 +115,7 @@
       align-items: center;
       gap: 8px;
       padding: 10px 16px;
-      border-radius: 999px;
+      border-radius: var(--r-button);
       background: var(--white);
       border: 1.5px solid var(--border-light);
       color: var(--text-primary);
@@ -234,7 +234,7 @@
       padding: 8px 14px;
       background: var(--success);
       color: white;
-      border-radius: var(--r-pill);
+      border-radius: var(--r-button);
       font-size: 12px;
       font-weight: 600;
     }
@@ -295,7 +295,7 @@
       flex: 1;
       padding: 14px 24px;
       border: none;
-      border-radius: var(--r-pill);
+      border-radius: var(--r-button);
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
@@ -476,6 +476,43 @@
     }
   }
 
+  function getStoredUser() {
+    try {
+      var stored = localStorage.getItem('mthunziAuthUser');
+      if (!stored) return null;
+      return JSON.parse(stored);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function getCartStorageKey() {
+    var user = getStoredUser();
+    return user && user.id ? 'mthunziCart:' + String(user.id) : 'mthunziCart:guest';
+  }
+
+  function getCartItems() {
+    var user = getStoredUser();
+    var key = getCartStorageKey();
+    var legacyKey = 'mthunziCart';
+    try {
+      var cart = JSON.parse(localStorage.getItem(key) || '[]');
+      if (Array.isArray(cart) && cart.length) return cart;
+      var legacyCart = JSON.parse(localStorage.getItem(legacyKey) || '[]');
+      if (Array.isArray(legacyCart) && legacyCart.length) {
+        if (user && user.id) localStorage.setItem(key, JSON.stringify(legacyCart));
+        return legacyCart;
+      }
+      return [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveCartItems(items) {
+    localStorage.setItem(getCartStorageKey(), JSON.stringify(items));
+  }
+
   function requireAuth(message) {
     if (isSignedIn()) return true;
     localStorage.setItem('mthunziAuthRedirect', window.location.pathname + window.location.search);
@@ -485,7 +522,7 @@
   }
 
   function renderCart() {
-    cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = getCartItems();
     var cartItems = document.getElementById('cartItems');
     var cartTotalRow = document.getElementById('cartTotalRow');
     var cartTotalAmt = document.getElementById('cartTotalAmt');
@@ -513,7 +550,7 @@
             if (dir === 'plus') cartItem.qty++;
             else if (dir === 'minus' && cartItem.qty > 1) cartItem.qty--;
             else if (dir === 'minus' && cartItem.qty === 1) cart = cart.filter(function(i) { return i.id !== id; });
-            localStorage.setItem('cart', JSON.stringify(cart));
+            saveCartItems(cart);
             renderCart();
             updateCartBadge();
           }
@@ -521,7 +558,7 @@
       });
       item.querySelector('.cart-item-remove').addEventListener('click', function() {
         cart = cart.filter(function(i) { return i.id !== product.id; });
-        localStorage.setItem('cart', JSON.stringify(cart));
+        saveCartItems(cart);
         renderCart();
         updateCartBadge();
       });
@@ -535,7 +572,7 @@
   }
 
   function updateCartBadge() {
-    cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart = getCartItems();
     var cartBadge = document.getElementById('cartBadge');
     if (cartBadge) cartBadge.textContent = cart.reduce(function(s, i) { return s + i.qty; }, 0);
     updateCartButtonVisibility();
@@ -565,7 +602,11 @@
     const id = Number(product.id ?? product.product_id ?? 0);
     const category = product.category || product.cat || 'Paintings';
     const image = product.image || product.img || '/assets/sample1.jpg';
-    const stocked = product.stocked ?? product.in_stock ?? (product.stock === 'in-stock' || product.stock === true);
+    const rawStock = product.stock;
+    const stockAmount = rawStock === undefined || rawStock === null || rawStock === ''
+      ? (product.stocked || product.in_stock ? 10 : 0)
+      : Math.max(0, Number(rawStock) || 0);
+    const stocked = stockAmount > 0;
     const dimensions = product.dims || product.dimensions || 'N/A';
     const description = product.description || product.desc || '';
 
@@ -577,9 +618,9 @@
       description,
       price: Number(product.price || 0),
       image,
-      stocked: stocked !== false,
+      stocked,
       dims: dimensions,
-      stock: product.stock ?? (stocked ? 'in-stock' : 'low-stock'),
+      stock: stockAmount,
       img: image,
       cat: category,
       dimensions,
@@ -590,7 +631,7 @@
 
   let allProducts = [];
   let currentProduct = null;
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let cart = getCartItems();
 
   async function loadProducts() {
     try {
@@ -705,11 +746,11 @@
     document.getElementById('productPrice').textContent = formatPrice(currentProduct.price);
     document.getElementById('productDims').textContent = currentProduct.dims;
     document.getElementById('productDesc').textContent = currentProduct.description;
-    document.getElementById('availabilityText').textContent = currentProduct.stocked ? 'In Stock' : 'Limited Stock';
+    document.getElementById('availabilityText').textContent = currentProduct.stock <= 0 ? 'Out of Stock' : currentProduct.stock < 5 ? 'Low Stock: ' + currentProduct.stock : 'High Stock: ' + currentProduct.stock;
 
     const stockStatus = document.getElementById('stockStatus');
-    stockStatus.textContent = currentProduct.stocked ? '✓ In Stock' : '⚠ Limited';
-    stockStatus.classList.toggle('low', !currentProduct.stocked);
+    stockStatus.textContent = currentProduct.stock <= 0 ? '⚠ Out of Stock' : currentProduct.stock < 5 ? '⚠ Low Stock: ' + currentProduct.stock : '✓ High Stock: ' + currentProduct.stock;
+    stockStatus.classList.toggle('low', currentProduct.stock < 5);
 
     setupImageZoom();
   }
@@ -727,7 +768,7 @@
     } else {
       cart.push({ id: currentProduct.id, name: currentProduct.name, img: currentProduct.image, price: currentProduct.price, qty: 1 });
     }
-    localStorage.setItem('cart', JSON.stringify(cart));
+    saveCartItems(cart);
     showToast(`${currentProduct.name} added to cart!`);
     updateCartBadge();
     setTimeout(function() {
@@ -737,13 +778,13 @@
 
   document.getElementById('proceedBtn').addEventListener('click', () => {
     if (!requireAuth('Please sign in to continue to payment.')) return;
+    cart = getCartItems();
     const existingItem = cart.find(item => item.id === currentProduct.id);
     if (!existingItem) {
       cart.push({ id: currentProduct.id, name: currentProduct.name, img: currentProduct.image, price: currentProduct.price, qty: 1 });
-      localStorage.setItem('cart', JSON.stringify(cart));
-    } else {
-      localStorage.setItem('cart', JSON.stringify(cart));
     }
+    saveCartItems(cart);
+    updateCartBadge();
     window.location.href = 'payment.html';
   });
 
